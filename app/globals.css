@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-/* --- PLEXUS GLOBAL SCROLLBAR --- */
+/* --- UNIRIVO GLOBAL SCROLLBAR --- */
 
 /* For Webkit browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
@@ -12,25 +12,25 @@
 
 /* The background of the scrollbar */
 ::-webkit-scrollbar-track {
-  background: #141C1C; /* Matches your deepest charcoal background */
+  background: #141c1c; /* Matches your deepest charcoal background */
 }
 
 /* The draggable part of the scrollbar */
 ::-webkit-scrollbar-thumb {
-  background: #3E5C58; /* Forest Green for a subtle look */
+  background: #3e5c58; /* Forest Green for a subtle look */
   border-radius: 10px;
-  border: 2px solid #141C1C; /* Creates a padding effect around the thumb */
+  border: 2px solid #141c1c; /* Creates a padding effect around the thumb */
 }
 
 /* Hover state for the scrollbar */
 ::-webkit-scrollbar-thumb:hover {
-  background: #88AB8E; /* Sage Green highlight on hover */
+  background: #88ab8e; /* Sage Green highlight on hover */
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #3E5C58 #141C1C;
+  scrollbar-color: #3e5c58 #141c1c;
 }
 
 /* Utility to hide scrollbars while maintaining functionality (if needed) */
@@ -140,7 +140,7 @@
   /* Charts */
   --chart-1: oklch(0.6 0.25 270);
   --chart-2: oklch(0.7 0.18 190);
-  --chart-3: oklch(0.68 0.20 310);
+  --chart-3: oklch(0.68 0.2 310);
   --chart-4: oklch(0.66 0.21 80);
   --chart-5: oklch(0.64 0.22 160);
 }
@@ -191,7 +191,7 @@
 /* --- Notebook Grid Background --- */
 .bg-notebook-grid {
   /* This is the light mode grid (faint black lines) */
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 20px 20px; /* This controls the size of the checks */

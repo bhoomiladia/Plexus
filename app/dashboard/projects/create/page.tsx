@@ -120,7 +120,7 @@ export default function CreateProjectPage() {
               Launch Project
             </h1>
             <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
-              PLEXUS / NEW VENTURE
+              UNIRIVO / NEW VENTURE
             </p>
           </div>
         </div>

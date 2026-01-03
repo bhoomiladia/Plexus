@@ -56,12 +56,12 @@ export default function Sidebar() {
         {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
       </button>
 
-      {/* Header Updated to PLEXUS */}
+      {/* Header Updated to UNIRIVO */}
       <div
         className={`p-10 pb-10 transition-all duration-300 ${isCollapsed ? "opacity-0 invisible" : "opacity-100 visible"}`}
       >
         <h1 className="text-3xl font-black text-[#88AB8E] tracking-tighter uppercase   whitespace-nowrap">
-          PLEXUS
+          UNIRIVO
         </h1>
       </div>
 

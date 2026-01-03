@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import Navbar, { ViewType } from "@/components/Navbar";
 
-import Navbar, { ViewType } from "@/components/Navbar"
-
-import FeaturesSection from "@/components/FeaturesSection"
+import FeaturesSection from "@/components/FeaturesSection";
 
 /* ------------------ GEMINI BACKGROUND ------------------ */
 
@@ -15,9 +15,9 @@ const PATH_DATA = [
   "M0 514C147.5 514.333 294.5 513.735 380.5 513.735C405.976 514.94 422.849 515.228 436.37 515.123C477.503 514.803 518.631 506.605 559.508 511.197C564.04 511.706 569.162 512.524 575 513.735C588 516.433 616 521.702 627.5 519.402C647.5 515.402 659 499.235 680.5 499.235C700.5 499.235 725 529.235 742 528.735C757.654 528.735 768.77 510.583 791.793 500.59C798.991 497.465 807.16 496.777 814.423 499.745C832.335 507.064 850.418 524.648 866 524.235C882.791 524.235 902.316 509.786 921.814 505.392C926.856 504.255 932.097 504.674 937.176 505.631C966.993 511.248 970.679 514.346 989.5 514.735C1006.3 515.083 1036.5 513.235 1055.5 513.235C1114.5 513.235 1090.5 513.235 1124 513.235C1177.5 513.235 1178.99 514.402 1241 514.402C1317.5 514.402 1274.5 512.568 1440 513.235",
   "M0 438.5C150.5 438.5 261 438.318 323.5 456.5C351 464.5 387.517 484.001 423.5 494.5C447.371 501.465 472 503.735 487 507.735C503.786 512.212 504.5 516.808 523 518.735C547 521.235 564.814 501.235 584.5 501.235C604.5 501.235 626 529.069 643 528.569C658.676 528.569 672.076 511.63 695.751 501.972C703.017 499.008 711.231 498.208 718.298 501.617C735.448 509.889 751.454 529.98 767 529.569C783.364 529.569 801.211 507.687 819.903 500.657C825.718 498.469 832.141 499.104 837.992 501.194C859.178 508.764 873.089 523.365 891 523.735C907.8 524.083 923 504.235 963 506.735C1034.5 506.735 1047.5 492.68 1071 481.5C1122.5 457 1142.23 452.871 1185 446.5C1255.5 436 1294 439 1439.5 439",
   "M0.5 364C145.288 362.349 195 361.5 265.5 378C322 391.223 399.182 457.5 411 467.5C424.176 478.649 456.916 491.677 496.259 502.699C498.746 503.396 501.16 504.304 503.511 505.374C517.104 511.558 541.149 520.911 551.5 521.236C571.5 521.236 590 498.736 611.5 498.736C631.5 498.736 652.5 529.236 669.5 528.736C685.171 528.736 697.81 510.924 721.274 501.036C728.505 497.988 736.716 497.231 743.812 500.579C761.362 508.857 778.421 529.148 794 528.736C810.375 528.736 829.35 508.68 848.364 502.179C854.243 500.169 860.624 500.802 866.535 502.718C886.961 509.338 898.141 519.866 916 520.236C932.8 520.583 934.5 510.236 967.5 501.736C1011.5 491 1007.5 493.5 1029.5 480C1069.5 453.5 1072 440.442 1128.5 403.5C1180.5 369.5 1275 360.374 1439 364",
-]
+];
 
-const COLORS = ["#FFB7C5", "#FFDDB7", "#B1C5FF", "#4FABFF", "#076EFF"]
+const COLORS = ["#FFB7C5", "#FFDDB7", "#B1C5FF", "#4FABFF", "#076EFF"];
 
 const GoogleGeminiEffect = ({ isActive }: { isActive: boolean }) => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -43,12 +43,12 @@ const GoogleGeminiEffect = ({ isActive }: { isActive: boolean }) => (
       ))}
     </svg>
   </div>
-)
+);
 
 /* ------------------ PAGE ------------------ */
 
 export default function Page() {
-  const [view, setView] = useState<ViewType>("home")
+  const [view, setView] = useState<ViewType>("home");
 
   return (
     <main className="relative min-h-screen w-full bg-black overflow-hidden">
@@ -60,34 +60,31 @@ export default function Page() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60 z-10 pointer-events-none" />
 
       <AnimatePresence mode="wait">
-        {view === "home" ? (
-          <motion.div
-            key="home"
-            className="relative z-20 flex items-center justify-center min-h-screen px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="flex flex-col items-center text-center">
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-[0.15em] md:tracking-[0.2em] text-white uppercase leading-none mb-4 md:mb-6">
-                Plexus
-              </h1>
-              <p className="text-neutral-300 text-xs md:text-sm tracking-[0.5em] md:tracking-[0.8em] uppercase font-light">
-                Where great minds converge
-              </p>
+        <motion.div
+          key="home"
+          className="relative z-20 flex items-center justify-center min-h-screen px-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="flex flex-col items-center text-center">
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-[0.15em] md:tracking-[0.2em] text-white uppercase leading-none mb-4 md:mb-6">
+              UNIRIVO
+            </h1>
+            <p className="text-neutral-300 text-xs md:text-sm tracking-[0.5em] md:tracking-[0.8em] uppercase font-light">
+              Where great minds converge
+            </p>
 
-              <button
-                onClick={() => setView("features")}
-                className="mt-18 md:mt-20 px-10 md:px-12 py-3.5 md:py-4 rounded-full bg-white/15 text-white uppercase text-[10px] md:text-xs tracking-[0.25em] hover:bg-white hover:text-black transition-all duration-300 border border-white/30 hover:border-white shadow-lg shadow-white/5 hover:shadow-white/20"
-              >
-                Enter Network
-              </button>
-            </div>
-          </motion.div>
-        ) : (
-          <FeaturesSection onBack={() => setView("home")} />
-        )}
+            <Link
+             href='/login'
+              className="mt-18 md:mt-40 px-10 md:px-12 py-3.5 md:py-4 rounded-full bg-white/15 text-white uppercase text-[10px] md:text-xs tracking-[0.25em] hover:bg-white hover:text-black transition-all duration-300 border border-white/30 hover:border-white shadow-lg shadow-white/5 hover:shadow-white/20"
+            >
+              Enter Network
+            </Link>
+          </div>
+        </motion.div>
+        )
       </AnimatePresence>
     </main>
-  )
+  );
 }

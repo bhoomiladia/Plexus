@@ -80,7 +80,7 @@ export default function SignupPage() {
       <div className="absolute inset-0 opacity-10 grayscale pointer-events-none">
         <SyntheticHero
           title="IDENTITY ENROLLMENT"
-          description="Initialize your specialist profile within the Plexus Network."
+          description="Initialize your specialist profile within the UNIRIVO Network."
           badgeText="Secure Entry"
           badgeLabel="Phase"
           ctaButtons={[]}

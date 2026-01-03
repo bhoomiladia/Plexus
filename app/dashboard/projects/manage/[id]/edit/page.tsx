@@ -140,7 +140,7 @@ export default function EditProjectPage() {
               Modify Project
             </h1>
             <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
-              PLEXUS / UPDATE PROTOCOL
+              UNIRIVO / UPDATE PROTOCOL
             </p>
           </div>
         </div>

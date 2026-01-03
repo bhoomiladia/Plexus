@@ -1,43 +1,45 @@
-"use client"
-import React from "react"
-import Link from "next/link"
-import { motion } from "framer-motion"
+"use client";
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
-export type ViewType = "home" | "features"
+export type ViewType = "home" | "features";
 
 interface NavbarProps {
-  onNavigate: (view: ViewType) => void
-  currentView: ViewType
+  onNavigate: (view: ViewType) => void;
+  currentView: ViewType;
 }
 
 const Navbar = ({ onNavigate, currentView }: NavbarProps) => (
   <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-6 bg-black/20 backdrop-blur-sm border-b border-white/10">
-    <button 
+    <button
       onClick={() => onNavigate("home")}
       className="text-white text-xl md:text-2xl font-bold tracking-widest uppercase hover:text-neutral-300 transition-colors"
     >
-      Plexus
+      UNIRIVO
     </button>
-    
+
     <div className="flex items-center gap-4 md:gap-8">
       {/* Navigation Links */}
       <div className="flex gap-6 md:gap-8">
-        <button 
+        <button
           onClick={() => onNavigate("home")}
           className={`text-[10px] md:text-xs uppercase tracking-[0.2em] transition-colors ${
-            currentView === "home" ? "text-white" : "text-neutral-500 hover:text-white"
+            currentView === "home"
+              ? "text-white"
+              : "text-neutral-500 hover:text-white"
           }`}
         >
           Home
         </button>
-        <button 
+        {/* <button 
           onClick={() => onNavigate("features")}
           className={`text-[10px] md:text-xs uppercase tracking-[0.2em] transition-colors ${
             currentView === "features" ? "text-white" : "text-neutral-500 hover:text-white"
           }`}
         >
           Features
-        </button>
+        </button> */}
       </div>
 
       {/* Auth Buttons */}
@@ -48,7 +50,7 @@ const Navbar = ({ onNavigate, currentView }: NavbarProps) => (
         >
           Login
         </Link>
-        <Link 
+        <Link
           href="/signup"
           className="px-4 md:px-6 py-2 md:py-2.5 rounded-full bg-white/10 text-white uppercase text-[9px] md:text-[10px] tracking-[0.3em] hover:bg-white hover:text-black transition-all duration-300 border border-white/20 hover:border-white"
         >
@@ -57,6 +59,6 @@ const Navbar = ({ onNavigate, currentView }: NavbarProps) => (
       </div>
     </div>
   </nav>
-)
+);
 
-export default Navbar
+export default Navbar;

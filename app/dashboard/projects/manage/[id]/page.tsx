@@ -59,7 +59,9 @@ export default function ProjectManagePage() {
   const params = useParams();
   const { data: session } = useSession();
   const id = params.id as string;
-  const [activeTab, setActiveTab] = useState<"details" | "members" | "tasks">("details");
+  const [activeTab, setActiveTab] = useState<"details" | "members" | "tasks">(
+    "details"
+  );
   const [project, setProject] = useState<any>(null);
   const [apps, setApps] = useState<any[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -236,16 +238,24 @@ export default function ProjectManagePage() {
                 tasks={tasks}
                 members={[
                   // Add owner with session email if current user is owner
-                  ...(isOwner && session?.user?.email ? [{
-                    userName: session.user.name || project.ownerName || "Owner",
-                    userEmail: session.user.email,
-                    role: "Owner"
-                  }] : []),
+                  ...(isOwner && session?.user?.email
+                    ? [
+                        {
+                          userName:
+                            session.user.name || project.ownerName || "Owner",
+                          userEmail: session.user.email,
+                          role: "Owner",
+                        },
+                      ]
+                    : []),
                   // Add accepted team members
                   ...acceptedMembers.map((app: any) => ({
                     userName: app.userName,
                     userEmail: app.userEmail,
-                    role: project.roles?.find((r: any) => r._id.toString() === app.roleId)?.roleName || "Member",
+                    role:
+                      project.roles?.find(
+                        (r: any) => r._id.toString() === app.roleId
+                      )?.roleName || "Member",
                   })),
                   // Add authorized personnel
                   ...(project.authorizedPersonnel || []).map((p: any) => ({
@@ -340,55 +350,64 @@ export default function ProjectManagePage() {
                       </p>
                     </div>
                   ) : (
-                    project.authorizedPersonnel.map((person: any, index: number) => (
-                      <div
-                        key={person.userEmail || index}
-                        className="p-8 bg-[#243131] rounded-[2.5rem] border border-[#3E5C58]/30 relative group"
-                      >
-                        <div className="flex items-center gap-5">
-                          <div className="p-3 bg-[#1A2323] rounded-2xl text-[#3E5C58]">
-                            <ShieldCheck size={24} />
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-black   text-[#F0F4F2] uppercase tracking-tight">
-                              {person.userName}
-                            </p>
-                            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
-                              {person.userEmail}
-                            </p>
-                          </div>
-                          {isOwner && (
-                            <button
-                              onClick={async () => {
-                                if (!confirm(`Remove ${person.userName} from authorized personnel?`)) return;
-                                try {
-                                  const res = await fetch(
-                                    `/api/project/members/authorize?projectId=${id}&userEmail=${encodeURIComponent(person.userEmail)}`,
-                                    { method: "DELETE" }
-                                  );
-                                  if (res.ok) {
-                                    setProject((prev: any) => ({
-                                      ...prev,
-                                      authorizedPersonnel: prev.authorizedPersonnel.filter(
-                                        (p: any) => p.userEmail !== person.userEmail
-                                      ),
-                                    }));
-                                  } else {
+                    project.authorizedPersonnel.map(
+                      (person: any, index: number) => (
+                        <div
+                          key={person.userEmail || index}
+                          className="p-8 bg-[#243131] rounded-[2.5rem] border border-[#3E5C58]/30 relative group"
+                        >
+                          <div className="flex items-center gap-5">
+                            <div className="p-3 bg-[#1A2323] rounded-2xl text-[#3E5C58]">
+                              <ShieldCheck size={24} />
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-black   text-[#F0F4F2] uppercase tracking-tight">
+                                {person.userName}
+                              </p>
+                              <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
+                                {person.userEmail}
+                              </p>
+                            </div>
+                            {isOwner && (
+                              <button
+                                onClick={async () => {
+                                  if (
+                                    !confirm(
+                                      `Remove ${person.userName} from authorized personnel?`
+                                    )
+                                  )
+                                    return;
+                                  try {
+                                    const res = await fetch(
+                                      `/api/project/members/authorize?projectId=${id}&userEmail=${encodeURIComponent(person.userEmail)}`,
+                                      { method: "DELETE" }
+                                    );
+                                    if (res.ok) {
+                                      setProject((prev: any) => ({
+                                        ...prev,
+                                        authorizedPersonnel:
+                                          prev.authorizedPersonnel.filter(
+                                            (p: any) =>
+                                              p.userEmail !== person.userEmail
+                                          ),
+                                      }));
+                                    } else {
+                                      alert("Failed to remove authorized user");
+                                    }
+                                  } catch (err) {
+                                    console.error(err);
                                     alert("Failed to remove authorized user");
                                   }
-                                } catch (err) {
-                                  console.error(err);
-                                  alert("Failed to remove authorized user");
-                                }
-                              }}
-                              className="p-2 text-red-500/50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
-                            >
-                              <X size={16} />
-                            </button>
-                          )}
+                                }}
+                                className="p-2 text-red-500/50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                              >
+                                <X size={16} />
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      )
+                    )
                   )}
                 </div>
               </section>
@@ -451,7 +470,7 @@ export default function ProjectManagePage() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Add Member Modal - PLEXUS Dark Styled */}
+      {/* Add Member Modal - UNIRIVO Dark Styled */}
       {showAddMemberModal && (
         <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
@@ -510,7 +529,10 @@ export default function ProjectManagePage() {
                   required
                   value={addMemberForm.roleId}
                   onChange={(e) =>
-                    setAddMemberForm((prev) => ({ ...prev, roleId: e.target.value }))
+                    setAddMemberForm((prev) => ({
+                      ...prev,
+                      roleId: e.target.value,
+                    }))
                   }
                   className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
                 >
@@ -533,10 +555,13 @@ export default function ProjectManagePage() {
                   type="email"
                   value={addMemberForm.email}
                   onChange={(e) =>
-                    setAddMemberForm((prev) => ({ ...prev, email: e.target.value }))
+                    setAddMemberForm((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
                   }
                   className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
-                  placeholder="user@plexus.io"
+                  placeholder="user@UNIRIVO.io"
                 />
               </div>
               <div className="flex gap-4 pt-4">

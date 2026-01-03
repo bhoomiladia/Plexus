@@ -47,7 +47,7 @@ export default function LoginPage() {
       {/* Background Hero Element */}
       <div className="absolute inset-0 opacity-20 grayscale pointer-events-none">
         <SyntheticHero
-          title="PLEXUS ARCHIVE"
+          title="UNIRIVO ARCHIVE"
           description="Operational Intelligence System"
           badgeText="System Active"
           badgeLabel="Status"
@@ -93,7 +93,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
-                placeholder="operator@plexus.io"
+                placeholder="Email Address"
               />
             </div>
 

@@ -669,7 +669,7 @@ export default function ProfilePage() {
                 Verified Member
               </h3>
               <p className="text-[9px] font-black uppercase tracking-widest text-[#88AB8E]/60">
-                Plexus Community
+                UNIRIVO Community
               </p>
             </div>
           </div>
