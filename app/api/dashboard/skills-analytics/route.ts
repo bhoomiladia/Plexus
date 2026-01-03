@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("crewbook");
     const userId = session.user.id;
 
     let userObjectId: ObjectId | null = null;
@@ -56,11 +56,14 @@ export async function GET() {
       });
     });
 
-    // Calculate user's skill coverage
+    // Calculate user's skill coverage (what % of demanded skills does user have)
     const userSkillsLower = userSkills.map((s: string) => s.toLowerCase());
-    const matchedSkills = userSkillsLower.filter((skill: string) => skillDemand[skill]);
-    const coveragePercentage = userSkills.length > 0 
-      ? Math.round((matchedSkills.length / userSkills.length) * 100) 
+    const totalDemandedSkills = Object.keys(skillDemand).length;
+    const userMatchedDemandedSkills = Object.keys(skillDemand).filter(
+      (skill) => userSkillsLower.includes(skill)
+    ).length;
+    const coveragePercentage = totalDemandedSkills > 0 
+      ? Math.round((userMatchedDemandedSkills / totalDemandedSkills) * 100) 
       : 0;
 
     // Get top demanded skills

@@ -481,7 +481,7 @@ export default function DashboardPage() {
                   {skillAnalytics.coveragePercentage}%
                 </h3>
                 <p className="text-xs text-[#88AB8E] mb-2">
-                  of your skills match market demand
+                  of demanded skills you have
                 </p>
               </div>
               <div className="mt-4 h-2 bg-[#1A2323] rounded-full overflow-hidden">
@@ -492,6 +492,9 @@ export default function DashboardPage() {
                   className="h-full bg-[#88AB8E] rounded-full"
                 />
               </div>
+              <p className="text-[10px] text-[#88AB8E]/60 mt-3">
+                Based on {skillAnalytics.totalOpenProjects || 0} open projects
+              </p>
             </div>
 
             {/* Top Demanded Skills */}
@@ -500,25 +503,35 @@ export default function DashboardPage() {
                 Top Demanded Skills
               </span>
               <div className="mt-4 space-y-2">
-                {skillAnalytics.topDemandedSkills
-                  .slice(0, 5)
-                  .map((skill, idx) => (
-                    <div key={skill.skill} className="flex items-center gap-3">
-                      <span className="text-[10px] font-black text-[#88AB8E]/40 w-4">
-                        {idx + 1}
-                      </span>
-                      <span
-                        className={`text-xs font-bold flex-1 capitalize ${
-                          skill.userHas ? "text-[#88AB8E]" : "text-[#F0F4F2]/60"
-                        }`}
-                      >
-                        {skill.skill}
-                      </span>
-                      {skill.userHas && (
-                        <CheckCircle size={12} className="text-[#88AB8E]" />
-                      )}
-                    </div>
-                  ))}
+                {skillAnalytics.topDemandedSkills.length > 0 ? (
+                  skillAnalytics.topDemandedSkills
+                    .slice(0, 5)
+                    .map((skill, idx) => (
+                      <div key={skill.skill} className="flex items-center gap-3">
+                        <span className="text-[10px] font-black text-[#88AB8E]/40 w-4">
+                          {idx + 1}
+                        </span>
+                        <span
+                          className={`text-xs font-bold flex-1 capitalize ${
+                            skill.userHas ? "text-[#88AB8E]" : "text-[#F0F4F2]/60"
+                          }`}
+                        >
+                          {skill.skill}
+                        </span>
+                        <span className="text-[9px] text-[#88AB8E]/40">
+                          {skill.demand} {skill.demand === 1 ? "project" : "projects"}
+                        </span>
+                        {skill.userHas && (
+                          <CheckCircle size={12} className="text-[#88AB8E]" />
+                        )}
+                      </div>
+                    ))
+                ) : (
+                  <div className="text-center py-6">
+                    <Target className="mx-auto mb-2 text-[#88AB8E]/30" size={24} />
+                    <p className="text-xs text-[#88AB8E]/60">No skill data yet</p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -531,19 +544,30 @@ export default function DashboardPage() {
                 </span>
               </div>
               <div className="space-y-2">
-                {skillAnalytics.recommendedSkills.slice(0, 4).map((skill) => (
-                  <div
-                    key={skill.skill}
-                    className="flex items-center justify-between p-3 bg-[#1A2323] rounded-xl border border-white/5"
-                  >
-                    <span className="text-xs font-bold text-[#F0F4F2] capitalize">
-                      {skill.skill}
-                    </span>
-                    <span className="text-[10px] text-[#88AB8E]/60">
-                      {skill.demand} projects
-                    </span>
+                {skillAnalytics.recommendedSkills.length > 0 ? (
+                  skillAnalytics.recommendedSkills.slice(0, 4).map((skill) => (
+                    <div
+                      key={skill.skill}
+                      className="flex items-center justify-between p-3 bg-[#1A2323] rounded-xl border border-white/5"
+                    >
+                      <span className="text-xs font-bold text-[#F0F4F2] capitalize">
+                        {skill.skill}
+                      </span>
+                      <span className="text-[10px] text-[#88AB8E]/60">
+                        {skill.demand} {skill.demand === 1 ? "project" : "projects"}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-6">
+                    <CheckCircle className="mx-auto mb-2 text-[#88AB8E]/30" size={24} />
+                    <p className="text-xs text-[#88AB8E]/60">
+                      {skillAnalytics.userSkills?.length > 0 
+                        ? "You have all demanded skills!" 
+                        : "Add skills to your profile"}
+                    </p>
                   </div>
-                ))}
+                )}
               </div>
               <button
                 onClick={() => router.push("/dashboard/profile")}
