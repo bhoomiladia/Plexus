@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { useWalletModal } from "@solana/wallet-adapter-react-ui";
+import { Transaction, PublicKey } from "@solana/web3.js";
 import {
   X,
   Download,
@@ -12,6 +15,8 @@ import {
   Shield,
   Copy,
   Check,
+  Wallet,
+  Lock,
 } from "lucide-react";
 
 interface CertificateData {
@@ -37,6 +42,7 @@ interface CertificatePreviewProps {
   isOpen: boolean;
   onClose: () => void;
   onMint?: () => Promise<void>;
+  onMintWithWallet?: (walletAddress: string) => Promise<void>;
 }
 
 export default function CertificatePreview({
@@ -44,15 +50,38 @@ export default function CertificatePreview({
   isOpen,
   onClose,
   onMint,
+  onMintWithWallet,
 }: CertificatePreviewProps) {
   const [isMinting, setIsMinting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [mintError, setMintError] = useState<string | null>(null);
+  
+  const { publicKey, connected, signTransaction } = useWallet();
+  const { connection } = useConnection();
+  const { setVisible } = useWalletModal();
+
+  const handleConnectWallet = () => {
+    setVisible(true);
+  };
 
   const handleMint = async () => {
-    if (!onMint) return;
+    if (!connected || !publicKey) {
+      setVisible(true);
+      return;
+    }
+
     setIsMinting(true);
+    setMintError(null);
+    
     try {
-      await onMint();
+      if (onMintWithWallet) {
+        await onMintWithWallet(publicKey.toBase58());
+      } else if (onMint) {
+        await onMint();
+      }
+    } catch (error: any) {
+      console.error("Minting error:", error);
+      setMintError(error.message || "Failed to mint certificate");
     } finally {
       setIsMinting(false);
     }
@@ -71,6 +100,9 @@ export default function CertificatePreview({
       day: "numeric",
     });
   };
+
+  const isMinted = certificate.status === "minted";
+  const canViewCertificate = isMinted;
 
   return (
     <AnimatePresence>
@@ -109,7 +141,9 @@ export default function CertificatePreview({
               {/* Certificate Visual */}
               <div className="relative">
                 <div
-                  className="rounded-2xl overflow-hidden shadow-2xl"
+                  className={`rounded-2xl overflow-hidden shadow-2xl transition-all ${
+                    !canViewCertificate ? "filter blur-sm" : ""
+                  }`}
                   style={{
                     background: "linear-gradient(135deg, #d4e7d4 0%, #f0f4e8 50%, #e8f0e0 100%)",
                   }}
@@ -164,6 +198,15 @@ export default function CertificatePreview({
                   </div>
                 </div>
 
+                {/* Lock Overlay for unminted certificates */}
+                {!canViewCertificate && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 rounded-2xl">
+                    <Lock size={48} className="text-white/80 mb-3" />
+                    <p className="text-white font-bold text-lg">Certificate Locked</p>
+                    <p className="text-white/70 text-sm mt-1">Mint to unlock</p>
+                  </div>
+                )}
+
                 {/* Status Badge */}
                 <div
                   className={`absolute top-4 right-4 px-3 py-1.5 rounded-full text-xs font-bold uppercase flex items-center gap-1.5 ${
@@ -185,6 +228,58 @@ export default function CertificatePreview({
 
               {/* Certificate Details */}
               <div className="space-y-4">
+                {/* Wallet Connection Section */}
+                <div className="bg-[#243131] rounded-2xl p-5 border border-white/5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Wallet className="text-[#88AB8E]" size={18} />
+                    <h4 className="text-sm font-bold text-[#F0F4F2] uppercase tracking-wider">
+                      Wallet Connection
+                    </h4>
+                  </div>
+
+                  {connected && publicKey ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                        <span className="text-sm text-green-400 font-medium">Connected</span>
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+                          Wallet Address
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-[#F0F4F2] font-mono bg-[#1A2323] px-3 py-2 rounded-lg flex-1 truncate">
+                            {publicKey.toBase58()}
+                          </p>
+                          <button
+                            onClick={() => copyToClipboard(publicKey.toBase58())}
+                            className="p-2 bg-[#1A2323] rounded-lg hover:bg-white/10 transition-all"
+                          >
+                            {copied ? (
+                              <Check size={14} className="text-green-400" />
+                            ) : (
+                              <Copy size={14} className="text-[#88AB8E]" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-sm text-[#F0F4F2]/70">
+                        Connect your Solana wallet to mint this certificate on-chain.
+                      </p>
+                      <button
+                        onClick={handleConnectWallet}
+                        className="w-full py-3 bg-[#88AB8E] text-[#1A2323] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                      >
+                        <Wallet size={16} />
+                        Connect Wallet
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Blockchain Info */}
                 <div className="bg-[#243131] rounded-2xl p-5 border border-white/5">
                   <div className="flex items-center gap-2 mb-4">
@@ -212,16 +307,6 @@ export default function CertificatePreview({
                         <p className="text-xs text-[#F0F4F2] font-mono bg-[#1A2323] px-3 py-2 rounded-lg flex-1 truncate">
                           {certificate.certificateHash}
                         </p>
-                        <button
-                          onClick={() => copyToClipboard(certificate.certificateHash)}
-                          className="p-2 bg-[#1A2323] rounded-lg hover:bg-white/10 transition-all"
-                        >
-                          {copied ? (
-                            <Check size={14} className="text-green-400" />
-                          ) : (
-                            <Copy size={14} className="text-[#88AB8E]" />
-                          )}
-                        </button>
                       </div>
                     </div>
 
@@ -269,18 +354,34 @@ export default function CertificatePreview({
                   </div>
                 </div>
 
+                {/* Error Message */}
+                {mintError && (
+                  <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4">
+                    <p className="text-red-400 text-sm">{mintError}</p>
+                  </div>
+                )}
+
                 {/* Actions */}
                 <div className="flex gap-3">
-                  {certificate.status === "pending" && onMint && (
+                  {certificate.status === "pending" && (
                     <button
                       onClick={handleMint}
-                      disabled={isMinting}
-                      className="flex-1 py-4 bg-[#88AB8E] text-[#1A2323] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      disabled={isMinting || !connected}
+                      className={`flex-1 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all flex items-center justify-center gap-2 ${
+                        connected
+                          ? "bg-[#88AB8E] text-[#1A2323] hover:scale-[1.02]"
+                          : "bg-[#3E5C58] text-[#F0F4F2]/50 cursor-not-allowed"
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       {isMinting ? (
                         <>
                           <Loader2 size={16} className="animate-spin" />
                           Minting...
+                        </>
+                      ) : !connected ? (
+                        <>
+                          <Lock size={16} />
+                          Connect Wallet to Mint
                         </>
                       ) : (
                         <>
@@ -305,10 +406,18 @@ export default function CertificatePreview({
 
                   <button
                     onClick={() => {
-                      // Download certificate as image (would need html2canvas in production)
+                      if (!canViewCertificate) {
+                        alert("Mint the certificate first to download it!");
+                        return;
+                      }
                       alert("Download feature coming soon!");
                     }}
-                    className="px-6 py-4 bg-[#243131] text-[#88AB8E] rounded-xl font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-all border border-white/5"
+                    disabled={!canViewCertificate}
+                    className={`px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border border-white/5 ${
+                      canViewCertificate
+                        ? "bg-[#243131] text-[#88AB8E] hover:bg-white/10"
+                        : "bg-[#243131]/50 text-[#88AB8E]/30 cursor-not-allowed"
+                    }`}
                   >
                     <Download size={16} />
                   </button>

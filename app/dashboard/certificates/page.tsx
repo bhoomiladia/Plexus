@@ -13,8 +13,11 @@ import {
   Clock,
   AlertCircle,
   Search,
+  Wallet,
 } from "lucide-react";
 import CertificatePreview from "@/components/CertificatePreview";
+import WalletConnectButton from "@/components/WalletConnectButton";
+import { useCertificateMint } from "@/hooks/useCertificateMint";
 
 interface Certificate {
   _id: string;
@@ -41,6 +44,7 @@ export default function CertificatesPage() {
   const [loading, setLoading] = useState(true);
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const { mintCertificate, isMinting, isWalletConnected, walletAddress } = useCertificateMint();
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -65,36 +69,41 @@ export default function CertificatesPage() {
   }, [session]);
 
   const handleMintCertificate = async (certificateId: string) => {
-    try {
-      const res = await fetch("/api/certificates/mint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ certificateId }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        // Update certificate in state
-        setCertificates((prev) =>
-          prev.map((cert) =>
-            cert._id === certificateId
-              ? { ...cert, status: "minted", blockchain: data.blockchain }
-              : cert
-          )
+    const result = await mintCertificate(certificateId);
+    
+    if (result.success) {
+      // Update certificate in state
+      setCertificates((prev) =>
+        prev.map((cert) =>
+          cert._id === certificateId
+            ? { 
+                ...cert, 
+                status: "minted" as const, 
+                blockchain: {
+                  network: "solana-devnet",
+                  transactionSignature: result.transactionSignature,
+                  explorerUrl: result.explorerUrl,
+                }
+              }
+            : cert
+        )
+      );
+      // Update selected certificate if open
+      if (selectedCertificate?._id === certificateId) {
+        setSelectedCertificate((prev) =>
+          prev ? { 
+            ...prev, 
+            status: "minted" as const, 
+            blockchain: {
+              network: "solana-devnet",
+              transactionSignature: result.transactionSignature,
+              explorerUrl: result.explorerUrl,
+            }
+          } : null
         );
-        // Update selected certificate if open
-        if (selectedCertificate?._id === certificateId) {
-          setSelectedCertificate((prev) =>
-            prev ? { ...prev, status: "minted", blockchain: data.blockchain } : null
-          );
-        }
-      } else {
-        const error = await res.json();
-        alert(error.error || "Failed to mint certificate");
       }
-    } catch (error) {
-      console.error("Error minting certificate:", error);
-      alert("Failed to mint certificate");
+    } else {
+      alert(result.error || "Failed to mint certificate");
     }
   };
 
@@ -144,19 +153,24 @@ export default function CertificatesPage() {
             </div>
           </div>
 
-          {/* Search */}
-          <div className="relative">
-            <Search
-              size={16}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
-            />
-            <input
-              type="text"
-              placeholder="Search certificates..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-[#243131] border border-white/5 pl-10 pr-4 py-3 rounded-xl text-[#F0F4F2] text-sm outline-none focus:ring-2 focus:ring-[#88AB8E] w-64"
-            />
+          <div className="flex items-center gap-4">
+            {/* Wallet Connect Button */}
+            <WalletConnectButton showBalance={true} />
+            
+            {/* Search */}
+            <div className="relative">
+              <Search
+                size={16}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
+              />
+              <input
+                type="text"
+                placeholder="Search certificates..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-[#243131] border border-white/5 pl-10 pr-4 py-3 rounded-xl text-[#F0F4F2] text-sm outline-none focus:ring-2 focus:ring-[#88AB8E] w-64"
+              />
+            </div>
           </div>
         </div>
 

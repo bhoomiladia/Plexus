@@ -1,45 +1,44 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import {
-  createNewWallet,
-  getWalletBalance,
-  requestAirdrop,
-  getWalletFromPrivateKey,
-} from "@/lib/solana";
+import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
 
-// GET - Get wallet info and balance
-export async function GET() {
+const SOLANA_RPC_URL = "https://api.devnet.solana.com";
+
+// GET - Get wallet info and balance for a connected wallet
+export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const secretKey = process.env.SOLANA_WALLET_SECRET_KEY;
+    const { searchParams } = new URL(req.url);
+    const walletAddress = searchParams.get("address");
 
-    if (!secretKey) {
+    if (!walletAddress) {
       return NextResponse.json({
         configured: false,
-        message: "Solana wallet not configured. Please add SOLANA_WALLET_SECRET_KEY to .env.local",
+        message: "No wallet address provided. Please connect your Solana wallet.",
       });
     }
 
     try {
-      const wallet = getWalletFromPrivateKey(secretKey);
-      const balance = await getWalletBalance(wallet.publicKey.toBase58());
+      const connection = new Connection(SOLANA_RPC_URL, "confirmed");
+      const publicKey = new PublicKey(walletAddress);
+      const balance = await connection.getBalance(publicKey);
 
       return NextResponse.json({
         configured: true,
-        publicKey: wallet.publicKey.toBase58(),
-        balance,
+        publicKey: walletAddress,
+        balance: balance / LAMPORTS_PER_SOL,
         network: "devnet",
-        explorerUrl: `https://explorer.solana.com/address/${wallet.publicKey.toBase58()}?cluster=devnet`,
+        explorerUrl: `https://explorer.solana.com/address/${walletAddress}?cluster=devnet`,
       });
     } catch (error) {
       return NextResponse.json({
         configured: false,
-        error: "Invalid wallet configuration",
+        error: "Invalid wallet address",
       });
     }
   } catch (error) {
@@ -51,7 +50,7 @@ export async function GET() {
   }
 }
 
-// POST - Request airdrop (devnet only)
+// POST - Request airdrop for connected wallet (devnet only)
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -59,29 +58,40 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const secretKey = process.env.SOLANA_WALLET_SECRET_KEY;
+    const body = await req.json();
+    const { walletAddress, amount = 1 } = body;
 
-    if (!secretKey) {
+    if (!walletAddress) {
       return NextResponse.json(
-        { error: "Wallet not configured" },
+        { error: "Wallet address is required" },
         { status: 400 }
       );
     }
 
-    const wallet = getWalletFromPrivateKey(secretKey);
-    const result = await requestAirdrop(wallet.publicKey.toBase58(), 1);
+    try {
+      const connection = new Connection(SOLANA_RPC_URL, "confirmed");
+      const publicKey = new PublicKey(walletAddress);
+      
+      const signature = await connection.requestAirdrop(
+        publicKey,
+        amount * LAMPORTS_PER_SOL
+      );
+      
+      await connection.confirmTransaction(signature, "confirmed");
+      
+      const newBalance = await connection.getBalance(publicKey);
 
-    if (result.success) {
-      const newBalance = await getWalletBalance(wallet.publicKey.toBase58());
       return NextResponse.json({
         success: true,
-        message: "Airdrop successful! 1 SOL added to wallet.",
-        signature: result.signature,
-        newBalance,
+        message: `Airdrop successful! ${amount} SOL added to wallet.`,
+        signature,
+        newBalance: newBalance / LAMPORTS_PER_SOL,
+        explorerUrl: `https://explorer.solana.com/tx/${signature}?cluster=devnet`,
       });
-    } else {
+    } catch (error: any) {
+      console.error("Error requesting airdrop:", error);
       return NextResponse.json(
-        { error: result.error || "Airdrop failed" },
+        { error: error.message || "Airdrop failed. Try again later." },
         { status: 500 }
       );
     }

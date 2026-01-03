@@ -20,6 +20,7 @@ import {
   Shield,
 } from "lucide-react";
 import CertificatePreview from "@/components/CertificatePreview";
+import { useCertificateMint } from "@/hooks/useCertificateMint";
 
 interface Task {
   _id: string;
@@ -69,6 +70,7 @@ export default function TasksPage() {
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [generatedCertificate, setGeneratedCertificate] = useState<Certificate | null>(null);
   const [isGeneratingCert, setIsGeneratingCert] = useState(false);
+  const { mintCertificate, isWalletConnected } = useCertificateMint();
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -181,24 +183,23 @@ export default function TasksPage() {
 
   const handleMintCertificate = async () => {
     if (!generatedCertificate) return;
-    try {
-      const res = await fetch("/api/certificates/mint", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ certificateId: generatedCertificate._id }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setGeneratedCertificate((prev) =>
-          prev ? { ...prev, status: "minted", blockchain: data.blockchain } : null
-        );
-      } else {
-        const error = await res.json();
-        alert(error.error || "Failed to mint certificate");
-      }
-    } catch (error) {
-      console.error("Error minting certificate:", error);
-      alert("Failed to mint certificate");
+    
+    const result = await mintCertificate(generatedCertificate._id);
+    
+    if (result.success) {
+      setGeneratedCertificate((prev) =>
+        prev ? { 
+          ...prev, 
+          status: "minted" as const, 
+          blockchain: {
+            network: "solana-devnet",
+            transactionSignature: result.transactionSignature,
+            explorerUrl: result.explorerUrl,
+          }
+        } : null
+      );
+    } else {
+      alert(result.error || "Failed to mint certificate");
     }
   };
 

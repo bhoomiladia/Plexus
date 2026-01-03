@@ -1,17 +1,17 @@
 import {
   Connection,
-  Keypair,
   PublicKey,
   Transaction,
-  SystemProgram,
   LAMPORTS_PER_SOL,
-  sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { createHash } from "crypto";
 
 // Solana Devnet configuration
 const SOLANA_NETWORK = "devnet";
 const SOLANA_RPC_URL = "https://api.devnet.solana.com";
+
+// Memo Program ID
+export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
 
 // Initialize connection
 export const getConnection = () => {
@@ -42,97 +42,40 @@ export const generateCertificateId = (): string => {
   return `CERT-${timestamp}-${randomPart}`.toUpperCase();
 };
 
-// Get or create wallet from private key
-export const getWalletFromPrivateKey = (privateKeyBase58: string): Keypair => {
-  try {
-    // Decode base58 private key
-    const privateKeyBytes = Buffer.from(privateKeyBase58, "base64");
-    return Keypair.fromSecretKey(privateKeyBytes);
-  } catch (error) {
-    console.error("Error creating wallet from private key:", error);
-    throw new Error("Invalid private key format");
-  }
-};
-
-// Create a new wallet (for testing)
-export const createNewWallet = (): { publicKey: string; secretKey: string } => {
-  const keypair = Keypair.generate();
-  return {
-    publicKey: keypair.publicKey.toBase58(),
-    secretKey: Buffer.from(keypair.secretKey).toString("base64"),
-  };
-};
-
-
-// Store certificate hash on Solana blockchain using memo program
-export const storeCertificateOnChain = async (
+// Create a memo transaction for certificate (to be signed by client wallet)
+export const createCertificateMemoTransaction = async (
+  walletPublicKey: PublicKey,
   certificateHash: string,
-  certificateId: string,
-  walletSecretKey: string
+  certificateId: string
 ): Promise<{
-  success: boolean;
-  transactionSignature?: string;
-  explorerUrl?: string;
-  error?: string;
+  transaction: Transaction;
+  blockhash: string;
+  lastValidBlockHeight: number;
 }> => {
-  try {
-    const connection = getConnection();
-    
-    // Create wallet from secret key
-    const wallet = getWalletFromPrivateKey(walletSecretKey);
-    
-    // Check wallet balance
-    const balance = await connection.getBalance(wallet.publicKey);
-    if (balance < 0.001 * LAMPORTS_PER_SOL) {
-      return {
-        success: false,
-        error: "Insufficient SOL balance. Please fund the wallet on devnet.",
-      };
-    }
+  const connection = getConnection();
 
-    // Create memo data with certificate info
-    const memoData = JSON.stringify({
-      type: "CERTIFICATE",
-      id: certificateId,
-      hash: certificateHash,
-      timestamp: new Date().toISOString(),
-      app: "Unirico",
-    });
+  // Create memo data with certificate info
+  const memoData = JSON.stringify({
+    type: "CERTIFICATE",
+    id: certificateId,
+    hash: certificateHash,
+    timestamp: new Date().toISOString(),
+    app: "Unirico",
+  });
 
-    // Memo Program ID
-    const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
+  // Create transaction with memo instruction
+  const transaction = new Transaction().add({
+    keys: [{ pubkey: walletPublicKey, isSigner: true, isWritable: true }],
+    programId: MEMO_PROGRAM_ID,
+    data: Buffer.from(memoData),
+  });
 
-    // Create transaction with memo instruction
-    const transaction = new Transaction().add({
-      keys: [{ pubkey: wallet.publicKey, isSigner: true, isWritable: true }],
-      programId: MEMO_PROGRAM_ID,
-      data: Buffer.from(memoData),
-    });
+  // Get recent blockhash
+  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+  transaction.recentBlockhash = blockhash;
+  transaction.feePayer = walletPublicKey;
 
-    // Get recent blockhash
-    const { blockhash } = await connection.getLatestBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = wallet.publicKey;
-
-    // Sign and send transaction
-    const signature = await sendAndConfirmTransaction(connection, transaction, [wallet], {
-      commitment: "confirmed",
-    });
-
-    const explorerUrl = `https://explorer.solana.com/tx/${signature}?cluster=${SOLANA_NETWORK}`;
-
-    return {
-      success: true,
-      transactionSignature: signature,
-      explorerUrl,
-    };
-  } catch (error: any) {
-    console.error("Error storing certificate on chain:", error);
-    return {
-      success: false,
-      error: error.message || "Failed to store certificate on blockchain",
-    };
-  }
+  return { transaction, blockhash, lastValidBlockHeight };
 };
 
 // Verify certificate on blockchain
@@ -159,7 +102,7 @@ export const verifyCertificateOnChain = async (
     const memoInstruction = transaction.transaction.message.compiledInstructions?.find(
       (ix) => {
         const programId = transaction.transaction.message.staticAccountKeys[ix.programIdIndex];
-        return programId?.toBase58() === "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
+        return programId?.toBase58() === MEMO_PROGRAM_ID.toBase58();
       }
     );
 
@@ -209,4 +152,14 @@ export const requestAirdrop = async (
     console.error("Error requesting airdrop:", error);
     return { success: false, error: error.message };
   }
+};
+
+// Get explorer URL for transaction
+export const getExplorerUrl = (signature: string): string => {
+  return `https://explorer.solana.com/tx/${signature}?cluster=${SOLANA_NETWORK}`;
+};
+
+// Get explorer URL for address
+export const getAddressExplorerUrl = (address: string): string => {
+  return `https://explorer.solana.com/address/${address}?cluster=${SOLANA_NETWORK}`;
 };

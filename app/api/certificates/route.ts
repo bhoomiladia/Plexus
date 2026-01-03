@@ -6,7 +6,6 @@ import { ObjectId } from "mongodb";
 import {
   generateCertificateId,
   generateCertificateHash,
-  storeCertificateOnChain,
 } from "@/lib/solana";
 
 // GET - Fetch user's certificates
@@ -29,6 +28,7 @@ export async function GET(req: NextRequest) {
     const formattedCertificates = certificates.map((cert: any) => ({
       _id: cert._id.toString(),
       certificateId: cert.certificateId,
+      certificateHash: cert.certificateHash,
       taskTitle: cert.taskTitle,
       projectName: cert.projectName,
       userName: cert.userName,
@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
 }
 
 
-// POST - Generate and mint a new certificate
+// POST - Generate a new certificate (minting is done separately via wallet connection)
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { taskId, mintOnChain = false } = body;
+    const { taskId } = body;
 
     if (!taskId) {
       return NextResponse.json({ error: "Task ID is required" }, { status: 400 });
@@ -89,6 +89,12 @@ export async function POST(req: NextRequest) {
           _id: existingCert._id.toString(),
           certificateId: existingCert.certificateId,
           certificateHash: existingCert.certificateHash,
+          userName: existingCert.userName,
+          taskTitle: existingCert.taskTitle,
+          projectName: existingCert.projectName,
+          role: existingCert.role,
+          totalTasksCompleted: existingCert.totalTasksCompleted,
+          issuedAt: existingCert.issuedAt,
           status: existingCert.status,
           blockchain: existingCert.blockchain,
         },
@@ -126,7 +132,7 @@ export async function POST(req: NextRequest) {
       issuedAt,
     });
 
-    // Create certificate record
+    // Create certificate record (pending status - user needs to connect wallet to mint)
     const certificate = {
       userId: session.user.id,
       userName: session.user.name || "User",
@@ -143,8 +149,7 @@ export async function POST(req: NextRequest) {
       blockchain: {
         network: "solana-devnet",
         transactionSignature: null,
-        mintAddress: null,
-        metadataUri: null,
+        walletAddress: null,
         explorerUrl: null,
       },
       status: "pending",
@@ -152,41 +157,22 @@ export async function POST(req: NextRequest) {
 
     const result = await db.collection("certificates").insertOne(certificate);
 
-    // Mint on blockchain if requested and wallet is configured
-    let blockchainResult = null;
-    if (mintOnChain && process.env.SOLANA_WALLET_SECRET_KEY) {
-      blockchainResult = await storeCertificateOnChain(
-        certificateHash,
-        certificateId,
-        process.env.SOLANA_WALLET_SECRET_KEY
-      );
-
-      if (blockchainResult.success) {
-        await db.collection("certificates").updateOne(
-          { _id: result.insertedId },
-          {
-            $set: {
-              status: "minted",
-              "blockchain.transactionSignature": blockchainResult.transactionSignature,
-              "blockchain.explorerUrl": blockchainResult.explorerUrl,
-            },
-          }
-        );
-        (certificate as any).status = "minted";
-        (certificate as any).blockchain.transactionSignature = blockchainResult.transactionSignature || null;
-        (certificate as any).blockchain.explorerUrl = blockchainResult.explorerUrl || null;
-      }
-    }
-
     return NextResponse.json({
       success: true,
       certificate: {
         _id: result.insertedId.toString(),
-        ...certificate,
-        taskId: taskId,
-        projectId: task.projectId?.toString(),
+        certificateId: certificate.certificateId,
+        certificateHash: certificate.certificateHash,
+        userName: certificate.userName,
+        taskTitle: certificate.taskTitle,
+        projectName: certificate.projectName,
+        role: certificate.role,
+        totalTasksCompleted: certificate.totalTasksCompleted,
+        issuedAt: certificate.issuedAt,
+        status: certificate.status,
+        blockchain: certificate.blockchain,
       },
-      blockchainResult,
+      message: "Certificate created. Connect your wallet to mint it on-chain.",
     });
   } catch (error) {
     console.error("Error creating certificate:", error);
