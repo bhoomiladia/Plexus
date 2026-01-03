@@ -25,6 +25,7 @@ import {
   Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import SkillQuizModal from "@/components/SkillQuizModal";
 
 type Links = {
   github?: string;
@@ -114,6 +115,10 @@ export default function ProfilePage() {
   const [editingEducation, setEditingEducation] = useState<Education | null>(
     null
   );
+
+  // Skill Quiz states
+  const [showSkillQuiz, setShowSkillQuiz] = useState(false);
+  const [pendingSkill, setPendingSkill] = useState("");
 
   const normalizeUrl = (url?: string) => {
     if (!url) return "";
@@ -270,6 +275,33 @@ export default function ProfilePage() {
   const handleDeleteEducation = async (id: string) => {
     const updated = profile?.education.filter((e) => e.id !== id) || [];
     await patchProfile({ education: updated });
+  };
+
+  // Skill Quiz handlers
+  const handleAddSkillClick = () => {
+    if (newTech.trim()) {
+      // Check if skill already exists
+      if (profile?.techStack.includes(newTech.trim())) {
+        setNewTech("");
+        return;
+      }
+      setPendingSkill(newTech.trim());
+      setShowSkillQuiz(true);
+    }
+  };
+
+  const handleSkillQuizSuccess = async (skill: string) => {
+    await patchProfile({
+      techStack: [...(profile?.techStack || []), skill],
+    });
+    setNewTech("");
+    setPendingSkill("");
+    setShowSkillQuiz(false);
+  };
+
+  const handleSkillQuizClose = () => {
+    setShowSkillQuiz(false);
+    setPendingSkill("");
   };
 
   if (loading || !profile)
@@ -545,24 +577,14 @@ export default function ProfilePage() {
                   onChange={(e) => setNewTech(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && newTech.trim()) {
-                      patchProfile({
-                        techStack: [...profile.techStack, newTech.trim()],
-                      });
-                      setNewTech("");
+                      handleAddSkillClick();
                     }
                   }}
                   className="bg-[#1A2323] border border-[#88AB8E]/30 px-4 py-2 rounded-xl text-[10px] text-white outline-none uppercase tracking-widest"
                   placeholder="Add skill..."
                 />
                 <button
-                  onClick={() => {
-                    if (newTech.trim()) {
-                      patchProfile({
-                        techStack: [...profile.techStack, newTech.trim()],
-                      });
-                      setNewTech("");
-                    }
-                  }}
+                  onClick={handleAddSkillClick}
                   className="p-2 bg-[#88AB8E] rounded-xl text-[#141C1C]"
                 >
                   <Plus size={14} />
@@ -1264,6 +1286,14 @@ export default function ProfilePage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Skill Quiz Modal */}
+      <SkillQuizModal
+        skill={pendingSkill}
+        isOpen={showSkillQuiz}
+        onClose={handleSkillQuizClose}
+        onSuccess={handleSkillQuizSuccess}
+      />
     </div>
   );
 }
