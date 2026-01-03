@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import {
   ArrowLeft,
@@ -18,8 +18,10 @@ import {
   Sparkles,
   Loader2,
   User,
+  Target,
 } from "lucide-react";
 import KanbanBoard from "@/components/KanbanBoard";
+import MilestoneSection from "@/components/MilestoneSection";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -70,6 +72,7 @@ export default function ProjectManagePage() {
   const [loadingProfiles, setLoadingProfiles] = useState(false);
   const [selectedRoleForMatch, setSelectedRoleForMatch] = useState<any>(null);
   const [shortlistingUser, setShortlistingUser] = useState<string | null>(null);
+  const [activeTaskView, setActiveTaskView] = useState<"kanban" | "milestones">("kanban");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +103,28 @@ export default function ProjectManagePage() {
     () => apps.filter((a) => a.status === "ACCEPTED"),
     [apps]
   );
+
+  const handleCreateTaskFromSuggestion = useCallback(async (taskTitle: string) => {
+    try {
+      const res = await fetch(`/api/project/${id}/tasks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: taskTitle,
+          description: "",
+          priority: "medium",
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setTasks((prev) => [...prev, data.task]);
+        setActiveTaskView("kanban");
+      }
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
+  }, [id]);
 
   const fetchMatchedProfiles = async (role: any) => {
     setSelectedRoleForMatch(role);
@@ -339,49 +364,83 @@ export default function ProjectManagePage() {
               key="tasks"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
             >
-              <KanbanBoard
-                projectId={id}
-                tasks={tasks}
-                members={[
-                  // Add owner with session email if current user is owner
-                  ...(isOwner && session?.user?.email
-                    ? [
-                        {
-                          userName:
-                            session.user.name || project.ownerName || "Owner",
-                          userEmail: session.user.email,
-                          role: "Owner",
-                        },
-                      ]
-                    : []),
-                  // Add accepted team members
-                  ...acceptedMembers.map((app: any) => ({
-                    userName: app.userName,
-                    userEmail: app.userEmail,
-                    role:
-                      project.roles?.find(
-                        (r: any) => r._id.toString() === app.roleId
-                      )?.roleName || "Member",
-                  })),
-                  // Add authorized personnel
-                  ...(project.authorizedPersonnel || []).map((p: any) => ({
-                    userName: p.userName,
-                    userEmail: p.userEmail,
-                    role: "Authorized",
-                  })),
-                ]}
-                isOwner={isOwner}
-                currentUserEmail={session?.user?.email || ""}
-                currentUserName={session?.user?.name || ""}
-                isAuthorized={(project.authorizedPersonnel || []).some(
-                  (p: any) => p.userEmail === session?.user?.email
-                )}
-                isTeamMember={acceptedMembers.some(
-                  (app: any) => app.userEmail === session?.user?.email
-                )}
-                onTasksChange={setTasks}
-              />
+              {/* Task View Toggle */}
+              <div className="flex items-center gap-2 p-1.5 bg-[#243131] rounded-2xl border border-white/5 w-fit">
+                <button
+                  onClick={() => setActiveTaskView("kanban")}
+                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
+                    activeTaskView === "kanban"
+                      ? "bg-[#88AB8E] text-[#141C1C]"
+                      : "text-[#F0F4F2]/40 hover:text-[#F0F4F2]"
+                  }`}
+                >
+                  <LayoutGrid size={14} /> Kanban Board
+                </button>
+                <button
+                  onClick={() => setActiveTaskView("milestones")}
+                  className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
+                    activeTaskView === "milestones"
+                      ? "bg-[#88AB8E] text-[#141C1C]"
+                      : "text-[#F0F4F2]/40 hover:text-[#F0F4F2]"
+                  }`}
+                >
+                  <Target size={14} /> Milestones
+                </button>
+              </div>
+
+              {activeTaskView === "kanban" ? (
+                <KanbanBoard
+                  projectId={id}
+                  tasks={tasks}
+                  members={[
+                    ...(isOwner && session?.user?.email
+                      ? [
+                          {
+                            userName:
+                              session.user.name || project.ownerName || "Owner",
+                            userEmail: session.user.email,
+                            role: "Owner",
+                          },
+                        ]
+                      : []),
+                    ...acceptedMembers.map((app: any) => ({
+                      userName: app.userName,
+                      userEmail: app.userEmail,
+                      role:
+                        project.roles?.find(
+                          (r: any) => r._id.toString() === app.roleId
+                        )?.roleName || "Member",
+                    })),
+                    ...(project.authorizedPersonnel || []).map((p: any) => ({
+                      userName: p.userName,
+                      userEmail: p.userEmail,
+                      role: "Authorized",
+                    })),
+                  ]}
+                  isOwner={isOwner}
+                  currentUserEmail={session?.user?.email || ""}
+                  currentUserName={session?.user?.name || ""}
+                  isAuthorized={(project.authorizedPersonnel || []).some(
+                    (p: any) => p.userEmail === session?.user?.email
+                  )}
+                  isTeamMember={acceptedMembers.some(
+                    (app: any) => app.userEmail === session?.user?.email
+                  )}
+                  onTasksChange={setTasks}
+                />
+              ) : (
+                <MilestoneSection
+                  projectId={id}
+                  projectTitle={project.title}
+                  projectDescription={project.description}
+                  tasks={tasks}
+                  teamSize={acceptedMembers.length + 1}
+                  isOwner={isOwner}
+                  onCreateTaskFromSuggestion={handleCreateTaskFromSuggestion}
+                />
+              )}
             </motion.div>
           ) : (
             <motion.div

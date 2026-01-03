@@ -212,67 +212,102 @@ export default function InterviewPage() {
         return;
       }
 
-      const recognition = new SpeechRecognitionAPI();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = "en-US";
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        setIsListening(true);
-      };
-
-      recognition.onresult = (event: SpeechRecognitionEvent) => {
-        let interimText = "";
-        let finalText = "";
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const result = event.results[i];
-          const text = result[0].transcript;
+      // First request microphone permission
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then((stream) => {
+          // Stop the stream immediately, we just needed permission
+          stream.getTracks().forEach(track => track.stop());
           
-          if (result.isFinal) {
-            finalText += text + " ";
-          } else {
-            interimText += text;
-          }
-        }
+          const recognition = new SpeechRecognitionAPI();
+          recognition.continuous = false; // Use non-continuous to avoid network issues
+          recognition.interimResults = true;
+          recognition.lang = "en-US";
+          recognition.maxAlternatives = 1;
 
-        if (finalText) {
-          setInput((prev) => (prev + " " + finalText).trim());
-          setTranscript("");
-        } else {
-          setTranscript(interimText);
-        }
-      };
+          recognition.onstart = () => {
+            setIsListening(true);
+            setMediaError("");
+          };
 
-      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
-        console.error("Speech recognition error:", event.error);
-        if (event.error === "not-allowed") {
+          recognition.onresult = (event: SpeechRecognitionEvent) => {
+            let interimText = "";
+            let finalText = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const result = event.results[i];
+              const text = result[0].transcript;
+              
+              if (result.isFinal) {
+                finalText += text + " ";
+              } else {
+                interimText += text;
+              }
+            }
+
+            if (finalText) {
+              setInput((prev) => (prev + " " + finalText).trim());
+              setTranscript("");
+            } else {
+              setTranscript(interimText);
+            }
+          };
+
+          recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+            console.error("Speech recognition error:", event.error);
+            if (event.error === "not-allowed") {
+              setMediaError("Microphone access denied. Please allow microphone permissions.");
+              setIsMicOn(false);
+              setIsListening(false);
+            } else if (event.error === "no-speech") {
+              // Ignore no-speech errors, just restart
+              setIsListening(false);
+            } else if (event.error === "network") {
+              // Network error - restart after a short delay
+              setIsListening(false);
+              console.log("Network error, restarting speech recognition...");
+              setTimeout(() => {
+                if (isMicOnRef.current && recognitionRef.current) {
+                  try {
+                    recognitionRef.current.start();
+                  } catch (e) {
+                    // Ignore
+                  }
+                }
+              }, 500);
+            } else if (event.error === "aborted") {
+              // Aborted - just restart
+              setIsListening(false);
+            } else {
+              setMediaError(`Speech error: ${event.error}. Try again.`);
+              setIsListening(false);
+            }
+          };
+
+          recognition.onend = () => {
+            setIsListening(false);
+            // Restart if still supposed to be on
+            if (isMicOnRef.current && recognitionRef.current) {
+              setTimeout(() => {
+                if (isMicOnRef.current && recognitionRef.current) {
+                  try {
+                    recognitionRef.current.start();
+                  } catch (e) {
+                    // Ignore if already started
+                  }
+                }
+              }, 100);
+            }
+          };
+
+          recognitionRef.current = recognition;
+          recognition.start();
+          setIsMicOn(true);
+        })
+        .catch((err) => {
+          console.error("Microphone permission error:", err);
           setMediaError("Microphone access denied. Please allow microphone permissions.");
           setIsMicOn(false);
-          setIsListening(false);
-        } else if (event.error === "no-speech") {
-          // Ignore no-speech errors, just restart
-        } else {
-          setMediaError(`Speech error: ${event.error}`);
-        }
-      };
-
-      recognition.onend = () => {
-        setIsListening(false);
-        // Restart if still supposed to be on
-        if (isMicOnRef.current && recognitionRef.current) {
-          try {
-            recognitionRef.current.start();
-          } catch (e) {
-            // Ignore if already started
-          }
-        }
-      };
-
-      recognitionRef.current = recognition;
-      recognition.start();
-      setIsMicOn(true);
+        });
     } catch (err: any) {
       console.error("Microphone error:", err);
       setMediaError("Failed to start microphone. Please check permissions.");
