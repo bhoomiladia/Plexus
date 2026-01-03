@@ -244,7 +244,7 @@ export default function ProjectManagePage() {
                           </p>
                           <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
                             {project.roles.find(
-                              (r: any) => r._id === app.roleId
+                              (r: any) => r._id.toString() === app.roleId
                             )?.roleName || "Specialist"}
                           </p>
                         </div>
@@ -323,14 +323,79 @@ export default function ProjectManagePage() {
             <h2 className="text-3xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-8">
               Deploy Specialist
             </h2>
-            <form onSubmit={() => {}} className="space-y-6">
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!addMemberForm.email || !addMemberForm.roleId) return;
+                setAddingMember(true);
+                try {
+                  const res = await fetch("/api/project/members/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      projectId: id,
+                      roleId: addMemberForm.roleId,
+                      userEmail: addMemberForm.email,
+                    }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setApps((prev) => [...prev, data.application]);
+                    setProject((prev: any) => ({
+                      ...prev,
+                      roles: prev.roles.map((r: any) =>
+                        r._id.toString() === addMemberForm.roleId
+                          ? { ...r, filled: r.filled + 1 }
+                          : r
+                      ),
+                    }));
+                    setShowAddMemberModal(false);
+                    setAddMemberForm({ email: "", roleId: "" });
+                  } else {
+                    alert(data.message || "Failed to add member");
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert("Failed to add member");
+                } finally {
+                  setAddingMember(false);
+                }
+              }}
+              className="space-y-6"
+            >
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60 text-center">
+                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                  Select Role
+                </label>
+                <select
+                  required
+                  value={addMemberForm.roleId}
+                  onChange={(e) =>
+                    setAddMemberForm((prev) => ({ ...prev, roleId: e.target.value }))
+                  }
+                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                >
+                  <option value="">Choose a role...</option>
+                  {project.roles
+                    .filter((r: any) => r.filled < r.needed)
+                    .map((role: any) => (
+                      <option key={role._id} value={role._id.toString()}>
+                        {role.roleName} ({role.filled}/{role.needed} filled)
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
                   Identity Email
                 </label>
                 <input
                   required
                   type="email"
+                  value={addMemberForm.email}
+                  onChange={(e) =>
+                    setAddMemberForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
                   className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
                   placeholder="user@plexus.io"
                 />
@@ -338,13 +403,17 @@ export default function ProjectManagePage() {
               <div className="flex gap-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all"
+                  disabled={addingMember}
+                  className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Authorize
+                  {addingMember ? "Adding..." : "Authorize"}
                 </button>
                 <button
                   type="button"
-                  onClick={() => setShowAddMemberModal(false)}
+                  onClick={() => {
+                    setShowAddMemberModal(false);
+                    setAddMemberForm({ email: "", roleId: "" });
+                  }}
                   className="px-6 py-5 bg-white/5 text-[#F0F4F2]/40 font-black uppercase tracking-widest rounded-2xl hover:text-white transition-all"
                 >
                   Abort
@@ -360,7 +429,7 @@ export default function ProjectManagePage() {
 
 function StatusCol({ title, icon, status, apps, role, onUpdate }: any) {
   const filtered = apps.filter(
-    (a: any) => a.roleId === role._id && a.status === status
+    (a: any) => a.roleId === role._id.toString() && a.status === status
   );
   return (
     <div className="space-y-6">
