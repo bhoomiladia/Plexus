@@ -15,6 +15,9 @@ import {
   ClipboardList,
   UserCircle,
   LayoutGrid,
+  Sparkles,
+  Loader2,
+  User,
 } from "lucide-react";
 import KanbanBoard from "@/components/KanbanBoard";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,6 +34,18 @@ interface Task {
   dueDate: string | null;
   verifiedBy?: string | null;
   verifiedAt?: string | null;
+}
+
+interface MatchedProfile {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  skills: string[];
+  matchedRole: string;
+  matchScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
 }
 
 interface Member {
@@ -72,6 +87,10 @@ export default function ProjectManagePage() {
   const [addAuthorizedEmail, setAddAuthorizedEmail] = useState("");
   const [addingMember, setAddingMember] = useState(false);
   const [addingAuthorized, setAddingAuthorized] = useState(false);
+  const [showMatchedProfiles, setShowMatchedProfiles] = useState(false);
+  const [matchedProfiles, setMatchedProfiles] = useState<MatchedProfile[]>([]);
+  const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [selectedRoleForMatch, setSelectedRoleForMatch] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,6 +121,28 @@ export default function ProjectManagePage() {
     () => apps.filter((a) => a.status === "ACCEPTED"),
     [apps]
   );
+
+  const fetchMatchedProfiles = async (role: any) => {
+    setSelectedRoleForMatch(role);
+    setShowMatchedProfiles(true);
+    setLoadingProfiles(true);
+    try {
+      const response = await fetch("/api/projects/match-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roles: [role] }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMatchedProfiles(data.profiles || []);
+      }
+    } catch (error) {
+      console.error("Error fetching matched profiles:", error);
+    } finally {
+      setLoadingProfiles(false);
+    }
+  };
 
   const handleUpdateStatus = async (
     appId: string,
@@ -433,13 +474,21 @@ export default function ProjectManagePage() {
                               Fulfillment Status
                             </span>
                           </div>
-                          <div className="text-right">
-                            <span className="text-4xl font-black   text-[#88AB8E]">
-                              {role.filled} / {role.needed}
-                            </span>
-                            <p className="text-[9px] font-black text-[#F0F4F2]/30 uppercase tracking-widest">
-                              Units Allocated
-                            </p>
+                          <div className="flex items-center gap-6">
+                            <button
+                              onClick={() => fetchMatchedProfiles(role)}
+                              className="flex items-center gap-2 px-6 py-3 bg-[#3E5C58] text-[#F0F4F2] rounded-2xl hover:bg-[#88AB8E] hover:text-[#1A2323] transition-all text-[10px] font-black uppercase tracking-widest"
+                            >
+                              <Sparkles size={14} /> Find Matches
+                            </button>
+                            <div className="text-right">
+                              <span className="text-4xl font-black   text-[#88AB8E]">
+                                {role.filled} / {role.needed}
+                              </span>
+                              <p className="text-[9px] font-black text-[#F0F4F2]/30 uppercase tracking-widest">
+                                Units Allocated
+                              </p>
+                            </div>
                           </div>
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -675,6 +724,179 @@ export default function ProjectManagePage() {
           </motion.div>
         </div>
       )}
+
+      {/* Matched Profiles Modal */}
+      <AnimatePresence>
+        {showMatchedProfiles && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+            onClick={() => setShowMatchedProfiles(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-[#1A2323] rounded-[3rem] border border-white/10 w-full max-w-4xl max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="p-8 border-b border-white/5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="p-4 bg-[#88AB8E] rounded-2xl">
+                      <Sparkles size={28} className="text-[#1A2323]" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-black uppercase text-[#F0F4F2] tracking-tighter">
+                        Matched Profiles
+                      </h2>
+                      <p className="text-[#88AB8E] text-sm font-bold mt-1">
+                        For {selectedRoleForMatch?.roleName || "Role"}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setShowMatchedProfiles(false)}
+                    className="p-3 bg-[#243131] hover:bg-[#3E5C58] rounded-xl text-[#88AB8E] transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-8 overflow-y-auto max-h-[calc(85vh-180px)]">
+                {loadingProfiles ? (
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E] mb-4" />
+                    <p className="text-[#88AB8E] font-bold">Finding matching profiles...</p>
+                  </div>
+                ) : matchedProfiles.length === 0 ? (
+                  <div className="text-center py-16">
+                    <Users className="mx-auto mb-6 text-[#F0F4F2]/20" size={64} />
+                    <h3 className="text-xl font-black uppercase text-[#F0F4F2]/40 tracking-widest mb-2">
+                      No Matches Found
+                    </h3>
+                    <p className="text-[#88AB8E]/50 text-sm">
+                      No profiles match the required skills for this role
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-6">
+                      <Users size={18} className="text-[#88AB8E]" />
+                      <span className="text-[#88AB8E] font-bold text-sm">
+                        {matchedProfiles.length} matching profile{matchedProfiles.length !== 1 ? 's' : ''} found
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {matchedProfiles.map((profile, index) => (
+                        <motion.div
+                          key={profile._id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="bg-[#243131] p-6 rounded-[2rem] border border-white/5 hover:border-[#88AB8E]/30 transition-all"
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#3E5C58] flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {profile.avatar ? (
+                                <img
+                                  src={profile.avatar}
+                                  alt={profile.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <User size={24} className="text-[#88AB8E]" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-2 mb-1">
+                                <h4 className="text-lg font-black text-[#F0F4F2] truncate">
+                                  {profile.name}
+                                </h4>
+                                <div className="flex items-center gap-1 bg-[#88AB8E] text-[#1A2323] px-3 py-1 rounded-full flex-shrink-0">
+                                  <Star size={12} />
+                                  <span className="text-xs font-black">
+                                    {profile.matchScore}%
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-[#88AB8E]/60 text-xs mb-3 truncate">
+                                {profile.email}
+                              </p>
+
+                              {profile.matchedSkills.length > 0 && (
+                                <div className="mb-3">
+                                  <span className="text-[8px] font-black uppercase text-[#88AB8E] tracking-widest opacity-50 block mb-2">
+                                    Matched Skills
+                                  </span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {profile.matchedSkills.slice(0, 4).map((skill, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="px-2 py-1 bg-[#88AB8E]/20 text-[#88AB8E] text-[9px] font-bold rounded-lg"
+                                      >
+                                        {skill}
+                                      </span>
+                                    ))}
+                                    {profile.matchedSkills.length > 4 && (
+                                      <span className="px-2 py-1 text-[#88AB8E]/40 text-[9px] font-bold">
+                                        +{profile.matchedSkills.length - 4}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+
+                              {profile.missingSkills.length > 0 && (
+                                <div>
+                                  <span className="text-[8px] font-black uppercase text-red-400/60 tracking-widest opacity-50 block mb-2">
+                                    Missing Skills
+                                  </span>
+                                  <div className="flex flex-wrap gap-1">
+                                    {profile.missingSkills.slice(0, 3).map((skill, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="px-2 py-1 bg-red-500/10 text-red-400/60 text-[9px] font-bold rounded-lg"
+                                      >
+                                        {skill}
+                                      </span>
+                                    ))}
+                                    {profile.missingSkills.length > 3 && (
+                                      <span className="px-2 py-1 text-red-400/30 text-[9px] font-bold">
+                                        +{profile.missingSkills.length - 3}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-6 border-t border-white/5">
+                <button
+                  onClick={() => setShowMatchedProfiles(false)}
+                  className="w-full py-4 bg-[#243131] text-[#88AB8E] font-black uppercase tracking-widest rounded-2xl hover:bg-[#3E5C58] transition-colors text-sm"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
