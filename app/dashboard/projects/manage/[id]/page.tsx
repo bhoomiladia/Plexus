@@ -48,14 +48,6 @@ interface MatchedProfile {
   missingSkills: string[];
 }
 
-interface Member {
-  userId: string;
-  userName: string;
-  userEmail: string;
-  role: string;
-  joinedAt: string;
-}
-
 export default function ProjectManagePage() {
   const params = useParams();
   const { data: session } = useSession();
@@ -169,7 +161,8 @@ export default function ProjectManagePage() {
   const handleUpdateStatus = async (
     appId: string,
     roleId: string,
-    newStatus: string
+    newStatus: string,
+    appData?: any
   ) => {
     const res = await fetch(`/api/project/applications/${appId}`, {
       method: "PATCH",
@@ -187,8 +180,40 @@ export default function ProjectManagePage() {
             r._id === roleId ? { ...r, filled: r.filled + 1 } : r
           ),
         }));
+
+        // Add to Authorized Personnel if we have the app data
+        if (appData) {
+          try {
+            const authRes = await fetch("/api/project/members/authorize", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                projectId: id,
+                userEmail: appData.userEmail,
+              }),
+            });
+            if (authRes.ok) {
+              const data = await authRes.json();
+              setProject((prev: any) => ({
+                ...prev,
+                authorizedPersonnel: [
+                  ...(prev.authorizedPersonnel || []),
+                  data.authorizedUser,
+                ],
+              }));
+            }
+          } catch (err) {
+            console.error("Failed to add to authorized personnel:", err);
+          }
+        }
       }
     }
+  };
+
+  const handleInterview = (app: any) => {
+    // Navigate to chat or open interview modal
+    // For now, we'll navigate to the project chat
+    window.location.href = `/dashboard/chat?projectId=${id}&userId=${app.userId}`;
   };
 
   if (loading)
@@ -521,6 +546,7 @@ export default function ProjectManagePage() {
                             apps={apps}
                             role={role}
                             onUpdate={handleUpdateStatus}
+                            onInterview={handleInterview}
                           />
                           <StatusCol
                             title="Inbound Requests"
@@ -529,6 +555,7 @@ export default function ProjectManagePage() {
                             apps={apps}
                             role={role}
                             onUpdate={handleUpdateStatus}
+                            onInterview={handleInterview}
                           />
                         </div>
                       </div>
@@ -945,7 +972,7 @@ export default function ProjectManagePage() {
   );
 }
 
-function StatusCol({ title, icon, status, apps, role, onUpdate }: any) {
+function StatusCol({ title, icon, status, apps, role, onUpdate, onInterview }: any) {
   const filtered = apps.filter(
     (a: any) => a.roleId === role._id.toString() && a.status === status
   );
@@ -965,24 +992,37 @@ function StatusCol({ title, icon, status, apps, role, onUpdate }: any) {
               key={app._id}
               className="bg-[#1A2323] p-6 rounded-[2rem] border border-white/5 group hover:border-[#88AB8E]/30 transition-all"
             >
-              <p className="font-black   text-[#F0F4F2] uppercase tracking-tight mb-4">
+              <p className="font-black text-[#F0F4F2] uppercase tracking-tight mb-1">
                 {app.userName}
+              </p>
+              <p className="text-[#88AB8E]/50 text-[9px] mb-4 truncate">
+                {app.userEmail}
               </p>
               <div className="flex gap-2">
                 {status === "PENDING" && (
+                  <>
+                    <button
+                      onClick={() => onInterview(app)}
+                      className="flex-1 py-2 bg-[#3E5C58] text-[#F0F4F2] text-[9px] font-black uppercase rounded-lg hover:bg-[#4a6b67] transition-all"
+                    >
+                      Interview
+                    </button>
+                    <button
+                      onClick={() => onUpdate(app._id, role._id, "ACCEPTED", app)}
+                      className="flex-1 py-2 bg-[#88AB8E] text-[#141C1C] text-[9px] font-black uppercase rounded-lg hover:scale-105 transition-all"
+                    >
+                      Accept
+                    </button>
+                  </>
+                )}
+                {status === "SHORTLISTED" && (
                   <button
-                    onClick={() => onUpdate(app._id, role._id, "SHORTLISTED")}
-                    className="flex-1 py-2 bg-white/5 text-[#88AB8E] text-[9px] font-black uppercase rounded-lg hover:bg-[#3E5C58] transition-all"
+                    onClick={() => onUpdate(app._id, role._id, "ACCEPTED", app)}
+                    className="flex-1 py-2 bg-[#88AB8E] text-[#141C1C] text-[9px] font-black uppercase rounded-lg"
                   >
-                    Shortlist
+                    Accept
                   </button>
                 )}
-                <button
-                  onClick={() => onUpdate(app._id, role._id, "ACCEPTED")}
-                  className="flex-1 py-2 bg-[#88AB8E] text-[#141C1C] text-[9px] font-black uppercase rounded-lg"
-                >
-                  Accept
-                </button>
                 <button
                   onClick={() => onUpdate(app._id, role._id, "REJECTED")}
                   className="px-4 py-2 text-red-500/50 hover:text-red-500 transition-all"
