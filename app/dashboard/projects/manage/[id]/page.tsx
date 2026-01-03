@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState, useEffect, useMemo } from "react";
 import { useSession } from "next-auth/react";
 import {
@@ -56,20 +56,6 @@ interface Member {
   joinedAt: string;
 }
 
-interface Project {
-  _id: string;
-  ownerId: string;
-  ownerName: string;
-  title: string;
-  description: string;
-  tags: string[];
-  status: string;
-  members: Member[];
-  tasks: Task[];
-  deadline: string | null;
-  createdAt: string;
-}
-
 export default function ProjectManagePage() {
   const params = useParams();
   const { data: session } = useSession();
@@ -91,6 +77,7 @@ export default function ProjectManagePage() {
   const [matchedProfiles, setMatchedProfiles] = useState<MatchedProfile[]>([]);
   const [loadingProfiles, setLoadingProfiles] = useState(false);
   const [selectedRoleForMatch, setSelectedRoleForMatch] = useState<any>(null);
+  const [shortlistingUser, setShortlistingUser] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,6 +128,41 @@ export default function ProjectManagePage() {
       console.error("Error fetching matched profiles:", error);
     } finally {
       setLoadingProfiles(false);
+    }
+  };
+
+  const handleShortlistUser = async (profile: MatchedProfile) => {
+    if (!selectedRoleForMatch) return;
+    
+    setShortlistingUser(profile._id);
+    try {
+      const response = await fetch("/api/projects/shortlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId: id,
+          roleId: selectedRoleForMatch._id.toString(),
+          userId: profile._id,
+          userName: profile.name,
+          userEmail: profile.email,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Add to apps list
+        setApps((prev) => [...prev, data.application]);
+        // Remove from matched profiles
+        setMatchedProfiles((prev) => prev.filter((p) => p._id !== profile._id));
+      } else {
+        const error = await response.json();
+        alert(error.error || "Failed to shortlist user");
+      }
+    } catch (error) {
+      console.error("Error shortlisting user:", error);
+      alert("Failed to shortlist user");
+    } finally {
+      setShortlistingUser(null);
     }
   };
 
@@ -877,12 +899,26 @@ export default function ProjectManagePage() {
                               )}
 
                               {/* View Profile Button */}
-                              <Link
-                                href={`/dashboard/profile/${profile._id}`}
-                                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1A2323] text-[#88AB8E] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#3E5C58] transition-all border border-white/5"
-                              >
-                                <UserCircle size={14} /> View Profile
-                              </Link>
+                              <div className="flex gap-2">
+                                <Link
+                                  href={`/dashboard/profile/${profile._id}`}
+                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#1A2323] text-[#88AB8E] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#3E5C58] transition-all border border-white/5"
+                                >
+                                  <UserCircle size={14} /> View Profile
+                                </Link>
+                                <button
+                                  onClick={() => handleShortlistUser(profile)}
+                                  disabled={shortlistingUser === profile._id}
+                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#88AB8E] text-[#1A2323] text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {shortlistingUser === profile._id ? (
+                                    <Loader2 size={14} className="animate-spin" />
+                                  ) : (
+                                    <Star size={14} />
+                                  )}
+                                  Shortlist
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </motion.div>

@@ -16,6 +16,9 @@ import {
   FileEdit,
   Trash2,
   Filter,
+  Check,
+  X,
+  Star,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -43,6 +46,7 @@ export default function NotificationsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "unread">("all");
   const [unreadCount, setUnreadCount] = useState(0);
+  const [respondingTo, setRespondingTo] = useState<string | null>(null);
 
   useEffect(() => {
     if (session) {
@@ -113,6 +117,55 @@ export default function NotificationsPage() {
     }
   };
 
+  const handleRespondToShortlist = async (
+    notification: Notification,
+    action: "accept" | "decline"
+  ) => {
+    if (!notification.metadata?.applicationId) return;
+
+    setRespondingTo(`${notification._id}-${action}`);
+    try {
+      const res = await fetch("/api/applications/respond", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          applicationId: notification.metadata.applicationId,
+          action,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // Mark notification as read and update its type to show it's been handled
+        markAsRead(notification._id);
+        // Remove the notification or update it
+        setNotifications((prev) =>
+          prev.map((n) =>
+            n._id === notification._id
+              ? {
+                  ...n,
+                  read: true,
+                  type: action === "accept" ? "APPLICATION_ACCEPTED" : "APPLICATION_REJECTED",
+                  title: action === "accept" ? "Opportunity Accepted" : "Opportunity Declined",
+                  message: action === "accept" 
+                    ? "You accepted this opportunity. The project owner has been notified."
+                    : "You declined this opportunity.",
+                }
+              : n
+          )
+        );
+      } else {
+        alert(data.error || "Failed to respond");
+      }
+    } catch (error) {
+      console.error("Error responding to shortlist:", error);
+      alert("Failed to respond to shortlist");
+    } finally {
+      setRespondingTo(null);
+    }
+  };
+
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "APPLICATION_ACCEPTED":
@@ -120,7 +173,7 @@ export default function NotificationsPage() {
       case "APPLICATION_REJECTED":
         return <XCircle size={24} className="text-red-500" />;
       case "APPLICATION_SHORTLISTED":
-        return <Briefcase size={24} className="text-yellow-500" />;
+        return <Star size={24} className="text-yellow-500" />;
       case "NEW_APPLICATION":
         return <Briefcase size={24} className="text-[#88AB8E]" />;
       case "MEMBER_ADDED":
@@ -290,6 +343,42 @@ export default function NotificationsPage() {
                     <p className="text-[#F0F4F2]/60 text-sm leading-relaxed mb-4">
                       {notification.message}
                     </p>
+
+                    {/* Accept/Decline buttons for shortlisted notifications */}
+                    {notification.type === "APPLICATION_SHORTLISTED" && notification.metadata?.applicationId && (
+                      <div className="flex gap-3 mb-4">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRespondToShortlist(notification, "accept");
+                          }}
+                          disabled={respondingTo !== null}
+                          className="flex items-center gap-2 px-5 py-3 bg-[#88AB8E] text-[#1A2323] rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {respondingTo === `${notification._id}-accept` ? (
+                            <Loader2 size={14} className="animate-spin" />
+                          ) : (
+                            <Check size={14} />
+                          )}
+                          Accept
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRespondToShortlist(notification, "decline");
+                          }}
+                          disabled={respondingTo !== null}
+                          className="flex items-center gap-2 px-5 py-3 bg-red-500/20 text-red-400 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {respondingTo === `${notification._id}-decline` ? (
+                            <Loader2 size={14} className="animate-spin" />
+                          ) : (
+                            <X size={14} />
+                          )}
+                          Decline
+                        </button>
+                      </div>
+                    )}
 
                     <div className="flex items-center justify-between">
                       <span className="text-[#88AB8E]/40 text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
