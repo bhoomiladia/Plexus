@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
       title: title || "",
       bio: bio || "",
       skills: skills || [],
+      techStack: skills || [],
       createdAt: new Date(),
     });
 

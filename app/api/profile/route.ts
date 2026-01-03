@@ -69,7 +69,7 @@ export async function GET() {
     name: user?.name || user?.fullName || session.user.name,
     username: user?.username || generatedUsername,
     email: session.user.email,
-    techStack: user?.techStack || user?.skills || [],
+    techStack: user?.skills || user?.techStack || [],
     experience: user?.experience || [],
     education: user?.education || [],
     achievements: user?.achievements || [],
@@ -122,6 +122,11 @@ export async function PATCH(req: NextRequest) {
   // If techStack is being updated, also update skills for consistency
   if (updateData.techStack) {
     updateData.skills = updateData.techStack;
+  }
+
+  // If skills is being updated, also update techStack for consistency
+  if (updateData.skills) {
+    updateData.techStack = updateData.skills;
   }
 
   const client = await clientPromise;
