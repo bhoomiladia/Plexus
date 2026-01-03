@@ -166,7 +166,7 @@ export default function SignupPage() {
                   placeholder="e.g. Fullstack Developer"
                 />
               </div>
-              <div className="flex flex-col gap-2">
+              {/* <div className="flex flex-col gap-2">
                 <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
                   Register Skillsets
                 </label>
@@ -193,7 +193,7 @@ export default function SignupPage() {
             </div>
 
             {/* Skill Tags */}
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
                 <span
                   key={skill}
@@ -206,8 +206,8 @@ export default function SignupPage() {
                     onClick={() => removeSkill(skill)}
                   />
                 </span>
-              ))}
-            </div>
+              ))}*/} 
+            </div> 
 
             <div className="flex flex-col gap-2">
               <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
