@@ -1,0 +1,236 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+/* --- PLEXUS GLOBAL SCROLLBAR --- */
+
+/* For Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px; /* Vertical scrollbar width */
+  height: 8px; /* Horizontal scrollbar height */
+}
+
+/* The background of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #141C1C; /* Matches your deepest charcoal background */
+}
+
+/* The draggable part of the scrollbar */
+::-webkit-scrollbar-thumb {
+  background: #3E5C58; /* Forest Green for a subtle look */
+  border-radius: 10px;
+  border: 2px solid #141C1C; /* Creates a padding effect around the thumb */
+}
+
+/* Hover state for the scrollbar */
+::-webkit-scrollbar-thumb:hover {
+  background: #88AB8E; /* Sage Green highlight on hover */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3E5C58 #141C1C;
+}
+
+/* Utility to hide scrollbars while maintaining functionality (if needed) */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+:root {
+  --font-size: 16px;
+
+  /* --- Light Mode Pastels --- */
+  --background: #fafaf9;
+  --foreground: #3a3a3a;
+
+  --card: #ffffff;
+  --card-foreground: #3a3a3a;
+
+  --popover: #ffffff;
+  --popover-foreground: #3a3a3a;
+
+  /* Softer Lavender Primary */
+  --primary: #b7a7f8;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f5f3ff;
+  --secondary-foreground: #3a3a3a;
+
+  --muted: #f6f6f5;
+  --muted-foreground: #78716c;
+
+  --accent: #ece9ff;
+  --accent-foreground: #3a3a3a;
+
+  --destructive: #fca5a5;
+  --destructive-foreground: #3a3a3a;
+
+  --border: rgba(0, 0, 0, 0.06);
+  --input: #f8f8f7;
+  --switch-background: #d4d4d8;
+
+  --ring: #c7b9ff;
+
+  /* Sidebar */
+  --sidebar: #fafaf9;
+  --sidebar-foreground: #3a3a3a;
+  --sidebar-primary: #b7a7f8;
+  --sidebar-primary-foreground: #fafaf9;
+  --sidebar-accent: #f5f5f4;
+  --sidebar-accent-foreground: #3a3a3a;
+  --sidebar-border: #ececec;
+  --sidebar-ring: #c7b9ff;
+
+  /* Charts */
+  --chart-1: oklch(0.74 0.19 270);
+  --chart-2: oklch(0.7 0.13 180);
+  --chart-3: oklch(0.5 0.09 220);
+  --chart-4: oklch(0.82 0.18 90);
+  --chart-5: oklch(0.76 0.17 70);
+
+  --radius: 1rem;
+}
+
+.dark {
+  /* --- Dark Mode (Muted Lavender-Midnight) --- */
+  --background: #1c1b2a;
+  --foreground: #e9e9f5;
+
+  --card: #252538;
+  --card-foreground: #f0f0f0;
+
+  --popover: #2a2940;
+  --popover-foreground: #f0f0f0;
+
+  --primary: #c2b7ff;
+  --primary-foreground: #1a1a2e;
+
+  --secondary: #2d2d42;
+  --secondary-foreground: #f0f0f0;
+
+  --muted: #2e2e48;
+  --muted-foreground: #a1a1aa;
+
+  --accent: #37375a;
+  --accent-foreground: #f0f0f0;
+
+  --destructive: #ff9b9b;
+  --destructive-foreground: #1a1a2e;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --ring: #9b8fff;
+
+  /* Sidebar */
+  --sidebar: #1a1a2e;
+  --sidebar-foreground: #f0f0f0;
+  --sidebar-primary: #9b8fff;
+  --sidebar-primary-foreground: #1a1a2e;
+  --sidebar-accent: #2a2940;
+  --sidebar-accent-foreground: #f0f0f0;
+  --sidebar-border: #2d2d42;
+  --sidebar-ring: #9b8fff;
+
+  /* Charts */
+  --chart-1: oklch(0.6 0.25 270);
+  --chart-2: oklch(0.7 0.18 190);
+  --chart-3: oklch(0.68 0.20 310);
+  --chart-4: oklch(0.66 0.21 80);
+  --chart-5: oklch(0.64 0.22 160);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+  }
+}
+/* --- Notebook Grid Background --- */
+.bg-notebook-grid {
+  /* This is the light mode grid (faint black lines) */
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px; /* This controls the size of the checks */
+}
+
+/* --- Chatbot Paper-Flip Animation (FOR RIGHT-SIDE PANEL) --- */
+@keyframes paper-flip-in-right {
+  from {
+    /* Start with the page rotated 90deg (invisible) at the right edge */
+    transform: perspective(1000px) rotateY(90deg);
+    opacity: 0;
+    transform-origin: right center;
+  }
+  to {
+    /* Animate to be flat (visible) */
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+    transform-origin: right center;
+  }
+}
+
+@keyframes paper-flip-out-right {
+  from {
+    transform: perspective(1000px) rotateY(0deg);
+    opacity: 1;
+    transform-origin: right center;
+  }
+  to {
+    /* Animate back to be invisible at the right edge */
+    transform: perspective(1000px) rotateY(90deg);
+    opacity: 0;
+    transform-origin: right center;
+  }
+}
+
+/* Custom classes to apply the animation */
+.animate-paper-flip-in-right {
+  animation: paper-flip-in-right 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.animate-paper-flip-out-right {
+  animation: paper-flip-out-right 0.4s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
