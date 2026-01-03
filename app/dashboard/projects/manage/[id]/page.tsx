@@ -14,19 +14,23 @@ import {
   Plus,
   ClipboardList,
   UserCircle,
+  LayoutGrid,
 } from "lucide-react";
+import KanbanBoard from "@/components/KanbanBoard";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 interface Task {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   assignedTo: string | null;
-  priority: string;
-  status: string;
+  assignedToName: string | null;
+  priority: "low" | "medium" | "high";
+  status: "pending" | "in-progress" | "completed" | "verified";
   dueDate: string | null;
-  createdBy: string;
+  verifiedBy?: string | null;
+  verifiedAt?: string | null;
 }
 
 interface Member {
@@ -55,9 +59,10 @@ export default function ProjectManagePage() {
   const params = useParams();
   const { data: session } = useSession();
   const id = params.id as string;
-  const [activeTab, setActiveTab] = useState<"details" | "members">("details");
+  const [activeTab, setActiveTab] = useState<"details" | "members" | "tasks">("details");
   const [project, setProject] = useState<any>(null);
   const [apps, setApps] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
   const [showAddAuthorizedModal, setShowAddAuthorizedModal] = useState(false);
@@ -69,10 +74,15 @@ export default function ProjectManagePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/project/${id}`);
-        const data = await res.json();
-        setProject(data.project);
-        setApps(data.applications || []);
+        const [projectRes, tasksRes] = await Promise.all([
+          fetch(`/api/project/${id}`),
+          fetch(`/api/project/${id}/tasks`),
+        ]);
+        const projectData = await projectRes.json();
+        const tasksData = await tasksRes.json();
+        setProject(projectData.project);
+        setApps(projectData.applications || []);
+        setTasks(tasksData.tasks || []);
       } catch (err) {
         console.error(err);
       } finally {
@@ -171,6 +181,12 @@ export default function ProjectManagePage() {
                 Overview
               </button>
               <button
+                onClick={() => setActiveTab("tasks")}
+                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === "tasks" ? "bg-[#88AB8E] text-[#141C1C]" : "text-[#F0F4F2]/40"}`}
+              >
+                <LayoutGrid size={14} /> Tasks
+              </button>
+              <button
                 onClick={() => setActiveTab("members")}
                 className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "members" ? "bg-[#88AB8E] text-[#141C1C]" : "text-[#F0F4F2]/40"}`}
               >
@@ -208,6 +224,47 @@ export default function ProjectManagePage() {
                   Active Contributors
                 </p>
               </div>
+            </motion.div>
+          ) : activeTab === "tasks" ? (
+            <motion.div
+              key="tasks"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <KanbanBoard
+                projectId={id}
+                tasks={tasks}
+                members={[
+                  // Add owner with session email if current user is owner
+                  ...(isOwner && session?.user?.email ? [{
+                    userName: session.user.name || project.ownerName || "Owner",
+                    userEmail: session.user.email,
+                    role: "Owner"
+                  }] : []),
+                  // Add accepted team members
+                  ...acceptedMembers.map((app: any) => ({
+                    userName: app.userName,
+                    userEmail: app.userEmail,
+                    role: project.roles?.find((r: any) => r._id.toString() === app.roleId)?.roleName || "Member",
+                  })),
+                  // Add authorized personnel
+                  ...(project.authorizedPersonnel || []).map((p: any) => ({
+                    userName: p.userName,
+                    userEmail: p.userEmail,
+                    role: "Authorized",
+                  })),
+                ]}
+                isOwner={isOwner}
+                currentUserEmail={session?.user?.email || ""}
+                currentUserName={session?.user?.name || ""}
+                isAuthorized={(project.authorizedPersonnel || []).some(
+                  (p: any) => p.userEmail === session?.user?.email
+                )}
+                isTeamMember={acceptedMembers.some(
+                  (app: any) => app.userEmail === session?.user?.email
+                )}
+                onTasksChange={setTasks}
+              />
             </motion.div>
           ) : (
             <motion.div

@@ -7,7 +7,7 @@ const TaskSchema = new Schema(
     description: { type: String, default: "" },
     status: {
       type: String,
-      enum: ["pending", "in-progress", "completed"],
+      enum: ["pending", "in-progress", "completed", "verified"],
       default: "pending",
     },
     priority: {
@@ -17,7 +17,10 @@ const TaskSchema = new Schema(
     },
     dueDate: { type: Date },
     projectId: { type: Schema.Types.ObjectId, ref: "Project" },
-    assignedTo: { type: String }, // For team tasks
+    assignedTo: { type: String }, // User email for team tasks
+    assignedToName: { type: String }, // User name for display
+    verifiedBy: { type: String }, // Name of person who verified
+    verifiedAt: { type: Date }, // When task was verified
     tags: [{ type: String }],
   },
   { timestamps: true }
