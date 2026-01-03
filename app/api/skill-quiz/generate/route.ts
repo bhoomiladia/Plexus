@@ -22,14 +22,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const prompt = `Generate exactly 5 multiple choice questions to verify someone's knowledge of "${skill}". 
+    const prompt = `Generate exactly 5 multiple choice questions to verify basic knowledge of "${skill}". 
     
 Requirements:
-- Questions should be practical and test real-world knowledge
+- Questions should be VERY EASY and test fundamental/beginner-level knowledge
+- Focus on basic definitions, simple concepts, and common terminology
 - Each question should have exactly 4 options (A, B, C, D)
 - Only one option should be correct
-- Mix difficulty levels (2 easy, 2 medium, 1 hard)
-- Questions should be clear and unambiguous
+- Make the correct answer obvious to anyone with basic familiarity
+- Wrong options should be clearly incorrect
+- All 5 questions should be easy difficulty
 
 Return ONLY a valid JSON array with this exact structure, no markdown or extra text:
 [
