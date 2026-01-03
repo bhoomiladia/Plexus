@@ -9,21 +9,42 @@ import {
   ArrowLeft,
   Trash2,
   Sparkles,
+  Users,
+  CheckCircle,
+  X,
+  User,
+  Star,
 } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface MatchedProfile {
+  _id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  skills: string[];
+  matchedRole: string;
+  matchScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+}
 
 export default function CreateProjectPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showMatchedProfiles, setShowMatchedProfiles] = useState(false);
+  const [matchedProfiles, setMatchedProfiles] = useState<MatchedProfile[]>([]);
+  const [loadingProfiles, setLoadingProfiles] = useState(false);
+  const [createdProjectId, setCreatedProjectId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    userRole: "", // Added to track user's own role
+    userRole: "",
   });
 
   const [roles, setRoles] = useState([
@@ -46,7 +67,6 @@ export default function CreateProjectPage() {
     setRoles(updatedRoles);
   };
 
-  // --- AI GENERATION LOGIC ---
   const handleAiGenerate = async () => {
     if (!formData.title || !formData.description) {
       setError("Please fill in Title and Description first!");
@@ -65,7 +85,6 @@ export default function CreateProjectPage() {
       const data = await response.json();
 
       if (data.roles && Array.isArray(data.roles)) {
-        // This is the magic part: it populates the state
         setRoles(data.roles);
       } else {
         setError("AI returned invalid data format.");
@@ -74,6 +93,26 @@ export default function CreateProjectPage() {
       setError("AI failed to generate roles.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchMatchedProfiles = async () => {
+    setLoadingProfiles(true);
+    try {
+      const response = await fetch("/api/projects/match-profiles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roles }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMatchedProfiles(data.profiles || []);
+      }
+    } catch (error) {
+      console.error("Error fetching matched profiles:", error);
+    } finally {
+      setLoadingProfiles(false);
     }
   };
 
@@ -92,11 +131,29 @@ export default function CreateProjectPage() {
         body: JSON.stringify({ ...formData, roles }),
       });
 
-      if (response.ok) router.push("/dashboard/projects/manage");
+      if (response.ok) {
+        const project = await response.json();
+        setCreatedProjectId(project._id);
+        setShowMatchedProfiles(true);
+        await fetchMatchedProfiles();
+      } else {
+        setError("Failed to create project");
+      }
     } catch (error) {
       setError("An error occurred while creating the project");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowMatchedProfiles(false);
+    router.push("/dashboard/projects/manage");
+  };
+
+  const handleViewProject = () => {
+    if (createdProjectId) {
+      router.push(`/dashboard/projects/${createdProjectId}`);
     }
   };
 
@@ -116,7 +173,7 @@ export default function CreateProjectPage() {
             <ArrowLeft size={24} />
           </Link>
           <div>
-            <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
+            <h1 className="text-5xl font-black uppercase text-[#F0F4F2] tracking-tighter">
               Launch Project
             </h1>
             <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
@@ -179,7 +236,6 @@ export default function CreateProjectPage() {
                 />
               </div>
 
-              {/* AI Trigger Button */}
               <button
                 type="button"
                 onClick={handleAiGenerate}
@@ -211,10 +267,10 @@ export default function CreateProjectPage() {
             </button>
           </div>
 
-          {/* Right Side: Roles (Controlled Inputs) */}
+          {/* Right Side: Roles */}
           <div className="col-span-12 lg:col-span-7 space-y-4">
             <div className="flex justify-between items-center px-4 mb-2">
-              <h2 className="text-xl font-black   text-[#F0F4F2] uppercase">
+              <h2 className="text-xl font-black text-[#F0F4F2] uppercase">
                 Requirements
               </h2>
               <button
@@ -241,7 +297,7 @@ export default function CreateProjectPage() {
                       </label>
                       <input
                         required
-                        value={role.roleName} // Important for AI fill
+                        value={role.roleName}
                         className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] outline-none text-sm font-bold"
                         placeholder="Lead Developer"
                         onChange={(e) =>
@@ -255,7 +311,7 @@ export default function CreateProjectPage() {
                       </label>
                       <input
                         type="number"
-                        value={role.needed} // Important for AI fill
+                        value={role.needed}
                         className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] outline-none text-sm font-bold"
                         onChange={(e) =>
                           handleRoleChange(
@@ -271,7 +327,7 @@ export default function CreateProjectPage() {
                         Mandatory Skills
                       </label>
                       <input
-                        value={role.mandatorySkills.join(", ")} // Important for AI fill
+                        value={role.mandatorySkills.join(", ")}
                         className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] outline-none text-xs"
                         placeholder="React, TypeScript, AWS..."
                         onChange={(e) =>
@@ -300,6 +356,166 @@ export default function CreateProjectPage() {
           </div>
         </form>
       </motion.div>
+
+      {/* Matched Profiles Modal */}
+      <AnimatePresence>
+        {showMatchedProfiles && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={handleCloseModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="bg-[#1A2323] rounded-[3rem] border border-white/10 w-full max-w-4xl max-h-[85vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Header */}
+              <div className="p-8 border-b border-white/5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="p-4 bg-[#88AB8E] rounded-2xl">
+                      <CheckCircle size={28} className="text-[#1A2323]" />
+                    </div>
+                    <div>
+                      <h2 className="text-3xl font-black uppercase text-[#F0F4F2] tracking-tighter">
+                        Project Deployed!
+                      </h2>
+                      <p className="text-[#88AB8E] text-sm font-bold mt-1">
+                        Here are profiles matching your requirements
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleCloseModal}
+                    className="p-3 bg-[#243131] hover:bg-[#3E5C58] rounded-xl text-[#88AB8E] transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-8 overflow-y-auto max-h-[calc(85vh-200px)]">
+                {loadingProfiles ? (
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E] mb-4" />
+                    <p className="text-[#88AB8E] font-bold">Finding matching profiles...</p>
+                  </div>
+                ) : matchedProfiles.length === 0 ? (
+                  <div className="text-center py-16">
+                    <Users className="mx-auto mb-6 text-[#F0F4F2]/20" size={64} />
+                    <h3 className="text-xl font-black uppercase text-[#F0F4F2]/40 tracking-widest mb-2">
+                      No Matches Found
+                    </h3>
+                    <p className="text-[#88AB8E]/50 text-sm">
+                      No profiles match your project requirements yet
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 mb-6">
+                      <Users size={18} className="text-[#88AB8E]" />
+                      <span className="text-[#88AB8E] font-bold text-sm">
+                        {matchedProfiles.length} matching profile{matchedProfiles.length !== 1 ? 's' : ''} found
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {matchedProfiles.map((profile, index) => (
+                        <motion.div
+                          key={profile._id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="bg-[#243131] p-6 rounded-[2rem] border border-white/5 hover:border-[#88AB8E]/30 transition-all"
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#3E5C58] flex items-center justify-center overflow-hidden flex-shrink-0">
+                              {profile.avatar ? (
+                                <img
+                                  src={profile.avatar}
+                                  alt={profile.name}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <User size={24} className="text-[#88AB8E]" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between gap-2 mb-1">
+                                <h4 className="text-lg font-black text-[#F0F4F2] truncate">
+                                  {profile.name}
+                                </h4>
+                                <div className="flex items-center gap-1 bg-[#88AB8E] text-[#1A2323] px-3 py-1 rounded-full flex-shrink-0">
+                                  <Star size={12} />
+                                  <span className="text-xs font-black">
+                                    {profile.matchScore}%
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-[#88AB8E]/60 text-xs mb-3 truncate">
+                                {profile.email}
+                              </p>
+                              
+                              <div className="mb-3">
+                                <span className="text-[8px] font-black uppercase text-[#88AB8E] tracking-widest opacity-50">
+                                  Best Match For
+                                </span>
+                                <p className="text-[#F0F4F2] text-sm font-bold">
+                                  {profile.matchedRole}
+                                </p>
+                              </div>
+
+                              {profile.matchedSkills.length > 0 && (
+                                <div className="flex flex-wrap gap-1">
+                                  {profile.matchedSkills.slice(0, 4).map((skill, idx) => (
+                                    <span
+                                      key={idx}
+                                      className="px-2 py-1 bg-[#88AB8E]/20 text-[#88AB8E] text-[9px] font-bold rounded-lg"
+                                    >
+                                      {skill}
+                                    </span>
+                                  ))}
+                                  {profile.matchedSkills.length > 4 && (
+                                    <span className="px-2 py-1 text-[#88AB8E]/40 text-[9px] font-bold">
+                                      +{profile.matchedSkills.length - 4}
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-6 border-t border-white/5 flex gap-4">
+                <button
+                  onClick={handleCloseModal}
+                  className="flex-1 py-4 bg-[#243131] text-[#88AB8E] font-black uppercase tracking-widest rounded-2xl hover:bg-[#3E5C58] transition-colors text-sm"
+                >
+                  Go to Projects
+                </button>
+                <button
+                  onClick={handleViewProject}
+                  className="flex-1 py-4 bg-[#88AB8E] text-[#1A2323] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all text-sm"
+                >
+                  View Project
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
