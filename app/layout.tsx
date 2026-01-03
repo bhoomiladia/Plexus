@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CrewBook",
+  title: "Unirivo",
   description:
     "Collaborate, manage projects, and chat with your teammates — all in one place.",
   generator: "v0.app",
@@ -45,7 +45,6 @@ export default function RootLayout({
       <body
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300`}
       >
-        
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <AuthProvider>
             {children}
