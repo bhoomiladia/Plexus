@@ -15,6 +15,9 @@ import {
   Loader2,
   Plus,
   X,
+  Wallet,
+  ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -63,10 +66,57 @@ export default function SettingsPage() {
     applicationAlerts: true,
     communityActivity: false,
   });
+  const [walletInfo, setWalletInfo] = useState<{
+    configured: boolean;
+    publicKey?: string;
+    balance?: number;
+    network?: string;
+    explorerUrl?: string;
+    message?: string;
+  } | null>(null);
+  const [loadingWallet, setLoadingWallet] = useState(false);
+  const [requestingAirdrop, setRequestingAirdrop] = useState(false);
 
   useEffect(() => {
     fetchProfile();
+    fetchWalletInfo();
   }, []);
+
+  const fetchWalletInfo = async () => {
+    setLoadingWallet(true);
+    try {
+      const res = await fetch("/api/certificates/wallet");
+      if (res.ok) {
+        const data = await res.json();
+        setWalletInfo(data);
+      }
+    } catch (error) {
+      console.error("Error fetching wallet info:", error);
+    } finally {
+      setLoadingWallet(false);
+    }
+  };
+
+  const handleRequestAirdrop = async () => {
+    setRequestingAirdrop(true);
+    try {
+      const res = await fetch("/api/certificates/wallet", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert(data.message || "Airdrop successful!");
+        fetchWalletInfo();
+      } else {
+        alert(data.error || "Airdrop failed");
+      }
+    } catch (error) {
+      console.error("Error requesting airdrop:", error);
+      alert("Failed to request airdrop");
+    } finally {
+      setRequestingAirdrop(false);
+    }
+  };
 
   const fetchProfile = async () => {
     try {
@@ -228,6 +278,7 @@ export default function SettingsPage() {
             { id: "profile", label: "Profile Identity", icon: User },
             { id: "security", label: "Security Protocol", icon: Shield },
             { id: "notifications", label: "Signal Alerts", icon: Bell },
+            { id: "blockchain", label: "Blockchain Wallet", icon: Wallet },
             { id: "network", label: "Network Uplinks", icon: Globe },
           ].map((item) => (
             <button
@@ -590,6 +641,123 @@ export default function SettingsPage() {
                   </button>
                 </div>
               ))}
+            </motion.div>
+          )}
+
+          {/* Section: Blockchain */}
+          {activeSection === "blockchain" && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-8"
+            >
+              <div className="bg-[#243131] p-10 rounded-[3.5rem] border border-white/5">
+                <div className="flex items-center gap-5 mb-8">
+                  <div className="p-4 bg-[#1A2323] rounded-2xl text-[#88AB8E] border border-white/5">
+                    <Wallet size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black uppercase text-[#F0F4F2] tracking-tighter">
+                      Solana Wallet
+                    </h3>
+                    <p className="text-[10px] font-medium text-[#F0F4F2]/40 uppercase tracking-widest mt-1">
+                      For minting certificates on blockchain
+                    </p>
+                  </div>
+                </div>
+
+                {loadingWallet ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="animate-spin h-8 w-8 text-[#88AB8E]" />
+                  </div>
+                ) : walletInfo?.configured ? (
+                  <div className="space-y-6">
+                    <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                      <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                        Wallet Address
+                      </p>
+                      <div className="flex items-center gap-3">
+                        <p className="text-sm font-mono text-[#F0F4F2] flex-1 truncate">
+                          {walletInfo.publicKey}
+                        </p>
+                        <a
+                          href={walletInfo.explorerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-2 bg-[#243131] rounded-lg hover:bg-white/10 transition-all"
+                        >
+                          <ExternalLink size={14} className="text-[#88AB8E]" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                        <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                          Balance
+                        </p>
+                        <p className="text-3xl font-black text-[#F0F4F2]">
+                          {walletInfo.balance?.toFixed(4)} <span className="text-lg text-[#88AB8E]">SOL</span>
+                        </p>
+                      </div>
+                      <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                        <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                          Network
+                        </p>
+                        <p className="text-xl font-black text-[#F0F4F2] uppercase">
+                          {walletInfo.network}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <button
+                        onClick={handleRequestAirdrop}
+                        disabled={requestingAirdrop}
+                        className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {requestingAirdrop ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <RefreshCw size={16} />
+                        )}
+                        Request Airdrop (1 SOL)
+                      </button>
+                      <button
+                        onClick={fetchWalletInfo}
+                        className="px-8 py-5 bg-[#1A2323] text-[#88AB8E] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all border border-white/5"
+                      >
+                        <RefreshCw size={16} />
+                      </button>
+                    </div>
+
+                    <p className="text-[10px] text-[#F0F4F2]/40 text-center">
+                      Airdrop is only available on Devnet. Each certificate mint costs ~0.001 SOL.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <Wallet className="mx-auto mb-4 text-[#88AB8E]/30" size={48} />
+                    <h4 className="text-lg font-bold text-[#F0F4F2] mb-2">
+                      Wallet Not Configured
+                    </h4>
+                    <p className="text-sm text-[#88AB8E]/60 max-w-md mx-auto mb-6">
+                      {walletInfo?.message || "Add SOLANA_WALLET_SECRET_KEY to your .env.local file to enable blockchain certificate minting."}
+                    </p>
+                    <div className="bg-[#1A2323] p-6 rounded-2xl text-left max-w-lg mx-auto">
+                      <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-3">
+                        Setup Instructions:
+                      </p>
+                      <ol className="text-xs text-[#F0F4F2]/60 space-y-2 list-decimal list-inside">
+                        <li>Run: <code className="bg-[#243131] px-2 py-1 rounded">node scripts/generate-solana-wallet.js</code></li>
+                        <li>Copy the secret key to .env.local as SOLANA_WALLET_SECRET_KEY</li>
+                        <li>Fund the wallet at <a href="https://faucet.solana.com" target="_blank" rel="noopener noreferrer" className="text-[#88AB8E] hover:underline">faucet.solana.com</a></li>
+                        <li>Restart the development server</li>
+                      </ol>
+                    </div>
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
 

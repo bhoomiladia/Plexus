@@ -17,11 +17,13 @@ import {
   ChevronRight,
   LogOut,
   CheckSquare,
+  Award,
 } from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "My Tasks", href: "/dashboard/tasks", icon: CheckSquare },
+  { name: "Certificates", href: "/dashboard/certificates", icon: Award },
   {
     name: "Create Project",
     href: "/dashboard/projects/create",

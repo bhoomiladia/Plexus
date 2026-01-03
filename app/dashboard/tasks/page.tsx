@@ -16,7 +16,10 @@ import {
   X,
   AlertCircle,
   ChevronDown,
+  Award,
+  Shield,
 } from "lucide-react";
+import CertificatePreview from "@/components/CertificatePreview";
 
 interface Task {
   _id: string;
@@ -28,6 +31,24 @@ interface Task {
   projectId: string | null;
   projectTitle: string | null;
   createdAt: string;
+}
+
+interface Certificate {
+  _id: string;
+  certificateId: string;
+  certificateHash: string;
+  userName: string;
+  taskTitle: string;
+  projectName: string;
+  role: string;
+  totalTasksCompleted: number;
+  issuedAt: string;
+  status: "pending" | "minted" | "failed";
+  blockchain?: {
+    network: string;
+    transactionSignature?: string;
+    explorerUrl?: string;
+  };
 }
 
 export default function TasksPage() {
@@ -45,6 +66,9 @@ export default function TasksPage() {
     dueDate: "",
     priority: "medium",
   });
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [generatedCertificate, setGeneratedCertificate] = useState<Certificate | null>(null);
+  const [isGeneratingCert, setIsGeneratingCert] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -124,8 +148,57 @@ export default function TasksPage() {
       setTasks(
         tasks.map((t) => (t._id === taskId ? { ...t, status: newStatus } : t))
       );
+
+      // Generate certificate when task is completed
+      if (newStatus === "completed") {
+        setIsGeneratingCert(true);
+        try {
+          const certRes = await fetch("/api/certificates", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ taskId, mintOnChain: false }),
+          });
+          const certData = await certRes.json();
+          console.log("Certificate API response:", certRes.status, certData);
+          if (certRes.ok && certData.certificate) {
+            setGeneratedCertificate(certData.certificate);
+            setShowCertificateModal(true);
+          } else {
+            console.error("Certificate generation failed:", certData);
+            alert(`Certificate generation failed: ${certData.error || 'Unknown error'}`);
+          }
+        } catch (certError) {
+          console.error("Error generating certificate:", certError);
+          alert("Error generating certificate. Check console for details.");
+        } finally {
+          setIsGeneratingCert(false);
+        }
+      }
     } catch (e) {
       console.error("Error updating task:", e);
+    }
+  };
+
+  const handleMintCertificate = async () => {
+    if (!generatedCertificate) return;
+    try {
+      const res = await fetch("/api/certificates/mint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ certificateId: generatedCertificate._id }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setGeneratedCertificate((prev) =>
+          prev ? { ...prev, status: "minted", blockchain: data.blockchain } : null
+        );
+      } else {
+        const error = await res.json();
+        alert(error.error || "Failed to mint certificate");
+      }
+    } catch (error) {
+      console.error("Error minting certificate:", error);
+      alert("Failed to mint certificate");
     }
   };
 
@@ -529,6 +602,51 @@ export default function TasksPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Certificate Generation Loading */}
+      <AnimatePresence>
+        {isGeneratingCert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-[#243131] p-8 rounded-[2rem] border border-white/10 text-center"
+            >
+              <Award className="mx-auto mb-4 text-[#88AB8E] animate-pulse" size={48} />
+              <h3 className="text-xl font-black text-[#F0F4F2] uppercase mb-2">
+                Generating Certificate
+              </h3>
+              <p className="text-sm text-[#88AB8E]/60">
+                Creating your blockchain-verified certificate...
+              </p>
+              <Loader2 className="mx-auto mt-4 animate-spin text-[#88AB8E]" size={24} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Certificate Preview Modal */}
+      {generatedCertificate && (
+        <CertificatePreview
+          certificate={generatedCertificate}
+          isOpen={showCertificateModal}
+          onClose={() => {
+            setShowCertificateModal(false);
+            setGeneratedCertificate(null);
+          }}
+          onMint={
+            generatedCertificate.status === "pending"
+              ? handleMintCertificate
+              : undefined
+          }
+        />
+      )}
     </div>
   );
 }
