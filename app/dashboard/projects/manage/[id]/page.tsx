@@ -854,7 +854,7 @@ export default function ProjectManagePage() {
                               )}
 
                               {profile.missingSkills.length > 0 && (
-                                <div>
+                                <div className="mb-3">
                                   <span className="text-[8px] font-black uppercase text-red-400/60 tracking-widest opacity-50 block mb-2">
                                     Missing Skills
                                   </span>
@@ -875,6 +875,14 @@ export default function ProjectManagePage() {
                                   </div>
                                 </div>
                               )}
+
+                              {/* View Profile Button */}
+                              <Link
+                                href={`/dashboard/profile/${profile._id}`}
+                                className="inline-flex items-center gap-2 px-4 py-2 bg-[#1A2323] text-[#88AB8E] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#3E5C58] transition-all border border-white/5"
+                              >
+                                <UserCircle size={14} /> View Profile
+                              </Link>
                             </div>
                           </div>
                         </motion.div>
