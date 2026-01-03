@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/dbConnect";
 import Project from "@/models/Project";
 import Application from "@/models/Application";
 
 export async function GET(
   req: NextRequest, 
-  { params }: { params: Promise<{ id: string }> } // 1. Define params as a Promise
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // 2. Await the params to get the id
     const { id } = await params;
 
-    // 3. Ensure Database is connected
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGODB_URI!);
-    }
+    await dbConnect();
 
     // 4. Fetch data using the unwrapped id
     const project = await Project.findById(id);
@@ -46,9 +42,7 @@ export async function PUT(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGODB_URI!);
-    }
+    await dbConnect();
 
     // Fetch the existing project
     const existingProject = await Project.findById(id);
@@ -113,9 +107,7 @@ export async function DELETE(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGODB_URI!);
-    }
+    await dbConnect();
 
     // Fetch the project
     const project = await Project.findById(id);

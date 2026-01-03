@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status"); // "OPEN" | "IN_PROGRESS" | "COMPLETED"
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     let query: any = {};
 
@@ -87,7 +87,7 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const project = {
       ownerId: session.user.id,

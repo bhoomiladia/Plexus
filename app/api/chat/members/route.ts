@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db(); // Use default database from connection string
+    const db = client.db();
 
     // Get project
     const project = await db.collection("projects").findOne({
@@ -38,16 +38,30 @@ export async function GET(req: NextRequest) {
     const isOwner = project.ownerId === session.user.id ||
                     project.ownerId === session.user.id.toString();
     
+    // Check if user is authorized personnel
+    const isAuthorized = project.authorizedPersonnel?.some(
+      (p: any) => p.userEmail === session.user.email || p.userId === session.user.id
+    );
+    
     let hasAcceptedApplication = null;
-    if (!isOwner) {
-      hasAcceptedApplication = await db.collection("applications").findOne({
+    if (!isOwner && !isAuthorized) {
+      // Check by both userId and userEmail
+      const appQuery: any = {
         projectId: new ObjectId(projectId),
-        userId: session.user.id,
         status: "ACCEPTED",
-      });
+      };
+      if (session.user.email) {
+        appQuery.$or = [
+          { userId: session.user.id },
+          { userEmail: session.user.email }
+        ];
+      } else {
+        appQuery.userId = session.user.id;
+      }
+      hasAcceptedApplication = await db.collection("applications").findOne(appQuery);
     }
 
-    if (!isOwner && !hasAcceptedApplication) {
+    if (!isOwner && !isAuthorized && !hasAcceptedApplication) {
       return NextResponse.json(
         { error: "Access denied" },
         { status: 403 }
@@ -100,6 +114,22 @@ export async function GET(req: NextRequest) {
         role: role?.roleName || "Member",
         isOwner: false,
       });
+    }
+
+    // Add authorized personnel
+    if (project.authorizedPersonnel && project.authorizedPersonnel.length > 0) {
+      for (const authUser of project.authorizedPersonnel) {
+        // Avoid duplicates (in case someone is both authorized and has an application)
+        if (!members.some(m => m.email === authUser.userEmail)) {
+          members.push({
+            userId: authUser.userId,
+            name: authUser.userName,
+            email: authUser.userEmail,
+            role: "Authorized Personnel",
+            isOwner: false,
+          });
+        }
+      }
     }
 
     return NextResponse.json({ members });

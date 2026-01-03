@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/dbConnect";
 import Project from "@/models/Project";
 
 export async function GET() {
-  if (mongoose.connection.readyState !== 1) {
-    await mongoose.connect(process.env.MONGODB_URI!);
-  }
+  await dbConnect();
   
   // Fetch all open projects
   const projects = await Project.find({ status: "OPEN" }).sort({ createdAt: -1 });

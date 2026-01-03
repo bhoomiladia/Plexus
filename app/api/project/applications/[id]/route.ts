@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/dbConnect";
 import Application from "@/models/Application";
 import Project from "@/models/Project";
 import { sendAcceptanceEmail } from "@/lib/email";
@@ -13,23 +13,17 @@ import {
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // Unwrapping Promise for Next.js 15
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // 1. Unwrapping params
     const { id } = await params;
 
-    // 2. Auth Check
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // 3. Database Connection Check
-    if (mongoose.connection.readyState !== 1) {
-      if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is missing");
-      await mongoose.connect(process.env.MONGODB_URI);
-    }
+    await dbConnect();
 
     // 4. Get request body
     const { status, roleId, projectId } = await req.json();

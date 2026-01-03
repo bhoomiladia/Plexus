@@ -12,7 +12,7 @@ export async function GET() {
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
     const userId = session.user.id;
 
     let userObjectId: ObjectId | null = null;

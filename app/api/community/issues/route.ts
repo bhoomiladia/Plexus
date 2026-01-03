@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     let query = {};
     if (search) {
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const issue = {
       userId: session.user.id,

@@ -12,7 +12,7 @@ export async function GET() {
   }
 
   const client = await clientPromise;
-  const db = client.db("crewbook");
+  const db = client.db();
   const userId = session.user.id;
 
   const user = await db.collection("users").findOne(
@@ -130,7 +130,7 @@ export async function PATCH(req: NextRequest) {
   }
 
   const client = await clientPromise;
-  const db = client.db("crewbook");
+  const db = client.db();
 
   await db.collection("users").updateOne(
     { _id: new ObjectId(session.user.id) },

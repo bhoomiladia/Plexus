@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/dbConnect";
 import Project from "@/models/Project";
 import Application from "@/models/Application";
 import { sendMemberAddedEmail } from "@/lib/email";
@@ -14,9 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGODB_URI!);
-    }
+    await dbConnect();
 
     const { projectId, roleId, userEmail } = await req.json();
 
@@ -69,7 +67,7 @@ export async function POST(req: NextRequest) {
     let userName = userEmail.split("@")[0]; // Default: extract from email
     try {
       const client = await clientPromise;
-      const db = client.db("crewbook");
+      const db = client.db();
       const existingUser = await db.collection("users").findOne({
         email: userEmail,
       });

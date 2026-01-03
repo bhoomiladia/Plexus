@@ -60,8 +60,11 @@ export default function ProjectManagePage() {
   const [apps, setApps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+  const [showAddAuthorizedModal, setShowAddAuthorizedModal] = useState(false);
   const [addMemberForm, setAddMemberForm] = useState({ email: "", roleId: "" });
+  const [addAuthorizedEmail, setAddAuthorizedEmail] = useState("");
   const [addingMember, setAddingMember] = useState(false);
+  const [addingAuthorized, setAddingAuthorized] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -217,7 +220,7 @@ export default function ProjectManagePage() {
               <section className="space-y-6">
                 <div className="flex justify-between items-center px-4">
                   <h3 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
-                    Authorized Personnel
+                    Team Members
                   </h3>
                   {isOwner && (
                     <button
@@ -251,6 +254,85 @@ export default function ProjectManagePage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              </section>
+
+              {/* Authorized Personnel Section */}
+              <section className="space-y-6 pt-10 border-t border-white/5">
+                <div className="flex justify-between items-center px-4">
+                  <h3 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
+                    Authorized Personnel
+                  </h3>
+                  {isOwner && (
+                    <button
+                      onClick={() => setShowAddAuthorizedModal(true)}
+                      className="p-3 bg-[#88AB8E] text-[#141C1C] rounded-xl hover:scale-110 transition-all"
+                    >
+                      <Plus size={20} />
+                    </button>
+                  )}
+                </div>
+                <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest px-4">
+                  Users with direct access to view project and chat
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {(project.authorizedPersonnel || []).length === 0 ? (
+                    <div className="col-span-3 p-8 bg-[#243131] rounded-[2.5rem] border border-white/5 text-center">
+                      <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+                        No authorized personnel added
+                      </p>
+                    </div>
+                  ) : (
+                    project.authorizedPersonnel.map((person: any, index: number) => (
+                      <div
+                        key={person.userEmail || index}
+                        className="p-8 bg-[#243131] rounded-[2.5rem] border border-[#3E5C58]/30 relative group"
+                      >
+                        <div className="flex items-center gap-5">
+                          <div className="p-3 bg-[#1A2323] rounded-2xl text-[#3E5C58]">
+                            <ShieldCheck size={24} />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-black   text-[#F0F4F2] uppercase tracking-tight">
+                              {person.userName}
+                            </p>
+                            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
+                              {person.userEmail}
+                            </p>
+                          </div>
+                          {isOwner && (
+                            <button
+                              onClick={async () => {
+                                if (!confirm(`Remove ${person.userName} from authorized personnel?`)) return;
+                                try {
+                                  const res = await fetch(
+                                    `/api/project/members/authorize?projectId=${id}&userEmail=${encodeURIComponent(person.userEmail)}`,
+                                    { method: "DELETE" }
+                                  );
+                                  if (res.ok) {
+                                    setProject((prev: any) => ({
+                                      ...prev,
+                                      authorizedPersonnel: prev.authorizedPersonnel.filter(
+                                        (p: any) => p.userEmail !== person.userEmail
+                                      ),
+                                    }));
+                                  } else {
+                                    alert("Failed to remove authorized user");
+                                  }
+                                } catch (err) {
+                                  console.error(err);
+                                  alert("Failed to remove authorized user");
+                                }
+                              }}
+                              className="p-2 text-red-500/50 hover:text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                            >
+                              <X size={16} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </section>
 
@@ -417,6 +499,94 @@ export default function ProjectManagePage() {
                   className="px-6 py-5 bg-white/5 text-[#F0F4F2]/40 font-black uppercase tracking-widest rounded-2xl hover:text-white transition-all"
                 >
                   Abort
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Add Authorized Personnel Modal */}
+      {showAddAuthorizedModal && (
+        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-[#243131] rounded-[3.5rem] p-12 max-w-md w-full border border-white/10 shadow-2xl"
+          >
+            <h2 className="text-3xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-4">
+              Add Authorized Personnel
+            </h2>
+            <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mb-8">
+              Grant direct access to view project and chat
+            </p>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (!addAuthorizedEmail) return;
+                setAddingAuthorized(true);
+                try {
+                  const res = await fetch("/api/project/members/authorize", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      projectId: id,
+                      userEmail: addAuthorizedEmail,
+                    }),
+                  });
+                  const data = await res.json();
+                  if (res.ok) {
+                    setProject((prev: any) => ({
+                      ...prev,
+                      authorizedPersonnel: [
+                        ...(prev.authorizedPersonnel || []),
+                        data.authorizedUser,
+                      ],
+                    }));
+                    setShowAddAuthorizedModal(false);
+                    setAddAuthorizedEmail("");
+                  } else {
+                    alert(data.message || "Failed to authorize user");
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert("Failed to authorize user");
+                } finally {
+                  setAddingAuthorized(false);
+                }
+              }}
+              className="space-y-6"
+            >
+              <div>
+                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                  User Email
+                </label>
+                <input
+                  required
+                  type="email"
+                  value={addAuthorizedEmail}
+                  onChange={(e) => setAddAuthorizedEmail(e.target.value)}
+                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
+                  placeholder="user@example.com"
+                />
+              </div>
+              <div className="flex gap-4 pt-4">
+                <button
+                  type="submit"
+                  disabled={addingAuthorized}
+                  className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {addingAuthorized ? "Adding..." : "Authorize"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddAuthorizedModal(false);
+                    setAddAuthorizedEmail("");
+                  }}
+                  className="px-6 py-5 bg-white/5 text-[#F0F4F2]/40 font-black uppercase tracking-widest rounded-2xl hover:text-white transition-all"
+                >
+                  Cancel
                 </button>
               </div>
             </form>

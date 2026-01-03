@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     // Connect to MongoDB
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     // Check if user already exists
     const existingUser = await db.collection("users").findOne({ email });

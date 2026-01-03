@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import mongoose from "mongoose"; // Import mongoose directly
+import dbConnect from "@/lib/dbConnect";
 import Project from "@/models/Project";
 
 export async function POST(req: NextRequest) {
@@ -9,11 +9,7 @@ export async function POST(req: NextRequest) {
     const session = await getServerSession(authOptions);
     if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
-    // 1. Check if Mongoose is connected. If not, connect using the URI.
-    if (mongoose.connection.readyState !== 1) {
-      if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is missing");
-      await mongoose.connect(process.env.MONGODB_URI);
-    }
+    await dbConnect();
 
     const body = await req.json();
 

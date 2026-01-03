@@ -18,7 +18,7 @@ export async function GET(
     const { id } = await params;
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const issue = await db
       .collection("issues")
@@ -52,7 +52,7 @@ export async function DELETE(
     const { id } = await params;
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const issue = await db
       .collection("issues")
@@ -103,7 +103,7 @@ export async function PATCH(
     const { id } = await params;
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const issue = await db
       .collection("issues")

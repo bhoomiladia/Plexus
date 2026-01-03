@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import mongoose from "mongoose";
+import dbConnect from "@/lib/dbConnect";
 import Application from "@/models/Application";
 import Project from "@/models/Project";
 
@@ -13,9 +13,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGODB_URI!);
-    }
+    await dbConnect();
 
     // Find all applications where user is shortlisted (invited by owner)
     const invitations = await Application.find({

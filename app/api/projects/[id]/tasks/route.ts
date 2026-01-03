@@ -27,7 +27,7 @@ export async function POST(
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const project = await db
       .collection("projects")
@@ -105,7 +105,7 @@ export async function PATCH(
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const project = await db
       .collection("projects")
@@ -180,7 +180,7 @@ export async function DELETE(
     }
 
     const client = await clientPromise;
-    const db = client.db("crewbook");
+    const db = client.db();
 
     const project = await db
       .collection("projects")

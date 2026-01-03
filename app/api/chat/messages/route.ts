@@ -20,17 +20,10 @@ export async function GET(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db(); // Use default database from connection string
+    const db = client.db();
 
-    // Handle both string and ObjectId user IDs
-    let userObjectId: ObjectId | null = null;
-    try {
-      if (ObjectId.isValid(session.user.id)) {
-        userObjectId = new ObjectId(session.user.id);
-      }
-    } catch (e) {
-      // Keep as null if conversion fails
-    }
+    const userId = session.user.id;
+    const userEmail = session.user.email;
 
     // Verify user is a member of this project
     const project = await db.collection("projects").findOne({
@@ -41,32 +34,46 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    // Verify user is owner or has an accepted application
-    const isOwner = project.ownerId === session.user.id || 
-                    (userObjectId && project.ownerId === userObjectId.toString());
+    // Check access: owner, authorized personnel, or accepted application
+    const isOwner = project.ownerId === userId;
     
-    let hasAcceptedApplication = null;
-    if (!isOwner) {
-      hasAcceptedApplication = await db.collection("applications").findOne({
+    const isAuthorized = project.authorizedPersonnel?.some(
+      (p: any) => p.userEmail === userEmail || p.userId === userId
+    );
+
+    let hasAccess = isOwner || isAuthorized;
+    
+    if (!hasAccess) {
+      // Check for accepted application (by userId or userEmail)
+      const appQuery: any = {
         projectId: new ObjectId(projectId),
-        $or: [
-          { userId: session.user.id },
-          ...(userObjectId ? [{ userId: userObjectId.toString() }] : []),
-        ],
         status: "ACCEPTED",
-      });
+      };
+      if (userEmail) {
+        appQuery.$or = [{ userId }, { userEmail }];
+      } else {
+        appQuery.userId = userId;
+      }
+      
+      const acceptedApp = await db.collection("applications").findOne(appQuery);
+      hasAccess = !!acceptedApp;
     }
 
-    if (!isOwner && !hasAcceptedApplication) {
+    if (!hasAccess) {
       return NextResponse.json({ 
         error: "Access denied. Only project owner and accepted members can view this chat." 
       }, { status: 403 });
     }
 
-    // Fetch messages
+    // Fetch messages - handle both ObjectId and string projectId
     const messages = await db
       .collection("messages")
-      .find({ projectId: new ObjectId(projectId) })
+      .find({ 
+        $or: [
+          { projectId: new ObjectId(projectId) },
+          { projectId: projectId }
+        ]
+      })
       .sort({ createdAt: 1 })
       .toArray();
 
@@ -92,17 +99,10 @@ export async function POST(req: NextRequest) {
     }
 
     const client = await clientPromise;
-    const db = client.db(); // Use default database from connection string
+    const db = client.db();
 
-    // Handle both string and ObjectId user IDs
-    let userObjectId: ObjectId | null = null;
-    try {
-      if (ObjectId.isValid(session.user.id)) {
-        userObjectId = new ObjectId(session.user.id);
-      }
-    } catch (e) {
-      // Keep as null if conversion fails
-    }
+    const userId = session.user.id;
+    const userEmail = session.user.email;
 
     // Verify user is a member of this project
     const project = await db.collection("projects").findOne({
@@ -113,35 +113,45 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
 
-    const isOwner = project.ownerId === session.user.id || 
-                    (userObjectId && project.ownerId === userObjectId.toString());
+    // Check access: owner, authorized personnel, or accepted application
+    const isOwner = project.ownerId === userId;
     
-    let hasAcceptedApplication = null;
-    if (!isOwner) {
-      hasAcceptedApplication = await db.collection("applications").findOne({
+    const isAuthorized = project.authorizedPersonnel?.some(
+      (p: any) => p.userEmail === userEmail || p.userId === userId
+    );
+
+    let hasAccess = isOwner || isAuthorized;
+    
+    if (!hasAccess) {
+      // Check for accepted application (by userId or userEmail)
+      const appQuery: any = {
         projectId: new ObjectId(projectId),
-        $or: [
-          { userId: session.user.id },
-          ...(userObjectId ? [{ userId: userObjectId.toString() }] : []),
-        ],
         status: "ACCEPTED",
-      });
+      };
+      if (userEmail) {
+        appQuery.$or = [{ userId }, { userEmail }];
+      } else {
+        appQuery.userId = userId;
+      }
+      
+      const acceptedApp = await db.collection("applications").findOne(appQuery);
+      hasAccess = !!acceptedApp;
     }
 
-    if (!isOwner && !hasAcceptedApplication) {
+    if (!hasAccess) {
       return NextResponse.json({ 
         error: "Access denied. Only project owner and accepted members can send messages." 
       }, { status: 403 });
     }
 
-    // Create message
+    // Create message - store projectId as ObjectId for consistency
     const message = {
       projectId: new ObjectId(projectId),
-      senderId: session.user.id,
+      senderId: userId,
       senderName: session.user.name || "Unknown",
-      senderEmail: session.user.email || "",
+      senderEmail: userEmail || "",
       content: content.trim(),
-      readBy: [session.user.id],
+      readBy: [userId],
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -149,7 +159,11 @@ export async function POST(req: NextRequest) {
     const result = await db.collection("messages").insertOne(message);
 
     return NextResponse.json({
-      message: { ...message, _id: result.insertedId },
+      message: { 
+        ...message, 
+        _id: result.insertedId,
+        projectId: projectId // Return as string for frontend
+      },
     });
   } catch (error) {
     console.error("Error sending message:", error);

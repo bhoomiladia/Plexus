@@ -8,6 +8,13 @@ const RoleSchema = new Schema({
   filled: { type: Number, default: 0 },
 });
 
+const AuthorizedPersonnelSchema = new Schema({
+  userId: { type: String, required: true },
+  userName: { type: String, required: true },
+  userEmail: { type: String, required: true },
+  addedAt: { type: Date, default: Date.now },
+});
+
 const ProjectSchema = new Schema(
   {
     ownerId: { type: String, required: true }, // Ties to session.user.id
@@ -21,6 +28,7 @@ const ProjectSchema = new Schema(
     roles: [RoleSchema],
     githubLink: { type: String },
     demoLink: { type: String },
+    authorizedPersonnel: [AuthorizedPersonnelSchema], // Users with direct access
   },
   { timestamps: true }
 );
