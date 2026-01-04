@@ -55,7 +55,7 @@ const priorityColors = {
 };
 
 const statusConfig = {
-  pending: { icon: Clock, color: "#88AB8E", label: "Pending" },
+  pending: { icon: Clock, color: "var(--theme-accent)", label: "Pending" },
   "in-progress": { icon: AlertCircle, color: "#F59E0B", label: "In Progress" },
   completed: { icon: CheckCircle2, color: "#10B981", label: "Completed" },
 };
@@ -297,9 +297,9 @@ export default function MilestoneSection({
 
   if (loading) {
     return (
-      <div className="bg-[#1A2323] rounded-[2.5rem] border border-white/5 p-8">
+      <div className="bg-[var(--theme-card)] rounded-[2.5rem] border border-white/5 p-8">
         <div className="flex items-center justify-center h-32">
-          <Loader2 className="animate-spin text-[#88AB8E]" size={24} />
+          <Loader2 className="animate-spin text-[var(--theme-accent)]" size={24} />
         </div>
       </div>
     );
@@ -311,10 +311,10 @@ export default function MilestoneSection({
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h3 className="text-2xl font-black uppercase text-[#F0F4F2] tracking-tighter flex items-center gap-3">
-            <Target className="text-[#88AB8E]" size={24} />
+            <Target className="text-[var(--theme-accent)]" size={24} />
             Project Milestones
           </h3>
-          <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mt-1">
+          <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mt-1">
             {milestones.length} milestones • {overallProgress}% complete
           </p>
         </div>
@@ -323,13 +323,13 @@ export default function MilestoneSection({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowGenerateModal(true)}
-              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[#3E5C58] to-[#88AB8E] text-[#F0F4F2] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
+              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[var(--theme-muted)] to-[var(--theme-accent)] text-[#F0F4F2] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
             >
               <Sparkles size={16} /> AI Generate
             </button>
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-2 px-5 py-3 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
+              className="flex items-center gap-2 px-5 py-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
             >
               <Plus size={16} /> Add
             </button>
@@ -339,18 +339,18 @@ export default function MilestoneSection({
 
       {/* Progress Bar */}
       {milestones.length > 0 && (
-        <div className="bg-[#243131] rounded-2xl p-4 border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] rounded-2xl p-4 border border-white/5">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest">
+            <span className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest">
               Overall Progress
             </span>
             <span className="text-sm font-black text-[#F0F4F2]">{overallProgress}%</span>
           </div>
-          <div className="h-2 bg-[#1A2323] rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--theme-card)] rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${overallProgress}%` }}
-              className="h-full bg-gradient-to-r from-[#88AB8E] to-[#10B981] rounded-full"
+              className="h-full bg-gradient-to-r from-[var(--theme-accent)] to-[#10B981] rounded-full"
             />
           </div>
         </div>
@@ -358,7 +358,7 @@ export default function MilestoneSection({
 
       {/* Milestones List */}
       {milestones.length === 0 ? (
-        <div className="bg-[#1A2323] rounded-[2.5rem] border border-white/5 p-12 text-center">
+        <div className="bg-[var(--theme-card)] rounded-[2.5rem] border border-white/5 p-12 text-center">
           <Target className="mx-auto text-white/10 mb-4" size={48} />
           <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-4">
             No milestones yet
@@ -366,7 +366,7 @@ export default function MilestoneSection({
           {isOwner && (
             <button
               onClick={() => setShowGenerateModal(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#3E5C58] text-[#F0F4F2] rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#88AB8E] hover:text-[#1A2323] transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[var(--theme-muted)] text-[#F0F4F2] rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[var(--theme-accent)] hover:text-[var(--theme-card)] transition-all"
             >
               <Sparkles size={14} /> Generate with AI
             </button>
@@ -382,7 +382,7 @@ export default function MilestoneSection({
               <motion.div
                 key={milestone._id}
                 layout
-                className="bg-[#243131] rounded-[2rem] border border-white/5 overflow-hidden"
+                className="bg-[var(--theme-card-alt)] rounded-[2rem] border border-white/5 overflow-hidden"
               >
                 {/* Milestone Header */}
                 <div
@@ -441,7 +441,7 @@ export default function MilestoneSection({
                       <div className="p-6 space-y-6">
                         {/* Description */}
                         <div>
-                          <h5 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-2">
+                          <h5 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-2">
                             Description
                           </h5>
                           <p className="text-white/60 text-sm">{milestone.description}</p>
@@ -450,14 +450,14 @@ export default function MilestoneSection({
                         {/* Suggested Tasks */}
                         {milestone.suggestedTasks?.length > 0 && (
                           <div>
-                            <h5 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <h5 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-3 flex items-center gap-2">
                               <ListTodo size={14} /> Suggested Tasks
                             </h5>
                             <div className="space-y-2">
                               {milestone.suggestedTasks.map((task, i) => (
                                 <div
                                   key={i}
-                                  className="flex items-center justify-between p-3 bg-[#1A2323] rounded-xl group"
+                                  className="flex items-center justify-between p-3 bg-[var(--theme-card)] rounded-xl group"
                                 >
                                   <span className="text-sm text-white/60">{task}</span>
                                   {isOwner && onCreateTaskFromSuggestion && (
@@ -466,7 +466,7 @@ export default function MilestoneSection({
                                         e.stopPropagation();
                                         onCreateTaskFromSuggestion(task);
                                       }}
-                                      className="opacity-0 group-hover:opacity-100 px-3 py-1 bg-[#88AB8E]/20 text-[#88AB8E] rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#88AB8E] hover:text-[#1A2323] transition-all"
+                                      className="opacity-0 group-hover:opacity-100 px-3 py-1 bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--theme-accent)] hover:text-[var(--theme-card)] transition-all"
                                     >
                                       Create Task
                                     </button>
@@ -480,14 +480,14 @@ export default function MilestoneSection({
                         {/* Deliverables */}
                         {milestone.deliverables?.length > 0 && (
                           <div>
-                            <h5 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <h5 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-3 flex items-center gap-2">
                               <Package size={14} /> Deliverables
                             </h5>
                             <div className="flex flex-wrap gap-2">
                               {milestone.deliverables.map((d, i) => (
                                 <span
                                   key={i}
-                                  className="px-3 py-1.5 bg-[#1A2323] rounded-lg text-xs text-white/60"
+                                  className="px-3 py-1.5 bg-[var(--theme-card)] rounded-lg text-xs text-white/60"
                                 >
                                   {d}
                                 </span>
@@ -501,7 +501,7 @@ export default function MilestoneSection({
                           <div className="space-y-4 pt-4 border-t border-white/5">
                             {/* AI Enhancement Buttons */}
                             <div>
-                              <h5 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-3 flex items-center gap-2">
+                              <h5 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-3 flex items-center gap-2">
                                 <Wand2 size={14} /> AI Enhancements
                               </h5>
                               <div className="flex flex-wrap gap-2">
@@ -510,7 +510,7 @@ export default function MilestoneSection({
                                     e.stopPropagation();
                                     handleEnhanceMilestone(milestone, "tasks");
                                   }}
-                                  className="px-3 py-2 bg-[#1A2323] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#3E5C58] hover:text-white transition-all flex items-center gap-1.5"
+                                  className="px-3 py-2 bg-[var(--theme-card)] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--theme-muted)] hover:text-white transition-all flex items-center gap-1.5"
                                 >
                                   <ListTodo size={12} /> Generate Tasks
                                 </button>
@@ -519,7 +519,7 @@ export default function MilestoneSection({
                                     e.stopPropagation();
                                     handleEnhanceMilestone(milestone, "risks");
                                   }}
-                                  className="px-3 py-2 bg-[#1A2323] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#3E5C58] hover:text-white transition-all flex items-center gap-1.5"
+                                  className="px-3 py-2 bg-[var(--theme-card)] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--theme-muted)] hover:text-white transition-all flex items-center gap-1.5"
                                 >
                                   <AlertCircle size={12} /> Identify Risks
                                 </button>
@@ -528,7 +528,7 @@ export default function MilestoneSection({
                                     e.stopPropagation();
                                     handleEnhanceMilestone(milestone, "timeline");
                                   }}
-                                  className="px-3 py-2 bg-[#1A2323] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#3E5C58] hover:text-white transition-all flex items-center gap-1.5"
+                                  className="px-3 py-2 bg-[var(--theme-card)] text-white/60 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[var(--theme-muted)] hover:text-white transition-all flex items-center gap-1.5"
                                 >
                                   <Calendar size={12} /> Timeline Breakdown
                                 </button>
@@ -547,8 +547,8 @@ export default function MilestoneSection({
                                     }}
                                     className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                                       milestone.status === status
-                                        ? "bg-[#88AB8E] text-[#141C1C]"
-                                        : "bg-[#1A2323] text-white/40 hover:text-white"
+                                        ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
+                                        : "bg-[var(--theme-card)] text-white/40 hover:text-white"
                                     }`}
                                   >
                                     {statusConfig[status].label}
@@ -579,18 +579,18 @@ export default function MilestoneSection({
 
       {/* AI Generate Modal */}
       {showGenerateModal && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3rem] p-10 max-w-2xl w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-[var(--theme-card-alt)] rounded-[3rem] p-10 max-w-2xl w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-8">
               <div>
                 <h2 className="text-2xl font-black text-[#F0F4F2] uppercase tracking-tighter flex items-center gap-3">
-                  <Sparkles className="text-[#88AB8E]" /> AI Milestone Generator
+                  <Sparkles className="text-[var(--theme-accent)]" /> AI Milestone Generator
                 </h2>
-                <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mt-1">
+                <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mt-1">
                   Generate smart milestones based on your project
                 </p>
               </div>
@@ -608,13 +608,13 @@ export default function MilestoneSection({
             {generatedMilestones.length === 0 ? (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Expected Project Duration
                   </label>
                   <select
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                   >
                     <option value="1 month">1 Month</option>
                     <option value="2 months">2 Months</option>
@@ -624,8 +624,8 @@ export default function MilestoneSection({
                   </select>
                 </div>
 
-                <div className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
-                  <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-2">
+                <div className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
+                  <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-2">
                     Project Context
                   </p>
                   <p className="text-sm text-white/60">{projectTitle}</p>
@@ -635,7 +635,7 @@ export default function MilestoneSection({
                 <button
                   onClick={handleGenerateMilestones}
                   disabled={generating}
-                  className="w-full py-4 bg-gradient-to-r from-[#3E5C58] to-[#88AB8E] text-[#F0F4F2] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-4 bg-gradient-to-r from-[var(--theme-muted)] to-[var(--theme-accent)] text-[#F0F4F2] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {generating ? (
                     <>
@@ -660,11 +660,11 @@ export default function MilestoneSection({
                   {generatedMilestones.map((m, index) => (
                     <div
                       key={index}
-                      className="p-5 bg-[#1A2323] rounded-2xl border border-white/5"
+                      className="p-5 bg-[var(--theme-card)] rounded-2xl border border-white/5"
                     >
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black text-[#88AB8E] uppercase">
+                          <span className="text-[10px] font-black text-[var(--theme-accent)] uppercase">
                             M{index + 1}
                           </span>
                           <h4 className="font-bold text-[#F0F4F2]">{m.title}</h4>
@@ -682,7 +682,7 @@ export default function MilestoneSection({
                       )}
                       {m.suggestedTasks?.length > 0 && (
                         <div className="mt-3 pt-3 border-t border-white/5">
-                          <p className="text-[9px] font-black text-[#88AB8E]/60 uppercase tracking-widest mb-2">
+                          <p className="text-[9px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mb-2">
                             Suggested Tasks
                           </p>
                           <div className="flex flex-wrap gap-1">
@@ -701,7 +701,7 @@ export default function MilestoneSection({
                 <div className="flex gap-4 pt-4">
                   <button
                     onClick={handleSaveGeneratedMilestones}
-                    className="flex-1 py-4 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all"
+                    className="flex-1 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all"
                   >
                     Save All Milestones
                   </button>
@@ -720,11 +720,11 @@ export default function MilestoneSection({
 
       {/* Add Manual Milestone Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3rem] p-10 max-w-lg w-full border border-white/10 shadow-2xl"
+            className="bg-[var(--theme-card-alt)] rounded-[3rem] p-10 max-w-lg w-full border border-white/10 shadow-2xl"
           >
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-black text-[#F0F4F2] uppercase tracking-tighter">
@@ -740,40 +740,40 @@ export default function MilestoneSection({
 
             <div className="space-y-5">
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                   Title
                 </label>
                 <input
                   type="text"
                   value={newMilestone.title}
                   onChange={(e) => setNewMilestone((prev) => ({ ...prev, title: e.target.value }))}
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold placeholder:text-white/10"
                   placeholder="Milestone title..."
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                   Description
                 </label>
                 <textarea
                   value={newMilestone.description}
                   onChange={(e) => setNewMilestone((prev) => ({ ...prev, description: e.target.value }))}
                   rows={3}
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-medium placeholder:text-white/10 resize-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-medium placeholder:text-white/10 resize-none"
                   placeholder="What needs to be achieved..."
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Priority
                   </label>
                   <select
                     value={newMilestone.priority}
                     onChange={(e) => setNewMilestone((prev) => ({ ...prev, priority: e.target.value as any }))}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -782,14 +782,14 @@ export default function MilestoneSection({
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Target Date
                   </label>
                   <input
                     type="date"
                     value={newMilestone.targetDate}
                     onChange={(e) => setNewMilestone((prev) => ({ ...prev, targetDate: e.target.value }))}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                   />
                 </div>
               </div>
@@ -798,7 +798,7 @@ export default function MilestoneSection({
                 <button
                   onClick={handleCreateMilestone}
                   disabled={!newMilestone.title.trim()}
-                  className="flex-1 py-4 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Create Milestone
                 </button>
@@ -816,18 +816,18 @@ export default function MilestoneSection({
 
       {/* AI Enhancement Modal */}
       {showEnhanceModal && selectedMilestoneForEnhance && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3rem] p-10 max-w-2xl w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-[var(--theme-card-alt)] rounded-[3rem] p-10 max-w-2xl w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-8">
               <div>
                 <h2 className="text-2xl font-black text-[#F0F4F2] uppercase tracking-tighter flex items-center gap-3">
-                  <Wand2 className="text-[#88AB8E]" /> AI Enhancement
+                  <Wand2 className="text-[var(--theme-accent)]" /> AI Enhancement
                 </h2>
-                <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mt-1">
+                <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mt-1">
                   {selectedMilestoneForEnhance.title}
                 </p>
               </div>
@@ -845,16 +845,16 @@ export default function MilestoneSection({
 
             {enhancing ? (
               <div className="flex flex-col items-center justify-center py-16">
-                <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E] mb-4" />
-                <p className="text-[#88AB8E] font-bold">Analyzing milestone...</p>
+                <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)] mb-4" />
+                <p className="text-[var(--theme-accent)] font-bold">Analyzing milestone...</p>
               </div>
             ) : enhancedData ? (
               <div className="space-y-6">
                 {enhancedData.enhanceType === "tasks" && (
                   <div className="space-y-3">
-                    <h3 className="text-sm font-black text-[#88AB8E] uppercase tracking-widest">Generated Tasks</h3>
+                    <h3 className="text-sm font-black text-[var(--theme-accent)] uppercase tracking-widest">Generated Tasks</h3>
                     {enhancedData.data.map((task: any, i: number) => (
-                      <div key={i} className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
+                      <div key={i} className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
                         <div className="flex items-start justify-between gap-3 mb-2">
                           <h4 className="font-bold text-[#F0F4F2]">{task.title}</h4>
                           <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${priorityColors[task.priority as keyof typeof priorityColors]}`}>
@@ -867,7 +867,7 @@ export default function MilestoneSection({
                           {onCreateTaskFromSuggestion && (
                             <button
                               onClick={() => onCreateTaskFromSuggestion(task.title)}
-                              className="px-3 py-1 bg-[#88AB8E]/20 text-[#88AB8E] rounded-lg text-[10px] font-black uppercase hover:bg-[#88AB8E] hover:text-[#1A2323] transition-all"
+                              className="px-3 py-1 bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] rounded-lg text-[10px] font-black uppercase hover:bg-[var(--theme-accent)] hover:text-[var(--theme-card)] transition-all"
                             >
                               Create Task
                             </button>
@@ -880,9 +880,9 @@ export default function MilestoneSection({
 
                 {enhancedData.enhanceType === "risks" && (
                   <div className="space-y-3">
-                    <h3 className="text-sm font-black text-[#88AB8E] uppercase tracking-widest">Identified Risks</h3>
+                    <h3 className="text-sm font-black text-[var(--theme-accent)] uppercase tracking-widest">Identified Risks</h3>
                     {enhancedData.data.map((risk: any, i: number) => (
-                      <div key={i} className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
+                      <div key={i} className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
                         <div className="flex items-start gap-3 mb-2">
                           <AlertCircle size={18} className="text-red-400 mt-0.5" />
                           <div className="flex-1">
@@ -897,8 +897,8 @@ export default function MilestoneSection({
                             </div>
                           </div>
                         </div>
-                        <div className="mt-3 p-3 bg-[#243131] rounded-lg">
-                          <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-1">Mitigation</p>
+                        <div className="mt-3 p-3 bg-[var(--theme-card-alt)] rounded-lg">
+                          <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-1">Mitigation</p>
                           <p className="text-sm text-white/60">{risk.mitigation}</p>
                         </div>
                       </div>
@@ -908,22 +908,22 @@ export default function MilestoneSection({
 
                 {enhancedData.enhanceType === "timeline" && (
                   <div className="space-y-3">
-                    <h3 className="text-sm font-black text-[#88AB8E] uppercase tracking-widest">Timeline Breakdown</h3>
+                    <h3 className="text-sm font-black text-[var(--theme-accent)] uppercase tracking-widest">Timeline Breakdown</h3>
                     <div className="relative">
                       {enhancedData.data.map((phase: any, i: number) => (
                         <div key={i} className="flex gap-4 pb-6 last:pb-0">
                           <div className="flex flex-col items-center">
-                            <div className="w-8 h-8 rounded-full bg-[#88AB8E] flex items-center justify-center text-[#1A2323] font-black text-sm">
+                            <div className="w-8 h-8 rounded-full bg-[var(--theme-accent)] flex items-center justify-center text-[var(--theme-card)] font-black text-sm">
                               {phase.order || i + 1}
                             </div>
                             {i < enhancedData.data.length - 1 && (
-                              <div className="w-0.5 flex-1 bg-[#88AB8E]/30 mt-2" />
+                              <div className="w-0.5 flex-1 bg-[var(--theme-accent)]/30 mt-2" />
                             )}
                           </div>
-                          <div className="flex-1 p-4 bg-[#1A2323] rounded-xl border border-white/5">
+                          <div className="flex-1 p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
                             <h4 className="font-bold text-[#F0F4F2] mb-1">{phase.phase}</h4>
                             <p className="text-sm text-white/50 mb-2">{phase.description}</p>
-                            <span className="text-[10px] font-black text-[#88AB8E] uppercase">
+                            <span className="text-[10px] font-black text-[var(--theme-accent)] uppercase">
                               Duration: {phase.durationDays} days
                             </span>
                           </div>
@@ -939,7 +939,7 @@ export default function MilestoneSection({
                     setEnhancedData(null);
                     setSelectedMilestoneForEnhance(null);
                   }}
-                  className="w-full py-4 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all"
+                  className="w-full py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all"
                 >
                   Done
                 </button>
@@ -953,7 +953,7 @@ export default function MilestoneSection({
       {isOwner && (
         <button
           onClick={() => setShowAIChat(true)}
-          className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-[#3E5C58] to-[#88AB8E] text-white rounded-full shadow-lg hover:scale-110 transition-all z-50"
+          className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-[var(--theme-muted)] to-[var(--theme-accent)] text-white rounded-full shadow-lg hover:scale-110 transition-all z-50"
         >
           <MessageSquare size={24} />
         </button>
@@ -961,23 +961,23 @@ export default function MilestoneSection({
 
       {/* AI Chat Modal */}
       {showAIChat && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3rem] max-w-2xl w-full border border-white/10 shadow-2xl h-[80vh] flex flex-col overflow-hidden"
+            className="bg-[var(--theme-card-alt)] rounded-[3rem] max-w-2xl w-full border border-white/10 shadow-2xl h-[80vh] flex flex-col overflow-hidden"
           >
             {/* Chat Header */}
             <div className="p-6 border-b border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#88AB8E] rounded-xl">
-                  <Bot size={20} className="text-[#1A2323]" />
+                <div className="p-2 bg-[var(--theme-accent)] rounded-xl">
+                  <Bot size={20} className="text-[var(--theme-card)]" />
                 </div>
                 <div>
                   <h2 className="text-lg font-black text-[#F0F4F2] uppercase tracking-tighter">
                     AI Planning Assistant
                   </h2>
-                  <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest">
+                  <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest">
                     Ask about milestones, tasks, or planning
                   </p>
                 </div>
@@ -1010,7 +1010,7 @@ export default function MilestoneSection({
                         onClick={() => {
                           setChatInput(suggestion);
                         }}
-                        className="px-3 py-2 bg-[#1A2323] text-white/50 rounded-lg text-xs hover:bg-[#3E5C58] hover:text-white transition-all"
+                        className="px-3 py-2 bg-[var(--theme-card)] text-white/50 rounded-lg text-xs hover:bg-[var(--theme-muted)] hover:text-white transition-all"
                       >
                         {suggestion}
                       </button>
@@ -1027,8 +1027,8 @@ export default function MilestoneSection({
                   <div
                     className={`max-w-[80%] p-4 rounded-2xl ${
                       msg.role === "user"
-                        ? "bg-[#88AB8E] text-[#1A2323]"
-                        : "bg-[#1A2323] text-white/80"
+                        ? "bg-[var(--theme-accent)] text-[var(--theme-card)]"
+                        : "bg-[var(--theme-card)] text-white/80"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -1038,8 +1038,8 @@ export default function MilestoneSection({
 
               {chatLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-[#1A2323] p-4 rounded-2xl">
-                    <Loader2 className="animate-spin text-[#88AB8E]" size={20} />
+                  <div className="bg-[var(--theme-card)] p-4 rounded-2xl">
+                    <Loader2 className="animate-spin text-[var(--theme-accent)]" size={20} />
                   </div>
                 </div>
               )}
@@ -1054,12 +1054,12 @@ export default function MilestoneSection({
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSendChatMessage()}
                   placeholder="Ask about your project planning..."
-                  className="flex-1 bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-medium placeholder:text-white/20"
+                  className="flex-1 bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-medium placeholder:text-white/20"
                 />
                 <button
                   onClick={handleSendChatMessage}
                   disabled={!chatInput.trim() || chatLoading}
-                  className="p-4 bg-[#88AB8E] text-[#1A2323] rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send size={20} />
                 </button>

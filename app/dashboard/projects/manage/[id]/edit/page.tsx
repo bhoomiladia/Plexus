@@ -115,13 +115,13 @@ export default function EditProjectPage() {
 
   if (loading)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -131,7 +131,7 @@ export default function EditProjectPage() {
         <div className="flex items-center gap-6 mb-12">
           <Link
             href={`/dashboard/projects/manage/${id}`}
-            className="p-4 bg-[#243131] hover:bg-[#3E5C58] rounded-2xl text-[#88AB8E] transition-all border border-white/5"
+            className="p-4 bg-[var(--theme-card-alt)] hover:bg-[var(--theme-muted)] rounded-2xl text-[var(--theme-accent)] transition-all border border-white/5"
           >
             <ArrowLeft size={24} />
           </Link>
@@ -139,7 +139,7 @@ export default function EditProjectPage() {
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
               Modify Project
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
               UNIRIVO / UPDATE PROTOCOL
             </p>
           </div>
@@ -154,9 +154,9 @@ export default function EditProjectPage() {
 
           {/* Left Side: General Config */}
           <div className="col-span-12 lg:col-span-5 space-y-6">
-            <div className="bg-[#243131] p-8 rounded-[2.5rem] border border-white/5 space-y-6">
+            <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2.5rem] border border-white/5 space-y-6">
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Identity
                 </label>
                 <input
@@ -166,11 +166,11 @@ export default function EditProjectPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                 />
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Operational Status
                 </label>
                 <select
@@ -178,14 +178,14 @@ export default function EditProjectPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, status: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none font-bold uppercase text-xs tracking-widest"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none font-bold uppercase text-xs tracking-widest"
                 >
                   <option value="OPEN">Open</option>
                   <option value="COMPLETED">Completed</option>
                 </select>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Briefing
                 </label>
                 <textarea
@@ -194,7 +194,7 @@ export default function EditProjectPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none min-h-[120px] text-sm"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none min-h-[120px] text-sm"
                 />
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function EditProjectPage() {
             <button
               type="submit"
               disabled={saving || deleting}
-              className="w-full py-6 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-[0.3em] rounded-[2rem] flex items-center justify-center gap-3 hover:scale-[1.02] transition-all shadow-xl disabled:opacity-50"
+              className="w-full py-6 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-[0.3em] rounded-[2rem] flex items-center justify-center gap-3 hover:scale-[1.02] transition-all shadow-xl disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="animate-spin" />
@@ -231,7 +231,7 @@ export default function EditProjectPage() {
               <button
                 type="button"
                 onClick={addRole}
-                className="p-2 bg-[#88AB8E] rounded-xl text-[#141C1C] hover:scale-110 transition-transform"
+                className="p-2 bg-[var(--theme-accent)] rounded-xl text-[var(--theme-background)] hover:scale-110 transition-transform"
               >
                 <Plus size={20} />
               </button>
@@ -241,11 +241,11 @@ export default function EditProjectPage() {
               {roles.map((role, index) => (
                 <div
                   key={index}
-                  className="bg-[#243131] p-8 rounded-[2.5rem] border border-white/5 relative"
+                  className="bg-[var(--theme-card-alt)] p-8 rounded-[2.5rem] border border-white/5 relative"
                 >
                   <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-8">
-                      <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-50">
+                      <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-50">
                         Role Designation
                       </label>
                       <input
@@ -254,11 +254,11 @@ export default function EditProjectPage() {
                         onChange={(e) =>
                           handleRoleChange(index, "roleName", e.target.value)
                         }
-                        className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] focus:ring-1 focus:ring-[#88AB8E] outline-none text-sm font-bold"
+                        className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-3 text-[#F0F4F2] focus:ring-1 focus:ring-[var(--theme-accent)] outline-none text-sm font-bold"
                       />
                     </div>
                     <div className="col-span-4">
-                      <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-50">
+                      <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-50">
                         Units ({role.filled})
                       </label>
                       <input
@@ -272,11 +272,11 @@ export default function EditProjectPage() {
                             parseInt(e.target.value)
                           )
                         }
-                        className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] focus:ring-1 focus:ring-[#88AB8E] outline-none text-sm font-bold"
+                        className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-3 text-[#F0F4F2] focus:ring-1 focus:ring-[var(--theme-accent)] outline-none text-sm font-bold"
                       />
                     </div>
                     <div className="col-span-12">
-                      <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-50">
+                      <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-50">
                         Required Skillsets
                       </label>
                       <input
@@ -288,7 +288,7 @@ export default function EditProjectPage() {
                             e.target.value.split(",").map((s) => s.trim())
                           )
                         }
-                        className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-3 text-[#F0F4F2] text-xs"
+                        className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-3 text-[#F0F4F2] text-xs"
                       />
                     </div>
                   </div>

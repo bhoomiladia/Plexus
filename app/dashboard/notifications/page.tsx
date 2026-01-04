@@ -175,7 +175,7 @@ export default function NotificationsPage() {
       case "APPLICATION_SHORTLISTED":
         return <Star size={24} className="text-yellow-500" />;
       case "NEW_APPLICATION":
-        return <Briefcase size={24} className="text-[#88AB8E]" />;
+        return <Briefcase size={24} className="text-[var(--theme-accent)]" />;
       case "MEMBER_ADDED":
         return <UserPlus size={24} className="text-blue-500" />;
       case "MEMBER_REMOVED":
@@ -183,9 +183,9 @@ export default function NotificationsPage() {
       case "PROJECT_UPDATED":
         return <FileEdit size={24} className="text-purple-500" />;
       case "NEW_MESSAGE":
-        return <MessageSquare size={24} className="text-[#88AB8E]" />;
+        return <MessageSquare size={24} className="text-[var(--theme-accent)]" />;
       default:
-        return <Bell size={24} className="text-[#88AB8E]" />;
+        return <Bell size={24} className="text-[var(--theme-accent)]" />;
     }
   };
 
@@ -198,7 +198,7 @@ export default function NotificationsPage() {
       case "APPLICATION_SHORTLISTED":
         return "border-yellow-500/30 bg-yellow-500/5";
       case "NEW_APPLICATION":
-        return "border-[#88AB8E]/30 bg-[#88AB8E]/5";
+        return "border-[var(--theme-accent)]/30 bg-[var(--theme-accent)]/5";
       case "MEMBER_ADDED":
         return "border-blue-500/30 bg-blue-500/5";
       case "MEMBER_REMOVED":
@@ -206,7 +206,7 @@ export default function NotificationsPage() {
       case "PROJECT_UPDATED":
         return "border-purple-500/30 bg-purple-500/5";
       case "NEW_MESSAGE":
-        return "border-[#88AB8E]/30 bg-[#88AB8E]/5";
+        return "border-[var(--theme-accent)]/30 bg-[var(--theme-accent)]/5";
       default:
         return "border-white/5";
     }
@@ -214,14 +214,14 @@ export default function NotificationsPage() {
 
   if (loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center border border-white/5">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center border border-white/5">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -230,7 +230,7 @@ export default function NotificationsPage() {
         {/* Header Section */}
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-8">
-            <div className="p-5 bg-[#3E5C58] rounded-[2rem] text-[#88AB8E] shadow-xl border border-white/5 relative">
+            <div className="p-5 bg-[var(--theme-muted)] rounded-[2rem] text-[var(--theme-accent)] shadow-xl border border-white/5 relative">
               <Bell size={36} />
               {unreadCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black rounded-full w-6 h-6 flex items-center justify-center">
@@ -242,7 +242,7 @@ export default function NotificationsPage() {
               <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
                 Notifications
               </h1>
-              <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
+              <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
                 System Intel // {unreadCount} Unread
               </p>
             </div>
@@ -253,7 +253,7 @@ export default function NotificationsPage() {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-[#243131] text-[#88AB8E] border border-white/5 hover:bg-[#88AB8E] hover:text-[#141C1C]"
+                className="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all bg-[var(--theme-card-alt)] text-[var(--theme-accent)] border border-white/5 hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)]"
               >
                 Mark All Read
               </button>
@@ -262,8 +262,8 @@ export default function NotificationsPage() {
               onClick={() => setFilter("all")}
               className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
                 filter === "all"
-                  ? "bg-[#88AB8E] text-[#141C1C]"
-                  : "bg-[#243131] text-[#88AB8E] border border-white/5"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
+                  : "bg-[var(--theme-card-alt)] text-[var(--theme-accent)] border border-white/5"
               }`}
             >
               All
@@ -272,8 +272,8 @@ export default function NotificationsPage() {
               onClick={() => setFilter("unread")}
               className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
                 filter === "unread"
-                  ? "bg-[#88AB8E] text-[#141C1C]"
-                  : "bg-[#243131] text-[#88AB8E] border border-white/5"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
+                  : "bg-[var(--theme-card-alt)] text-[var(--theme-accent)] border border-white/5"
               }`}
             >
               Unread ({unreadCount})
@@ -286,22 +286,22 @@ export default function NotificationsPage() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-24 bg-[#243131]/30 rounded-[3.5rem] border border-dashed border-white/10"
+              className="text-center py-24 bg-[var(--theme-card-alt)]/30 rounded-[3.5rem] border border-dashed border-white/10"
             >
-              <div className="bg-[#1A2323] w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/5 shadow-inner">
+              <div className="bg-[var(--theme-card)] w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 border border-white/5 shadow-inner">
                 <Bell className="text-[#F0F4F2]/10" size={40} />
               </div>
               <h3 className="text-2xl font-black   uppercase text-[#F0F4F2]/40 tracking-widest mb-4">
                 {filter === "unread" ? "All Caught Up" : "Zero Inbound Signals"}
               </h3>
-              <p className="text-[#88AB8E]/30 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xs mx-auto mb-10">
+              <p className="text-[var(--theme-accent)]/30 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xs mx-auto mb-10">
                 {filter === "unread"
                   ? "No unread notifications. You're all set!"
                   : "Queue empty. Standby for new transmissions."}
               </p>
               <Link
                 href="/dashboard/projects"
-                className="bg-[#88AB8E] text-[#141C1C] px-10 py-4 rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] hover:scale-105 transition-all shadow-xl"
+                className="bg-[var(--theme-accent)] text-[var(--theme-background)] px-10 py-4 rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] hover:scale-105 transition-all shadow-xl"
               >
                 Browse Projects
               </Link>
@@ -315,12 +315,12 @@ export default function NotificationsPage() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, x: 50 }}
-                  className={`bg-[#243131] p-8 rounded-[3rem] border shadow-lg flex items-start gap-6 group transition-all hover:border-[#88AB8E]/50 ${getNotificationColor(
+                  className={`bg-[var(--theme-card-alt)] p-8 rounded-[3rem] border shadow-lg flex items-start gap-6 group transition-all hover:border-[var(--theme-accent)]/50 ${getNotificationColor(
                     notification.type
-                  )} ${!notification.read ? "border-l-4 border-l-[#88AB8E]" : ""}`}
+                  )} ${!notification.read ? "border-l-4 border-l-[var(--theme-accent)]" : ""}`}
                 >
                   {/* Icon */}
-                  <div className="w-16 h-16 bg-[#1A2323] rounded-2xl flex items-center justify-center flex-shrink-0 border border-white/5">
+                  <div className="w-16 h-16 bg-[var(--theme-card)] rounded-2xl flex items-center justify-center flex-shrink-0 border border-white/5">
                     {getNotificationIcon(notification.type)}
                   </div>
 
@@ -334,7 +334,7 @@ export default function NotificationsPage() {
                         {notification.title}
                       </h3>
                       {!notification.read && (
-                        <span className="px-3 py-1 bg-[#88AB8E] text-[#141C1C] text-[8px] font-black rounded-full uppercase">
+                        <span className="px-3 py-1 bg-[var(--theme-accent)] text-[var(--theme-background)] text-[8px] font-black rounded-full uppercase">
                           New
                         </span>
                       )}
@@ -353,7 +353,7 @@ export default function NotificationsPage() {
                             handleRespondToShortlist(notification, "accept");
                           }}
                           disabled={respondingTo !== null}
-                          className="flex items-center gap-2 px-5 py-3 bg-[#88AB8E] text-[#1A2323] rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="flex items-center gap-2 px-5 py-3 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {respondingTo === `${notification._id}-accept` ? (
                             <Loader2 size={14} className="animate-spin" />
@@ -381,13 +381,13 @@ export default function NotificationsPage() {
                     )}
 
                     <div className="flex items-center justify-between">
-                      <span className="text-[#88AB8E]/40 text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
+                      <span className="text-[var(--theme-accent)]/40 text-[9px] font-black uppercase tracking-widest flex items-center gap-2">
                         <Clock size={12} />{" "}
                         {new Date(notification.createdAt).toLocaleString()}
                       </span>
 
                       {notification.link && (
-                        <span className="text-[#88AB8E] text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:underline">
+                        <span className="text-[var(--theme-accent)] text-[9px] font-black uppercase tracking-widest flex items-center gap-1 hover:underline">
                           View Details <ExternalLink size={12} />
                         </span>
                       )}
@@ -402,7 +402,7 @@ export default function NotificationsPage() {
                           e.stopPropagation();
                           markAsRead(notification._id);
                         }}
-                        className="p-2 bg-[#1A2323] rounded-xl text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                        className="p-2 bg-[var(--theme-card)] rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
                         title="Mark as read"
                       >
                         <CheckCircle2 size={16} />
@@ -413,7 +413,7 @@ export default function NotificationsPage() {
                         e.stopPropagation();
                         deleteNotification(notification._id);
                       }}
-                      className="p-2 bg-[#1A2323] rounded-xl text-red-500/50 hover:bg-red-500/10 hover:text-red-500 transition-all"
+                      className="p-2 bg-[var(--theme-card)] rounded-xl text-red-500/50 hover:bg-red-500/10 hover:text-red-500 transition-all"
                       title="Delete"
                     >
                       <Trash2 size={16} />

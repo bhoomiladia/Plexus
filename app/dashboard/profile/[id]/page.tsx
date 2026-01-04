@@ -94,22 +94,22 @@ export default function PublicProfilePage() {
 
   if (loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   if (error || !profile) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex flex-col items-center justify-center">
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex flex-col items-center justify-center">
         <User className="h-16 w-16 text-[#F0F4F2]/20 mb-4" />
         <h2 className="text-2xl font-black text-[#F0F4F2]/40 uppercase tracking-widest mb-4">
           {error || "User Not Found"}
         </h2>
         <button
           onClick={() => router.back()}
-          className="px-6 py-3 bg-[#88AB8E] text-[#1A2323] rounded-2xl font-black uppercase text-sm"
+          className="px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-2xl font-black uppercase text-sm"
         >
           Go Back
         </button>
@@ -118,7 +118,7 @@ export default function PublicProfilePage() {
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -127,15 +127,15 @@ export default function PublicProfilePage() {
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-60 hover:opacity-100 transition-all"
+          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-60 hover:opacity-100 transition-all"
         >
           <ArrowLeft size={14} /> Back
         </button>
 
         {/* Profile Header */}
-        <div className="bg-[#243131] p-10 rounded-[3rem] border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] p-10 rounded-[3rem] border border-white/5">
           <div className="flex items-start gap-8">
-            <div className="w-28 h-28 rounded-[2rem] bg-[#3E5C58] flex items-center justify-center overflow-hidden flex-shrink-0">
+            <div className="w-28 h-28 rounded-[2rem] bg-[var(--theme-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
               {profile.avatar ? (
                 <img
                   src={profile.avatar}
@@ -143,7 +143,7 @@ export default function PublicProfilePage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <User size={48} className="text-[#88AB8E]" />
+                <User size={48} className="text-[var(--theme-accent)]" />
               )}
             </div>
             <div className="flex-1">
@@ -151,7 +151,7 @@ export default function PublicProfilePage() {
                 {profile.name}
               </h1>
               {profile.location && (
-                <p className="flex items-center gap-2 text-[#88AB8E] text-sm mb-4">
+                <p className="flex items-center gap-2 text-[var(--theme-accent)] text-sm mb-4">
                   <MapPin size={14} /> {profile.location}
                 </p>
               )}
@@ -171,7 +171,7 @@ export default function PublicProfilePage() {
                   href={profile.links.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-[#1A2323] rounded-xl text-[#88AB8E] hover:bg-[#3E5C58] transition-colors"
+                  className="p-3 bg-[var(--theme-card)] rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-muted)] transition-colors"
                 >
                   <Github size={20} />
                 </a>
@@ -181,7 +181,7 @@ export default function PublicProfilePage() {
                   href={profile.links.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-[#1A2323] rounded-xl text-[#88AB8E] hover:bg-[#3E5C58] transition-colors"
+                  className="p-3 bg-[var(--theme-card)] rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-muted)] transition-colors"
                 >
                   <Linkedin size={20} />
                 </a>
@@ -191,7 +191,7 @@ export default function PublicProfilePage() {
                   href={profile.links.portfolio}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-[#1A2323] rounded-xl text-[#88AB8E] hover:bg-[#3E5C58] transition-colors"
+                  className="p-3 bg-[var(--theme-card)] rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-muted)] transition-colors"
                 >
                   <Globe size={20} />
                 </a>
@@ -202,24 +202,24 @@ export default function PublicProfilePage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-6">
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5 text-center">
-            <FolderKanban className="mx-auto mb-3 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5 text-center">
+            <FolderKanban className="mx-auto mb-3 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">{profile.stats.projectsOwned}</p>
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-60">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-60">
               Projects Created
             </p>
           </div>
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5 text-center">
-            <Briefcase className="mx-auto mb-3 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5 text-center">
+            <Briefcase className="mx-auto mb-3 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">{profile.stats.projectsJoined}</p>
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-60">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-60">
               Projects Joined
             </p>
           </div>
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5 text-center">
-            <Trophy className="mx-auto mb-3 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5 text-center">
+            <Trophy className="mx-auto mb-3 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">{profile.stats.projectsCompleted}</p>
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-60">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-60">
               Completed
             </p>
           </div>
@@ -227,15 +227,15 @@ export default function PublicProfilePage() {
 
         {/* Skills */}
         {profile.techStack.length > 0 && (
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5">
-            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-6 opacity-60">
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5">
+            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-6 opacity-60">
               <Code size={16} /> Skills & Technologies
             </h3>
             <div className="flex flex-wrap gap-2">
               {profile.techStack.map((skill, idx) => (
                 <span
                   key={idx}
-                  className="px-4 py-2 bg-[#1A2323] text-[#88AB8E] text-sm font-bold rounded-xl border border-white/5"
+                  className="px-4 py-2 bg-[var(--theme-card)] text-[var(--theme-accent)] text-sm font-bold rounded-xl border border-white/5"
                 >
                   {skill}
                 </span>
@@ -246,11 +246,11 @@ export default function PublicProfilePage() {
 
         {/* About Me / README */}
         {profile.readme && (
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5">
-            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-6 opacity-60">
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5">
+            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-6 opacity-60">
               <User size={16} /> About Me
             </h3>
-            <div className="bg-[#1A2323] p-6 rounded-xl border border-white/5">
+            <div className="bg-[var(--theme-card)] p-6 rounded-xl border border-white/5">
               <p className="text-[#F0F4F2]/70 text-sm leading-relaxed whitespace-pre-wrap">
                 {profile.readme}
               </p>
@@ -260,15 +260,15 @@ export default function PublicProfilePage() {
 
         {/* Experience */}
         {profile.experience && profile.experience.length > 0 && (
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5">
-            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-6 opacity-60">
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5">
+            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-6 opacity-60">
               <Briefcase size={16} /> Experience
             </h3>
             <div className="space-y-4">
               {profile.experience.map((exp, idx) => (
-                <div key={exp.id || idx} className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
+                <div key={exp.id || idx} className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
                   <p className="font-black text-[#F0F4F2]">{exp.title}</p>
-                  <p className="text-[#88AB8E] text-sm">{exp.company} {exp.location && `• ${exp.location}`}</p>
+                  <p className="text-[var(--theme-accent)] text-sm">{exp.company} {exp.location && `• ${exp.location}`}</p>
                   <p className="text-[#F0F4F2]/40 text-xs mt-1">
                     {exp.startDate} - {exp.current ? "Present" : exp.endDate}
                   </p>
@@ -283,15 +283,15 @@ export default function PublicProfilePage() {
 
         {/* Education */}
         {profile.education && profile.education.length > 0 && (
-          <div className="bg-[#243131] p-8 rounded-[2rem] border border-white/5">
-            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-6 opacity-60">
+          <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/5">
+            <h3 className="flex items-center gap-3 text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-6 opacity-60">
               <GraduationCap size={16} /> Education
             </h3>
             <div className="space-y-4">
               {profile.education.map((edu, idx) => (
-                <div key={edu.id || idx} className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
+                <div key={edu.id || idx} className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
                   <p className="font-black text-[#F0F4F2]">{edu.degree}</p>
-                  <p className="text-[#88AB8E] text-sm">
+                  <p className="text-[var(--theme-accent)] text-sm">
                     {edu.school || edu.institution} {edu.field && `• ${edu.field}`}
                   </p>
                   <p className="text-[#F0F4F2]/40 text-xs mt-1">

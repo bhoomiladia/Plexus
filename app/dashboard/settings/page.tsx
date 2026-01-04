@@ -254,21 +254,21 @@ export default function SettingsPage() {
 
   if (loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex overflow-hidden border border-white/5 shadow-2xl">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex overflow-hidden border border-white/5 shadow-2xl">
       {/* SETTINGS SIDEBAR */}
-      <aside className="w-80 bg-[#243131] border-r border-white/5 flex flex-col">
+      <aside className="w-80 bg-[var(--theme-card-alt)] border-r border-white/5 flex flex-col">
         <div className="p-10 border-b border-white/5">
           <h1 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter leading-none">
             Settings
           </h1>
-          <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-[0.3em] mt-3 opacity-60">
+          <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-[0.3em] mt-3 opacity-60">
             System Configuration
           </p>
         </div>
@@ -286,7 +286,7 @@ export default function SettingsPage() {
               onClick={() => setActiveSection(item.id)}
               className={`w-full flex items-center justify-between p-5 rounded-[1.8rem] transition-all duration-300 group ${
                 activeSection === item.id
-                  ? "bg-[#88AB8E] text-[#141C1C] shadow-lg"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-background)] shadow-lg"
                   : "text-[#F0F4F2]/40 hover:bg-white/5 hover:text-[#F0F4F2]"
               }`}
             >
@@ -314,19 +314,19 @@ export default function SettingsPage() {
       </aside>
 
       {/* SETTINGS CONTENT AREA */}
-      <main className="flex-1 flex flex-col bg-[#1A2323] overflow-y-auto no-scrollbar">
-        <header className="p-10 flex justify-between items-center border-b border-white/5 bg-[#243131]/10">
+      <main className="flex-1 flex flex-col bg-[var(--theme-card)] overflow-y-auto no-scrollbar">
+        <header className="p-10 flex justify-between items-center border-b border-white/5 bg-[var(--theme-card-alt)]/10">
           <div>
             <h2 className="text-4xl font-black   uppercase text-[#F0F4F2] tracking-tighter leading-tight">
               {activeSection.replace("-", " ")}
             </h2>
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-[0.2em] opacity-60 mt-1">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] opacity-60 mt-1">
               Authorized Personnel: {session?.user?.name || "Specialist"}
             </p>
           </div>
           <button
             onClick={handleSave}
-            className="px-10 py-4 bg-[#88AB8E] text-[#141C1C] rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
+            className="px-10 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] flex items-center gap-3 hover:scale-105 transition-all shadow-xl"
           >
             {saving ? (
               <Loader2 size={16} className="animate-spin" />
@@ -347,7 +347,7 @@ export default function SettingsPage() {
             >
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                  <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                     Public Alias
                   </label>
                   <input
@@ -356,11 +356,11 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setProfile({ ...profile, name: e.target.value })
                     }
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                 </div>
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                  <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                     Username
                   </label>
                   <input
@@ -369,25 +369,25 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setProfile({ ...profile, username: e.target.value })
                     }
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                  <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                     Identification Email
                   </label>
                   <input
                     type="email"
                     value={profile.email}
                     disabled
-                    className="w-full bg-[#243131]/50 border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2]/30 font-bold outline-none cursor-not-allowed"
+                    className="w-full bg-[var(--theme-card-alt)]/50 border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2]/30 font-bold outline-none cursor-not-allowed"
                   />
                 </div>
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                  <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                     Location
                   </label>
                   <input
@@ -397,13 +397,13 @@ export default function SettingsPage() {
                       setProfile({ ...profile, location: e.target.value })
                     }
                     placeholder="City, Country"
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                 </div>
               </div>
 
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                   Operational Bio
                 </label>
                 <textarea
@@ -411,14 +411,14 @@ export default function SettingsPage() {
                   onChange={(e) =>
                     setProfile({ ...profile, bio: e.target.value })
                   }
-                  className="w-full bg-[#243131] border border-white/5 p-6 rounded-[2.5rem] text-[#F0F4F2] font-medium min-h-[150px] outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                  className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-6 rounded-[2.5rem] text-[#F0F4F2] font-medium min-h-[150px] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   placeholder="Update your specialist brief..."
                 />
               </div>
 
               {/* Skills Section */}
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                   Tech Stack / Skills
                 </label>
                 <div className="flex gap-3">
@@ -428,11 +428,11 @@ export default function SettingsPage() {
                     onChange={(e) => setNewSkill(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && addSkill()}
                     placeholder="Add a skill (e.g., React, Node.js)"
-                    className="flex-1 bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="flex-1 bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-bold outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <button
                     onClick={addSkill}
-                    className="px-8 py-5 bg-[#88AB8E] text-[#141C1C] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all"
+                    className="px-8 py-5 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all"
                   >
                     <Plus size={16} />
                   </button>
@@ -441,7 +441,7 @@ export default function SettingsPage() {
                   {profile.techStack.map((skill, idx) => (
                     <span
                       key={idx}
-                      className="px-5 py-3 bg-[#243131] border border-white/5 text-[#88AB8E] rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center gap-3 group hover:border-red-500/30 transition-all"
+                      className="px-5 py-3 bg-[var(--theme-card-alt)] border border-white/5 text-[var(--theme-accent)] rounded-2xl font-black uppercase tracking-widest text-[10px] flex items-center gap-3 group hover:border-red-500/30 transition-all"
                     >
                       {skill}
                       <button
@@ -457,7 +457,7 @@ export default function SettingsPage() {
 
               {/* Links Section */}
               <div className="space-y-4">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 ml-2">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 ml-2">
                   Social Links
                 </label>
                 <div className="grid grid-cols-2 gap-6">
@@ -471,7 +471,7 @@ export default function SettingsPage() {
                       })
                     }
                     placeholder="GitHub URL"
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <input
                     type="url"
@@ -483,7 +483,7 @@ export default function SettingsPage() {
                       })
                     }
                     placeholder="LinkedIn URL"
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <input
                     type="url"
@@ -495,7 +495,7 @@ export default function SettingsPage() {
                       })
                     }
                     placeholder="Portfolio URL"
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <input
                     type="url"
@@ -507,7 +507,7 @@ export default function SettingsPage() {
                       })
                     }
                     placeholder="Twitter URL"
-                    className="w-full bg-[#243131] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card-alt)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] font-medium outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                 </div>
               </div>
@@ -521,9 +521,9 @@ export default function SettingsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-8"
             >
-              <div className="bg-[#243131] p-10 rounded-[3.5rem] border border-white/5">
+              <div className="bg-[var(--theme-card-alt)] p-10 rounded-[3.5rem] border border-white/5">
                 <div className="flex items-center gap-5 mb-8">
-                  <div className="p-4 bg-[#1A2323] rounded-2xl text-[#88AB8E] border border-white/5">
+                  <div className="p-4 bg-[var(--theme-card)] rounded-2xl text-[var(--theme-accent)] border border-white/5">
                     <Lock size={24} />
                   </div>
                   <h3 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
@@ -538,7 +538,7 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setPasswords({ ...passwords, current: e.target.value })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <input
                     type="password"
@@ -547,7 +547,7 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setPasswords({ ...passwords, new: e.target.value })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <input
                     type="password"
@@ -556,12 +556,12 @@ export default function SettingsPage() {
                     onChange={(e) =>
                       setPasswords({ ...passwords, confirm: e.target.value })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]/50 transition-all"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-[1.8rem] text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]/50 transition-all"
                   />
                   <button
                     onClick={handleChangePassword}
                     disabled={saving}
-                    className="w-full py-5 bg-[#88AB8E] text-[#141C1C] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-5 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {saving ? "Updating..." : "Update Password"}
                   </button>
@@ -601,7 +601,7 @@ export default function SettingsPage() {
               ].map((item) => (
                 <div
                   key={item.key}
-                  className="bg-[#243131] p-8 rounded-[2.5rem] border border-white/5 flex items-center justify-between"
+                  className="bg-[var(--theme-card-alt)] p-8 rounded-[2.5rem] border border-white/5 flex items-center justify-between"
                 >
                   <div>
                     <h4 className="text-lg font-black   uppercase text-[#F0F4F2] tracking-tighter">
@@ -625,8 +625,8 @@ export default function SettingsPage() {
                       notificationSettings[
                         item.key as keyof typeof notificationSettings
                       ]
-                        ? "bg-[#88AB8E]"
-                        : "bg-[#1A2323]"
+                        ? "bg-[var(--theme-accent)]"
+                        : "bg-[var(--theme-card)]"
                     }`}
                   >
                     <div
@@ -651,9 +651,9 @@ export default function SettingsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-8"
             >
-              <div className="bg-[#243131] p-10 rounded-[3.5rem] border border-white/5">
+              <div className="bg-[var(--theme-card-alt)] p-10 rounded-[3.5rem] border border-white/5">
                 <div className="flex items-center gap-5 mb-8">
-                  <div className="p-4 bg-[#1A2323] rounded-2xl text-[#88AB8E] border border-white/5">
+                  <div className="p-4 bg-[var(--theme-card)] rounded-2xl text-[var(--theme-accent)] border border-white/5">
                     <Wallet size={24} />
                   </div>
                   <div>
@@ -668,12 +668,12 @@ export default function SettingsPage() {
 
                 {loadingWallet ? (
                   <div className="flex items-center justify-center py-12">
-                    <Loader2 className="animate-spin h-8 w-8 text-[#88AB8E]" />
+                    <Loader2 className="animate-spin h-8 w-8 text-[var(--theme-accent)]" />
                   </div>
                 ) : walletInfo?.configured ? (
                   <div className="space-y-6">
-                    <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
-                      <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                    <div className="p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
+                      <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 mb-2">
                         Wallet Address
                       </p>
                       <div className="flex items-center gap-3">
@@ -684,24 +684,24 @@ export default function SettingsPage() {
                           href={walletInfo.explorerUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-[#243131] rounded-lg hover:bg-white/10 transition-all"
+                          className="p-2 bg-[var(--theme-card-alt)] rounded-lg hover:bg-white/10 transition-all"
                         >
-                          <ExternalLink size={14} className="text-[#88AB8E]" />
+                          <ExternalLink size={14} className="text-[var(--theme-accent)]" />
                         </a>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-6">
-                      <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
-                        <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                      <div className="p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
+                        <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 mb-2">
                           Balance
                         </p>
                         <p className="text-3xl font-black text-[#F0F4F2]">
-                          {walletInfo.balance?.toFixed(4)} <span className="text-lg text-[#88AB8E]">SOL</span>
+                          {walletInfo.balance?.toFixed(4)} <span className="text-lg text-[var(--theme-accent)]">SOL</span>
                         </p>
                       </div>
-                      <div className="p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
-                        <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50 mb-2">
+                      <div className="p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
+                        <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50 mb-2">
                           Network
                         </p>
                         <p className="text-xl font-black text-[#F0F4F2] uppercase">
@@ -714,7 +714,7 @@ export default function SettingsPage() {
                       <button
                         onClick={handleRequestAirdrop}
                         disabled={requestingAirdrop}
-                        className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="flex-1 py-5 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       >
                         {requestingAirdrop ? (
                           <Loader2 size={16} className="animate-spin" />
@@ -725,7 +725,7 @@ export default function SettingsPage() {
                       </button>
                       <button
                         onClick={fetchWalletInfo}
-                        className="px-8 py-5 bg-[#1A2323] text-[#88AB8E] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all border border-white/5"
+                        className="px-8 py-5 bg-[var(--theme-card)] text-[var(--theme-accent)] rounded-[1.8rem] font-black uppercase text-[10px] tracking-widest hover:bg-white/10 transition-all border border-white/5"
                       >
                         <RefreshCw size={16} />
                       </button>
@@ -737,21 +737,21 @@ export default function SettingsPage() {
                   </div>
                 ) : (
                   <div className="text-center py-12">
-                    <Wallet className="mx-auto mb-4 text-[#88AB8E]/30" size={48} />
+                    <Wallet className="mx-auto mb-4 text-[var(--theme-accent)]/30" size={48} />
                     <h4 className="text-lg font-bold text-[#F0F4F2] mb-2">
                       Wallet Not Configured
                     </h4>
-                    <p className="text-sm text-[#88AB8E]/60 max-w-md mx-auto mb-6">
+                    <p className="text-sm text-[var(--theme-accent)]/60 max-w-md mx-auto mb-6">
                       {walletInfo?.message || "Add SOLANA_WALLET_SECRET_KEY to your .env.local file to enable blockchain certificate minting."}
                     </p>
-                    <div className="bg-[#1A2323] p-6 rounded-2xl text-left max-w-lg mx-auto">
-                      <p className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest mb-3">
+                    <div className="bg-[var(--theme-card)] p-6 rounded-2xl text-left max-w-lg mx-auto">
+                      <p className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-3">
                         Setup Instructions:
                       </p>
                       <ol className="text-xs text-[#F0F4F2]/60 space-y-2 list-decimal list-inside">
-                        <li>Run: <code className="bg-[#243131] px-2 py-1 rounded">node scripts/generate-solana-wallet.js</code></li>
+                        <li>Run: <code className="bg-[var(--theme-card-alt)] px-2 py-1 rounded">node scripts/generate-solana-wallet.js</code></li>
                         <li>Copy the secret key to .env.local as SOLANA_WALLET_SECRET_KEY</li>
-                        <li>Fund the wallet at <a href="https://faucet.solana.com" target="_blank" rel="noopener noreferrer" className="text-[#88AB8E] hover:underline">faucet.solana.com</a></li>
+                        <li>Fund the wallet at <a href="https://faucet.solana.com" target="_blank" rel="noopener noreferrer" className="text-[var(--theme-accent)] hover:underline">faucet.solana.com</a></li>
                         <li>Restart the development server</li>
                       </ol>
                     </div>
@@ -768,9 +768,9 @@ export default function SettingsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="space-y-8"
             >
-              <div className="bg-[#243131] p-10 rounded-[3.5rem] border border-white/5">
+              <div className="bg-[var(--theme-card-alt)] p-10 rounded-[3.5rem] border border-white/5">
                 <div className="flex items-center gap-5 mb-8">
-                  <div className="p-4 bg-[#1A2323] rounded-2xl text-[#88AB8E] border border-white/5">
+                  <div className="p-4 bg-[var(--theme-card)] rounded-2xl text-[var(--theme-accent)] border border-white/5">
                     <Globe size={24} />
                   </div>
                   <h3 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
@@ -778,7 +778,7 @@ export default function SettingsPage() {
                   </h3>
                 </div>
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                  <div className="flex items-center justify-between p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
                     <div>
                       <p className="text-sm font-black uppercase text-[#F0F4F2] tracking-wider">
                         Profile Visibility
@@ -787,11 +787,11 @@ export default function SettingsPage() {
                         Make your profile visible to other users
                       </p>
                     </div>
-                    <span className="px-6 py-2 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase text-[9px] tracking-widest">
+                    <span className="px-6 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase text-[9px] tracking-widest">
                       Public
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                  <div className="flex items-center justify-between p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
                     <div>
                       <p className="text-sm font-black uppercase text-[#F0F4F2] tracking-wider">
                         Project Discovery
@@ -800,11 +800,11 @@ export default function SettingsPage() {
                         Allow others to discover your projects
                       </p>
                     </div>
-                    <span className="px-6 py-2 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase text-[9px] tracking-widest">
+                    <span className="px-6 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase text-[9px] tracking-widest">
                       Enabled
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-6 bg-[#1A2323] rounded-[2rem] border border-white/5">
+                  <div className="flex items-center justify-between p-6 bg-[var(--theme-card)] rounded-[2rem] border border-white/5">
                     <div>
                       <p className="text-sm font-black uppercase text-[#F0F4F2] tracking-wider">
                         Connection Status

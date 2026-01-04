@@ -69,23 +69,23 @@ export default function ProjectDetails() {
 
   if (loading)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
 
   if (!project)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex flex-col items-center justify-center text-center p-10">
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex flex-col items-center justify-center text-center p-10">
         <h1 className="text-4xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
           Venture Not Found
         </h1>
-        <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-4 mb-8">
+        <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-4 mb-8">
           The requested protocol ID is invalid
         </p>
         <Link
           href="/dashboard"
-          className="px-8 py-4 bg-[#88AB8E] text-[#141C1C] rounded-[2rem] font-black uppercase text-[10px] tracking-widest"
+          className="px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[2rem] font-black uppercase text-[10px] tracking-widest"
         >
           Return to Base
         </Link>
@@ -93,7 +93,7 @@ export default function ProjectDetails() {
     );
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -102,7 +102,7 @@ export default function ProjectDetails() {
         {/* Navigation */}
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-60 hover:opacity-100 transition-all"
+          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-60 hover:opacity-100 transition-all"
         >
           <ArrowLeft size={14} /> Back to Communications
         </Link>
@@ -110,11 +110,11 @@ export default function ProjectDetails() {
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-12 lg:col-span-8 space-y-8">
             {/* Project Header Card */}
-            <div className="bg-[#243131] p-12 rounded-[3.5rem] border border-white/5">
+            <div className="bg-[var(--theme-card-alt)] p-12 rounded-[3.5rem] border border-white/5">
               <h1 className="text-6xl font-black   uppercase text-[#F0F4F2] tracking-tighter leading-none mb-6">
                 {project.title}
               </h1>
-              <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-60">
+              <div className="flex flex-wrap gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-60">
                 <span className="flex items-center gap-2">
                   <Users size={14} /> ID: {project.ownerId.slice(-6)}
                 </span>
@@ -123,8 +123,8 @@ export default function ProjectDetails() {
                   {new Date(project.createdAt).toLocaleDateString()}
                 </span>
               </div>
-              <div className="mt-10 p-8 bg-[#1A2323] rounded-[2.5rem] border border-white/5">
-                <h3 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+              <div className="mt-10 p-8 bg-[var(--theme-card)] rounded-[2.5rem] border border-white/5">
+                <h3 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
                   <Info size={14} /> Operational Briefing
                 </h3>
                 <p className="text-[#F0F4F2]/80 text-xl font-medium leading-relaxed  ">
@@ -150,8 +150,8 @@ export default function ProjectDetails() {
                       key={role._id}
                       className={`p-8 rounded-[3rem] border transition-all ${
                         hasMatch
-                          ? "bg-[#3E5C58] border-[#88AB8E]/30"
-                          : "bg-[#243131] border-white/5 opacity-80"
+                          ? "bg-[var(--theme-muted)] border-[var(--theme-accent)]/30"
+                          : "bg-[var(--theme-card-alt)] border-white/5 opacity-80"
                       }`}
                     >
                       <div className="flex justify-between items-start mb-6">
@@ -159,12 +159,12 @@ export default function ProjectDetails() {
                           <h3 className="text-2xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
                             {role.roleName}
                           </h3>
-                          <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest mt-1">
+                          <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest mt-1">
                             {role.filled} / {role.needed} Units Allocated
                           </p>
                         </div>
                         {hasMatch && (
-                          <span className="bg-[#88AB8E] text-[#141C1C] text-[9px] font-black px-4 py-2 rounded-full flex items-center gap-2 uppercase tracking-widest">
+                          <span className="bg-[var(--theme-accent)] text-[var(--theme-background)] text-[9px] font-black px-4 py-2 rounded-full flex items-center gap-2 uppercase tracking-widest">
                             <BadgeCheck size={12} /> Skill Match
                           </span>
                         )}
@@ -180,8 +180,8 @@ export default function ProjectDetails() {
                               key={s}
                               className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest ${
                                 userSkills.includes(s)
-                                  ? "bg-[#88AB8E] text-[#141C1C]"
-                                  : "bg-[#1A2323] text-[#F0F4F2]/40"
+                                  ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
+                                  : "bg-[var(--theme-card)] text-[#F0F4F2]/40"
                               }`}
                             >
                               {s}
@@ -194,7 +194,7 @@ export default function ProjectDetails() {
                         <button
                           onClick={() => handleApply(role._id)}
                           disabled={applyingRole === role._id}
-                          className="w-full py-5 bg-[#1A2323] text-[#88AB8E] border border-white/5 font-black uppercase tracking-[0.3em] rounded-[2rem] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all flex items-center justify-center gap-3 text-[10px]"
+                          className="w-full py-5 bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5 font-black uppercase tracking-[0.3em] rounded-[2rem] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all flex items-center justify-center gap-3 text-[10px]"
                         >
                           {applyingRole === role._id
                             ? "Transmitting..."
@@ -218,7 +218,7 @@ export default function ProjectDetails() {
 
           {/* Sidebar Stats */}
           <div className="col-span-12 lg:col-span-4 space-y-6">
-            <div className="bg-[#88AB8E] p-10 rounded-[3.5rem] text-[#141C1C] shadow-2xl">
+            <div className="bg-[var(--theme-accent)] p-10 rounded-[3.5rem] text-[var(--theme-background)] shadow-2xl">
               <h3 className="text-2xl font-black   uppercase tracking-tighter mb-4 leading-tight">
                 Collaboration <br /> Ready
               </h3>

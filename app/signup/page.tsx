@@ -75,7 +75,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#141C1C] overflow-y-auto no-scrollbar py-10 flex items-center justify-center">
+    <div className="relative min-h-screen bg-[var(--theme-background)] overflow-y-auto no-scrollbar py-10 flex items-center justify-center">
       {/* Background Hero Element */}
       <div className="absolute inset-0 opacity-10 grayscale pointer-events-none">
         <SyntheticHero
@@ -96,13 +96,13 @@ export default function SignupPage() {
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="bg-[#1A2323] border border-white/5 rounded-[3.5rem] p-8 sm:p-12 shadow-2xl"
+          className="bg-[var(--theme-card)] border border-white/5 rounded-[3.5rem] p-8 sm:p-12 shadow-2xl"
         >
           <div className="text-center mb-10">
             <h1 className="text-[#F0F4F2] text-5xl font-black   uppercase tracking-normal leading-none">
               Join Us
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.3em] text-[10px] uppercase opacity-60 mt-4">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.3em] text-[10px] uppercase opacity-60 mt-4">
               Initialize Specialist Protocol
             </p>
           </div>
@@ -111,7 +111,7 @@ export default function SignupPage() {
             <div
               className={`mb-8 p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center border ${
                 statusMsg.type === "success"
-                  ? "bg-[#88AB8E]/10 border-[#88AB8E]/20 text-[#88AB8E]"
+                  ? "bg-[var(--theme-accent)]/10 border-[var(--theme-accent)]/20 text-[var(--theme-accent)]"
                   : "bg-red-500/10 border-red-500/20 text-red-400"
               }`}
             >
@@ -122,7 +122,7 @@ export default function SignupPage() {
           <form className="space-y-8" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                   Full Identity Name
                 </label>
                 <input
@@ -131,12 +131,12 @@ export default function SignupPage() {
                   required
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                   placeholder="Troye Sivan"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                   Signal Email
                 </label>
                 <input
@@ -145,7 +145,7 @@ export default function SignupPage() {
                   required
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                   placeholder="email@example.com"
                 />
               </div>
@@ -153,7 +153,7 @@ export default function SignupPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                   Specialist Title
                 </label>
                 <input
@@ -162,12 +162,12 @@ export default function SignupPage() {
                   required
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                  className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                   placeholder="e.g. Fullstack Developer"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+                <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                   Register Skillsets
                 </label>
                 <div className="flex gap-3">
@@ -178,13 +178,13 @@ export default function SignupPage() {
                     onKeyDown={(e) =>
                       e.key === "Enter" && (e.preventDefault(), addSkill())
                     }
-                    className="flex-1 h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                    className="flex-1 h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                     placeholder="React, Figma..."
                   />
                   <button
                     type="button"
                     onClick={addSkill}
-                    className="px-5 bg-[#243131] border border-white/5 rounded-2xl hover:bg-[#88AB8E] hover:text-[#141C1C] text-[#88AB8E] transition-all"
+                    className="px-5 bg-[var(--theme-card-alt)] border border-white/5 rounded-2xl hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] text-[var(--theme-accent)] transition-all"
                   >
                     <Plus size={20} />
                   </button>
@@ -197,7 +197,7 @@ export default function SignupPage() {
               {skills.map((skill) => (
                 <span
                   key={skill}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#88AB8E]/10 border border-[#88AB8E]/20 text-[#88AB8E] text-[10px] font-black uppercase tracking-widest rounded-full"
+                  className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-accent)]/10 border border-[var(--theme-accent)]/20 text-[var(--theme-accent)] text-[10px] font-black uppercase tracking-widest rounded-full"
                 >
                   {skill}
                   <X
@@ -210,20 +210,20 @@ export default function SignupPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+              <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                 Operational Briefing (Bio)
               </label>
               <textarea
                 name="bio"
                 value={formData.bio}
                 onChange={handleInputChange}
-                className="w-full h-32 p-6 rounded-[2rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-medium   transition-all resize-none"
+                className="w-full h-32 p-6 rounded-[2rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-medium   transition-all resize-none"
                 placeholder="What are you building?"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+              <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                 Encryption Key (Password)
               </label>
               <input
@@ -232,7 +232,7 @@ export default function SignupPage() {
                 required
                 value={formData.password}
                 onChange={handleInputChange}
-                className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                className="h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                 placeholder="••••••••"
               />
             </div>
@@ -240,7 +240,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-16 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-[0.3em] text-xs rounded-[2rem] hover:scale-[1.02] transition-all shadow-xl shadow-[#88AB8E]/10 flex items-center justify-center gap-3"
+              className="w-full h-16 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-[0.3em] text-xs rounded-[2rem] hover:scale-[1.02] transition-all shadow-xl shadow-[var(--theme-accent)]/10 flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <>
@@ -261,7 +261,7 @@ export default function SignupPage() {
             </p>
             <Link
               href="/login"
-              className="text-[#88AB8E] hover:text-[#F0F4F2] transition-all text-xs font-black uppercase tracking-[0.2em] underline underline-offset-8 decoration-2"
+              className="text-[var(--theme-accent)] hover:text-[#F0F4F2] transition-all text-xs font-black uppercase tracking-[0.2em] underline underline-offset-8 decoration-2"
             >
               Sign In Protocol
             </Link>

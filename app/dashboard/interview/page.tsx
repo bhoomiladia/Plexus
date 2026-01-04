@@ -100,19 +100,19 @@ export default function VoiceInterviewPage() {
   };
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3rem] p-10 flex flex-col items-center justify-between relative overflow-hidden transition-all duration-300">
+    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3rem] p-10 flex flex-col items-center justify-between relative overflow-hidden transition-all duration-300">
       
       {/* Top Bar */}
       <div className="w-full flex justify-between items-start z-10">
-        <div className="bg-[#3E5C58] rounded-[2.5rem] px-8 py-6 text-[#F0F4F2] border border-white/5">
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E]">Secure Connection</span>
+        <div className="bg-[var(--theme-muted)] rounded-[2.5rem] px-8 py-6 text-[#F0F4F2] border border-white/5">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)]">Secure Connection</span>
           <h1 className="text-3xl font-black uppercase mt-1 tracking-tighter">{project.role}</h1>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setShowCaptions(!showCaptions)} className="p-4 bg-[#243131] rounded-2xl text-[#88AB8E] border border-white/5">
+          <button onClick={() => setShowCaptions(!showCaptions)} className="p-4 bg-[var(--theme-card-alt)] rounded-2xl text-[var(--theme-accent)] border border-white/5">
             {showCaptions ? <Eye size={20} /> : <EyeOff size={20} />}
           </button>
-          <button onClick={() => router.back()} className="p-4 bg-[#243131] rounded-2xl text-[#88AB8E] border border-white/5">
+          <button onClick={() => router.back()} className="p-4 bg-[var(--theme-card-alt)] rounded-2xl text-[var(--theme-accent)] border border-white/5">
             <ArrowLeft size={20} />
           </button>
         </div>
@@ -127,17 +127,17 @@ export default function VoiceInterviewPage() {
           }}
           transition={{ repeat: Infinity, duration: 2.5 }}
           className={`w-64 h-64 rounded-full flex items-center justify-center transition-all duration-700 ${
-            isListening ? "bg-[#88AB8E]" : isAISpeaking ? "bg-[#3E5C58]" : "bg-[#243131]"
+            isListening ? "bg-[var(--theme-accent)]" : isAISpeaking ? "bg-[var(--theme-muted)]" : "bg-[var(--theme-card-alt)]"
           }`}
         >
-          {isProcessing ? <Loader2 className="w-12 h-12 text-[#88AB8E] animate-spin" /> : <Waves className="w-16 h-16 text-white/20" />}
+          {isProcessing ? <Loader2 className="w-12 h-12 text-[var(--theme-accent)] animate-spin" /> : <Waves className="w-16 h-16 text-white/20" />}
         </motion.div>
 
         {/* Floating Captions */}
         <AnimatePresence>
           {showCaptions && currentCaption && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute top-72 w-[600px] text-center">
-              <p className="text-lg font-bold text-[#F0F4F2] bg-[#1A2323]/90 backdrop-blur px-6 py-4 rounded-[2rem] border border-white/5">
+              <p className="text-lg font-bold text-[#F0F4F2] bg-[var(--theme-card)]/90 backdrop-blur px-6 py-4 rounded-[2rem] border border-white/5">
                 {currentCaption}
               </p>
             </motion.div>
@@ -152,13 +152,13 @@ export default function VoiceInterviewPage() {
             onClick={() => isListening ? handleDone() : (recognitionRef.current.start(), setIsListening(true))}
             disabled={isProcessing || isAISpeaking}
             className={`w-full py-8 rounded-[2.5rem] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-4 border-2 transition-all ${
-              isListening ? "bg-red-500/10 border-red-500 text-red-500" : "bg-[#88AB8E] border-transparent text-[#1A2323]"
+              isListening ? "bg-red-500/10 border-red-500 text-red-500" : "bg-[var(--theme-accent)] border-transparent text-[var(--theme-card)]"
             } disabled:opacity-20`}
           >
             {isListening ? <><Square fill="currentColor" size={16}/> Submit Answer</> : <><Mic size={18}/> Push to Speak</>}
           </button>
         ) : (
-          <button onClick={() => router.push('/dashboard')} className="w-full py-8 bg-[#3E5C58] text-white rounded-[2.5rem] font-black uppercase text-xs">
+          <button onClick={() => router.push('/dashboard')} className="w-full py-8 bg-[var(--theme-muted)] text-white rounded-[2.5rem] font-black uppercase text-xs">
             Interview Ended • View Dashboard
           </button>
         )}

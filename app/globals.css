@@ -2,6 +2,21 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+/* --- Theme CSS Variables (defaults to green) --- */
+:root {
+  --theme-sidebar: #2D3E40;
+  --theme-accent: #88AB8E;
+  --theme-background: #141C1C;
+  --theme-accent-light: #88AB8E;
+  --theme-muted: #3E5C58;
+  --theme-card: #1A2323;
+  --theme-card-alt: #243131;
+  --theme-button-bg: #2D4340;
+  --scrollbar-thumb: #3e5c58;
+  --scrollbar-thumb-hover: #88AB8E;
+}
+
 /* --- UNIRIVO GLOBAL SCROLLBAR --- */
 
 /* For Webkit browsers (Chrome, Safari, Edge) */
@@ -12,25 +27,25 @@
 
 /* The background of the scrollbar */
 ::-webkit-scrollbar-track {
-  background: #141c1c; /* Matches your deepest charcoal background */
+  background: var(--theme-background, #141c1c);
 }
 
 /* The draggable part of the scrollbar */
 ::-webkit-scrollbar-thumb {
-  background: #3e5c58; /* Forest Green for a subtle look */
+  background: var(--scrollbar-thumb, #3e5c58);
   border-radius: 10px;
-  border: 2px solid #141c1c; /* Creates a padding effect around the thumb */
+  border: 2px solid var(--theme-background, #141c1c);
 }
 
 /* Hover state for the scrollbar */
 ::-webkit-scrollbar-thumb:hover {
-  background: #88ab8e; /* Sage Green highlight on hover */
+  background: var(--scrollbar-thumb-hover, #88ab8e);
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #3e5c58 #141c1c;
+  scrollbar-color: var(--scrollbar-thumb, #3e5c58) var(--theme-background, #141c1c);
 }
 
 /* Utility to hide scrollbars while maintaining functionality (if needed) */

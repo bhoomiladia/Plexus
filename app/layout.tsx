@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { AuthProvider } from "@/hooks/useAuth";
 import { WalletProvider } from "@/components/WalletProvider";
+import { ColorThemeProvider } from "@/hooks/useColorTheme";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 const geistMono = Geist_Mono({
@@ -47,12 +48,14 @@ export default function RootLayout({
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <WalletProvider>
-            <AuthProvider>
-              {children}
-              <Analytics />
-            </AuthProvider>
-          </WalletProvider>
+          <ColorThemeProvider>
+            <WalletProvider>
+              <AuthProvider>
+                {children}
+                <Analytics />
+              </AuthProvider>
+            </WalletProvider>
+          </ColorThemeProvider>
         </ThemeProvider>
       </body>
     </html>

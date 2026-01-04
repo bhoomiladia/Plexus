@@ -47,7 +47,7 @@ export async function POST(
     }
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `You are a helpful technical assistant in a developer community. A user has posted the following issue:
 
@@ -69,13 +69,10 @@ Provide a helpful, concise, and technical response to help solve their problem. 
       createdAt: new Date(),
     };
 
-    await db.collection("issues").updateOne(
-      { _id: new ObjectId(id) },
-      {
-        $push: { responses: aiResponse },
-        $set: { updatedAt: new Date() },
-      } as any
-    );
+    await db.collection("issues").updateOne({ _id: new ObjectId(id) }, {
+      $push: { responses: aiResponse },
+      $set: { updatedAt: new Date() },
+    } as any);
 
     return NextResponse.json(
       {

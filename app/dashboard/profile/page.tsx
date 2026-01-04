@@ -306,8 +306,8 @@ export default function ProfilePage() {
 
   if (loading || !profile)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
 
@@ -315,38 +315,38 @@ export default function ProfilePage() {
     profile.name?.charAt(0) || profile.username?.charAt(0) || "?";
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="space-y-8"
       >
         {/* Profile Completeness Bar */}
-        <div className="bg-[#243131] rounded-2xl p-4 border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] rounded-2xl p-4 border border-white/5">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-black text-[#88AB8E] uppercase tracking-widest">
+            <span className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-widest">
               Profile Completeness
             </span>
             <span className="text-sm font-black text-[#F0F4F2]">
               {profile.stats.profileCompleteness}%
             </span>
           </div>
-          <div className="h-2 bg-[#1A2323] rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--theme-card)] rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${profile.stats.profileCompleteness}%` }}
               transition={{ duration: 1, ease: "easeOut" }}
-              className="h-full bg-gradient-to-r from-[#88AB8E] to-[#3E5C58] rounded-full"
+              className="h-full bg-gradient-to-r from-[var(--theme-accent)] to-[var(--theme-muted)] rounded-full"
             />
           </div>
         </div>
 
         {/* Header Section */}
-        <div className="flex flex-col lg:flex-row gap-8 bg-[#243131] border border-white/5 rounded-[3.5rem] p-10 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-[#88AB8E] to-transparent" />
+        <div className="flex flex-col lg:flex-row gap-8 bg-[var(--theme-card-alt)] border border-white/5 rounded-[3.5rem] p-10 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-[var(--theme-accent)] to-transparent" />
 
           {/* Avatar */}
-          <div className="relative z-10 w-28 h-28 rounded-[2rem] bg-[#3E5C58] flex items-center justify-center text-4xl font-black   text-[#88AB8E] border border-white/10 shadow-2xl">
+          <div className="relative z-10 w-28 h-28 rounded-[2rem] bg-[var(--theme-muted)] flex items-center justify-center text-4xl font-black   text-[var(--theme-accent)] border border-white/10 shadow-2xl">
             {avatarLetter}
           </div>
 
@@ -360,13 +360,13 @@ export default function ProfilePage() {
                   </h1>
                   <Pencil
                     size={14}
-                    className="text-[#88AB8E] opacity-0 group-hover:opacity-100 cursor-pointer"
+                    className="text-[var(--theme-accent)] opacity-0 group-hover:opacity-100 cursor-pointer"
                     onClick={() => setEditingName(true)}
                   />
                 </div>
               ) : (
                 <input
-                  className="bg-[#1A2323] border border-[#88AB8E]/30 px-4 py-2 rounded-xl text-[#F0F4F2] text-3xl font-black outline-none"
+                  className="bg-[var(--theme-card)] border border-[var(--theme-accent)]/30 px-4 py-2 rounded-xl text-[#F0F4F2] text-3xl font-black outline-none"
                   value={profile.name}
                   autoFocus
                   onBlur={() => {
@@ -378,7 +378,7 @@ export default function ProfilePage() {
                   }
                 />
               )}
-              <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-1">
+              <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-1">
                 @{profile.username} • {profile.email}
               </p>
             </div>
@@ -393,13 +393,13 @@ export default function ProfilePage() {
                   </p>
                   <Pencil
                     size={12}
-                    className="text-[#88AB8E] opacity-0 group-hover:opacity-100 cursor-pointer flex-shrink-0"
+                    className="text-[var(--theme-accent)] opacity-0 group-hover:opacity-100 cursor-pointer flex-shrink-0"
                     onClick={() => setEditingBio(true)}
                   />
                 </div>
               ) : (
                 <textarea
-                  className="bg-[#1A2323] border border-[#88AB8E]/30 p-4 w-full rounded-2xl text-[#F0F4F2] outline-none text-sm min-h-[80px]"
+                  className="bg-[var(--theme-card)] border border-[var(--theme-accent)]/30 p-4 w-full rounded-2xl text-[#F0F4F2] outline-none text-sm min-h-[80px]"
                   value={profile.bio}
                   autoFocus
                   onBlur={() => {
@@ -415,21 +415,21 @@ export default function ProfilePage() {
 
             {/* Location */}
             <div className="group flex items-center gap-2">
-              <MapPin size={14} className="text-[#88AB8E]/50" />
+              <MapPin size={14} className="text-[var(--theme-accent)]/50" />
               {!editingLocation ? (
                 <>
-                  <span className="text-[#88AB8E]/50 text-xs font-bold">
+                  <span className="text-[var(--theme-accent)]/50 text-xs font-bold">
                     {profile.location || "Add location"}
                   </span>
                   <Pencil
                     size={10}
-                    className="text-[#88AB8E] opacity-0 group-hover:opacity-100 cursor-pointer"
+                    className="text-[var(--theme-accent)] opacity-0 group-hover:opacity-100 cursor-pointer"
                     onClick={() => setEditingLocation(true)}
                   />
                 </>
               ) : (
                 <input
-                  className="bg-[#1A2323] border border-[#88AB8E]/30 px-3 py-1 rounded-lg text-[#F0F4F2] text-xs outline-none"
+                  className="bg-[var(--theme-card)] border border-[var(--theme-accent)]/30 px-3 py-1 rounded-lg text-[#F0F4F2] text-xs outline-none"
                   value={profile.location}
                   autoFocus
                   onBlur={() => {
@@ -448,7 +448,7 @@ export default function ProfilePage() {
           <div className="relative z-10 flex flex-col items-end gap-4">
             <button
               onClick={() => setShowLinksModal(true)}
-              className="bg-[#88AB8E] text-[#141C1C] px-6 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all"
+              className="bg-[var(--theme-accent)] text-[var(--theme-background)] px-6 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:scale-105 transition-all"
             >
               Edit Links
             </button>
@@ -458,7 +458,7 @@ export default function ProfilePage() {
                   href={normalizeUrl(profile.links.github)}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-9 h-9 bg-[#1A2323] border border-white/5 rounded-xl flex items-center justify-center text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                  className="w-9 h-9 bg-[var(--theme-card)] border border-white/5 rounded-xl flex items-center justify-center text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
                 >
                   <Github size={16} />
                 </a>
@@ -468,7 +468,7 @@ export default function ProfilePage() {
                   href={normalizeUrl(profile.links.linkedin)}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-9 h-9 bg-[#1A2323] border border-white/5 rounded-xl flex items-center justify-center text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                  className="w-9 h-9 bg-[var(--theme-card)] border border-white/5 rounded-xl flex items-center justify-center text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
                 >
                   <Linkedin size={16} />
                 </a>
@@ -478,7 +478,7 @@ export default function ProfilePage() {
                   href={normalizeUrl(profile.links.twitter)}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-9 h-9 bg-[#1A2323] border border-white/5 rounded-xl flex items-center justify-center text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                  className="w-9 h-9 bg-[var(--theme-card)] border border-white/5 rounded-xl flex items-center justify-center text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
                 >
                   <Twitter size={16} />
                 </a>
@@ -488,7 +488,7 @@ export default function ProfilePage() {
                   href={normalizeUrl(profile.links.portfolio)}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-9 h-9 bg-[#1A2323] border border-white/5 rounded-xl flex items-center justify-center text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                  className="w-9 h-9 bg-[var(--theme-card)] border border-white/5 rounded-xl flex items-center justify-center text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
                 >
                   <Globe size={16} />
                 </a>
@@ -499,53 +499,53 @@ export default function ProfilePage() {
 
         {/* Stats Row */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="bg-[#88AB8E] p-6 rounded-[2rem] text-center">
-            <FolderOpen className="mx-auto mb-2 text-[#1A2323]" size={24} />
-            <p className="text-3xl font-black text-[#1A2323]">
+          <div className="bg-[var(--theme-accent)] p-6 rounded-[2rem] text-center">
+            <FolderOpen className="mx-auto mb-2 text-[var(--theme-card)]" size={24} />
+            <p className="text-3xl font-black text-[var(--theme-card)]">
               {profile.stats.projectsOwned}
             </p>
-            <p className="text-[9px] font-black text-[#1A2323]/60 uppercase tracking-widest">
+            <p className="text-[9px] font-black text-[var(--theme-card)]/60 uppercase tracking-widest">
               Projects Created
             </p>
           </div>
-          <div className="bg-[#243131] p-6 rounded-[2rem] text-center border border-white/5">
-            <Users className="mx-auto mb-2 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] text-center border border-white/5">
+            <Users className="mx-auto mb-2 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">
               {profile.stats.projectsJoined}
             </p>
-            <p className="text-[9px] font-black text-[#88AB8E]/60 uppercase tracking-widest">
+            <p className="text-[9px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest">
               Projects Joined
             </p>
           </div>
-          <div className="bg-[#243131] p-6 rounded-[2rem] text-center border border-white/5">
-            <CheckCircle className="mx-auto mb-2 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] text-center border border-white/5">
+            <CheckCircle className="mx-auto mb-2 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">
               {profile.stats.projectsCompleted}
             </p>
-            <p className="text-[9px] font-black text-[#88AB8E]/60 uppercase tracking-widest">
+            <p className="text-[9px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest">
               Completed
             </p>
           </div>
-          <div className="bg-[#3E5C58] p-6 rounded-[2rem] text-center">
-            <TrendingUp className="mx-auto mb-2 text-[#88AB8E]" size={24} />
+          <div className="bg-[var(--theme-muted)] p-6 rounded-[2rem] text-center">
+            <TrendingUp className="mx-auto mb-2 text-[var(--theme-accent)]" size={24} />
             <p className="text-3xl font-black text-[#F0F4F2]">
               {profile.techStack.length}
             </p>
-            <p className="text-[9px] font-black text-[#88AB8E]/60 uppercase tracking-widest">
+            <p className="text-[9px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest">
               Skills
             </p>
           </div>
         </div>
 
         {/* Skills Section */}
-        <div className="bg-[#243131] rounded-[2.5rem] p-8 border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] rounded-[2.5rem] p-8 border border-white/5">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-black   uppercase text-[#F0F4F2] tracking-tighter">
               Skills & Technologies
             </h2>
             <button
               onClick={() => setEditingStack(!editingStack)}
-              className="p-2 bg-white/5 rounded-xl text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+              className="p-2 bg-white/5 rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
             >
               <Pencil size={14} />
             </button>
@@ -554,7 +554,7 @@ export default function ProfilePage() {
             {profile.techStack.map((tech) => (
               <span
                 key={tech}
-                className="bg-[#1A2323] border border-white/5 text-[#88AB8E] px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2"
+                className="bg-[var(--theme-card)] border border-white/5 text-[var(--theme-accent)] px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2"
               >
                 {tech}
                 {editingStack && (
@@ -580,19 +580,19 @@ export default function ProfilePage() {
                       handleAddSkillClick();
                     }
                   }}
-                  className="bg-[#1A2323] border border-[#88AB8E]/30 px-4 py-2 rounded-xl text-[10px] text-white outline-none uppercase tracking-widest"
+                  className="bg-[var(--theme-card)] border border-[var(--theme-accent)]/30 px-4 py-2 rounded-xl text-[10px] text-white outline-none uppercase tracking-widest"
                   placeholder="Add skill..."
                 />
                 <button
                   onClick={handleAddSkillClick}
-                  className="p-2 bg-[#88AB8E] rounded-xl text-[#141C1C]"
+                  className="p-2 bg-[var(--theme-accent)] rounded-xl text-[var(--theme-background)]"
                 >
                   <Plus size={14} />
                 </button>
               </div>
             )}
             {profile.techStack.length === 0 && !editingStack && (
-              <p className="text-[#88AB8E]/40 text-xs">
+              <p className="text-[var(--theme-accent)]/40 text-xs">
                 No skills added yet. Click edit to add your skills.
               </p>
             )}
@@ -602,21 +602,21 @@ export default function ProfilePage() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-12 gap-6">
           {/* README Section */}
-          <div className="col-span-12 lg:col-span-7 bg-[#243131] rounded-[2.5rem] p-8 border border-white/5">
+          <div className="col-span-12 lg:col-span-7 bg-[var(--theme-card-alt)] rounded-[2.5rem] p-8 border border-white/5">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-black   uppercase text-[#F0F4F2] tracking-tighter">
                 About Me
               </h2>
               <button
                 onClick={() => setEditingReadme(!editingReadme)}
-                className="p-2 bg-white/5 rounded-xl text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                className="p-2 bg-white/5 rounded-xl text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
               >
                 {editingReadme ? <Save size={14} /> : <Pencil size={14} />}
               </button>
             </div>
             {editingReadme ? (
               <textarea
-                className="w-full bg-[#1A2323] border border-[#88AB8E]/30 p-6 rounded-2xl min-h-[200px] text-[#F0F4F2] outline-none text-sm"
+                className="w-full bg-[var(--theme-card)] border border-[var(--theme-accent)]/30 p-6 rounded-2xl min-h-[200px] text-[#F0F4F2] outline-none text-sm"
                 value={profile.readme}
                 onBlur={() => {
                   setEditingReadme(false);
@@ -628,7 +628,7 @@ export default function ProfilePage() {
                 placeholder="Write about yourself, your interests, what you're looking for..."
               />
             ) : (
-              <div className="bg-[#1A2323] p-6 rounded-2xl border border-white/5 min-h-[200px]">
+              <div className="bg-[var(--theme-card)] p-6 rounded-2xl border border-white/5 min-h-[200px]">
                 <p className="whitespace-pre-wrap text-[#F0F4F2]/70 text-sm leading-relaxed">
                   {profile.readme || "Tell others about yourself..."}
                 </p>
@@ -638,12 +638,12 @@ export default function ProfilePage() {
 
           {/* GitHub Stats */}
           <div className="col-span-12 lg:col-span-5 space-y-6">
-            <div className="bg-[#243131] p-8 rounded-[2.5rem] border border-white/5">
-              <h2 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] mb-4 opacity-60">
+            <div className="bg-[var(--theme-card-alt)] p-8 rounded-[2.5rem] border border-white/5">
+              <h2 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] mb-4 opacity-60">
                 GitHub Activity
               </h2>
               {profile.links?.github ? (
-                <div className="bg-[#1A2323] p-4 rounded-2xl border border-white/5">
+                <div className="bg-[var(--theme-card)] p-4 rounded-2xl border border-white/5">
                   <img
                     src={`https://streak-stats.demolab.com?user=${extractUsername(profile.links.github)}&theme=dark&hide_border=true&background=1A2323&stroke=88AB8E&ring=88AB8E&fire=88AB8E&currStreakLabel=88AB8E`}
                     alt="GitHub Streak"
@@ -651,9 +651,9 @@ export default function ProfilePage() {
                   />
                 </div>
               ) : (
-                <div className="bg-[#1A2323] p-8 rounded-2xl border border-white/5 text-center">
+                <div className="bg-[var(--theme-card)] p-8 rounded-2xl border border-white/5 text-center">
                   <Github
-                    className="mx-auto mb-3 text-[#88AB8E]/30"
+                    className="mx-auto mb-3 text-[var(--theme-accent)]/30"
                     size={32}
                   />
                   <p className="text-[#F0F4F2]/30 text-xs">
@@ -663,12 +663,12 @@ export default function ProfilePage() {
               )}
             </div>
 
-            <div className="bg-[#3E5C58] p-8 rounded-[2.5rem]">
-              <Award className="mb-4 text-[#88AB8E]" size={28} />
+            <div className="bg-[var(--theme-muted)] p-8 rounded-[2.5rem]">
+              <Award className="mb-4 text-[var(--theme-accent)]" size={28} />
               <h3 className="text-xl font-black   uppercase tracking-tighter text-[#F0F4F2] mb-2">
                 Verified Member
               </h3>
-              <p className="text-[9px] font-black uppercase tracking-widest text-[#88AB8E]/60">
+              <p className="text-[9px] font-black uppercase tracking-widest text-[var(--theme-accent)]/60">
                 UNIRIVO Community
               </p>
             </div>
@@ -676,10 +676,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Experience Section */}
-        <div className="bg-[#243131] rounded-[2.5rem] p-8 border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] rounded-[2.5rem] p-8 border border-white/5">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
-              <Briefcase className="text-[#88AB8E]" size={20} />
+              <Briefcase className="text-[var(--theme-accent)]" size={20} />
               <h2 className="text-lg font-black   uppercase text-[#F0F4F2] tracking-tighter">
                 Experience
               </h2>
@@ -690,7 +690,7 @@ export default function ProfilePage() {
                 setNewExperience({});
                 setShowExperienceModal(true);
               }}
-              className="px-4 py-2 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase text-[9px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
+              className="px-4 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase text-[9px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
             >
               <Plus size={12} /> Add
             </button>
@@ -701,18 +701,18 @@ export default function ProfilePage() {
               {profile.experience.map((exp) => (
                 <div
                   key={exp.id}
-                  className="bg-[#1A2323] p-6 rounded-2xl border border-white/5 group"
+                  className="bg-[var(--theme-card)] p-6 rounded-2xl border border-white/5 group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-sm font-black text-[#F0F4F2]">
                         {exp.title}
                       </h3>
-                      <p className="text-xs text-[#88AB8E] flex items-center gap-2 mt-1">
+                      <p className="text-xs text-[var(--theme-accent)] flex items-center gap-2 mt-1">
                         <Building size={12} /> {exp.company}{" "}
                         {exp.location && `• ${exp.location}`}
                       </p>
-                      <p className="text-[10px] text-[#88AB8E]/60 flex items-center gap-2 mt-1">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 flex items-center gap-2 mt-1">
                         <Calendar size={10} /> {exp.startDate} -{" "}
                         {exp.current ? "Present" : exp.endDate}
                       </p>
@@ -730,7 +730,7 @@ export default function ProfilePage() {
                         }}
                         className="p-2 bg-white/5 rounded-lg hover:bg-white/10"
                       >
-                        <Pencil size={12} className="text-[#88AB8E]" />
+                        <Pencil size={12} className="text-[var(--theme-accent)]" />
                       </button>
                       <button
                         onClick={() => handleDeleteExperience(exp.id)}
@@ -744,8 +744,8 @@ export default function ProfilePage() {
               ))}
             </div>
           ) : (
-            <div className="bg-[#1A2323] p-8 rounded-2xl border border-dashed border-white/10 text-center">
-              <Briefcase className="mx-auto mb-3 text-[#88AB8E]/30" size={32} />
+            <div className="bg-[var(--theme-card)] p-8 rounded-2xl border border-dashed border-white/10 text-center">
+              <Briefcase className="mx-auto mb-3 text-[var(--theme-accent)]/30" size={32} />
               <p className="text-[#F0F4F2]/30 text-xs">
                 No experience added yet
               </p>
@@ -754,10 +754,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Education Section */}
-        <div className="bg-[#243131] rounded-[2.5rem] p-8 border border-white/5">
+        <div className="bg-[var(--theme-card-alt)] rounded-[2.5rem] p-8 border border-white/5">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
-              <GraduationCap className="text-[#88AB8E]" size={20} />
+              <GraduationCap className="text-[var(--theme-accent)]" size={20} />
               <h2 className="text-lg font-black   uppercase text-[#F0F4F2] tracking-tighter">
                 Education
               </h2>
@@ -768,7 +768,7 @@ export default function ProfilePage() {
                 setNewEducation({});
                 setShowEducationModal(true);
               }}
-              className="px-4 py-2 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase text-[9px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
+              className="px-4 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase text-[9px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
             >
               <Plus size={12} /> Add
             </button>
@@ -779,17 +779,17 @@ export default function ProfilePage() {
               {profile.education.map((edu) => (
                 <div
                   key={edu.id}
-                  className="bg-[#1A2323] p-6 rounded-2xl border border-white/5 group"
+                  className="bg-[var(--theme-card)] p-6 rounded-2xl border border-white/5 group"
                 >
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-sm font-black text-[#F0F4F2]">
                         {edu.degree}
                       </h3>
-                      <p className="text-xs text-[#88AB8E] mt-1">
+                      <p className="text-xs text-[var(--theme-accent)] mt-1">
                         {edu.school} {edu.field && `• ${edu.field}`}
                       </p>
-                      <p className="text-[10px] text-[#88AB8E]/60 flex items-center gap-2 mt-1">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 flex items-center gap-2 mt-1">
                         <Calendar size={10} /> {edu.startDate} - {edu.endDate}
                       </p>
                       {edu.description && (
@@ -806,7 +806,7 @@ export default function ProfilePage() {
                         }}
                         className="p-2 bg-white/5 rounded-lg hover:bg-white/10"
                       >
-                        <Pencil size={12} className="text-[#88AB8E]" />
+                        <Pencil size={12} className="text-[var(--theme-accent)]" />
                       </button>
                       <button
                         onClick={() => handleDeleteEducation(edu.id)}
@@ -820,9 +820,9 @@ export default function ProfilePage() {
               ))}
             </div>
           ) : (
-            <div className="bg-[#1A2323] p-8 rounded-2xl border border-dashed border-white/10 text-center">
+            <div className="bg-[var(--theme-card)] p-8 rounded-2xl border border-dashed border-white/10 text-center">
               <GraduationCap
-                className="mx-auto mb-3 text-[#88AB8E]/30"
+                className="mx-auto mb-3 text-[var(--theme-accent)]/30"
                 size={32}
               />
               <p className="text-[#F0F4F2]/30 text-xs">
@@ -834,11 +834,11 @@ export default function ProfilePage() {
 
         {/* GitHub Activity Graph */}
         {profile.links?.github && (
-          <div className="bg-[#243131] border border-white/5 rounded-[2.5rem] p-8">
-            <h2 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] mb-6">
+          <div className="bg-[var(--theme-card-alt)] border border-white/5 rounded-[2.5rem] p-8">
+            <h2 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] mb-6">
               Contribution Activity
             </h2>
-            <div className="bg-[#1A2323] p-6 rounded-2xl border border-white/5 overflow-hidden">
+            <div className="bg-[var(--theme-card)] p-6 rounded-2xl border border-white/5 overflow-hidden">
               <img
                 src={`https://github-readme-activity-graph.vercel.app/graph?username=${extractUsername(profile.links.github)}&theme=react-dark&hide_border=true&bg_color=1A2323&color=88AB8E&line=88AB8E&point=F0F4F2`}
                 alt="Activity Graph"
@@ -863,7 +863,7 @@ export default function ProfilePage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] w-full max-w-lg rounded-[2rem] p-8 border border-white/10"
+              className="bg-[var(--theme-card-alt)] w-full max-w-lg rounded-[2rem] p-8 border border-white/10"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6">
@@ -881,9 +881,9 @@ export default function ProfilePage() {
                 {Object.entries(profile.links).map(([key, value]) => (
                   <div
                     key={key}
-                    className="bg-[#1A2323] border border-white/5 rounded-xl p-4"
+                    className="bg-[var(--theme-card)] border border-white/5 rounded-xl p-4"
                   >
-                    <label className="text-[9px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 block capitalize">
+                    <label className="text-[9px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 block capitalize">
                       {key}
                     </label>
                     <input
@@ -906,7 +906,7 @@ export default function ProfilePage() {
                   patchProfile({ links: profile.links });
                   setShowLinksModal(false);
                 }}
-                className="w-full mt-6 py-4 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all"
+                className="w-full mt-6 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all"
               >
                 Save Links
               </button>
@@ -929,7 +929,7 @@ export default function ProfilePage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] w-full max-w-lg rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
+              className="bg-[var(--theme-card-alt)] w-full max-w-lg rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6">
@@ -959,7 +959,7 @@ export default function ProfilePage() {
                           title: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <input
                   type="text"
@@ -978,7 +978,7 @@ export default function ProfilePage() {
                           company: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <input
                   type="text"
@@ -997,7 +997,7 @@ export default function ProfilePage() {
                           location: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
@@ -1019,7 +1019,7 @@ export default function ProfilePage() {
                             startDate: e.target.value,
                           })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                   />
                   <input
                     type="text"
@@ -1041,7 +1041,7 @@ export default function ProfilePage() {
                     disabled={
                       editingExperience?.current || newExperience.current
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none disabled:opacity-50"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none disabled:opacity-50"
                   />
                 </div>
                 <label className="flex items-center gap-3 text-sm text-[#F0F4F2]">
@@ -1063,7 +1063,7 @@ export default function ProfilePage() {
                             current: e.target.checked,
                           })
                     }
-                    className="w-4 h-4 rounded accent-[#88AB8E]"
+                    className="w-4 h-4 rounded accent-[var(--theme-accent)]"
                   />
                   Currently working here
                 </label>
@@ -1085,7 +1085,7 @@ export default function ProfilePage() {
                           description: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none min-h-[100px]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none min-h-[100px]"
                 />
               </div>
               <button
@@ -1095,7 +1095,7 @@ export default function ProfilePage() {
                     : handleAddExperience
                 }
                 disabled={saving}
-                className="w-full mt-6 py-4 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50"
+                className="w-full mt-6 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50"
               >
                 {saving ? (
                   <Loader2 className="animate-spin mx-auto" size={20} />
@@ -1124,7 +1124,7 @@ export default function ProfilePage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] w-full max-w-lg rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
+              className="bg-[var(--theme-card-alt)] w-full max-w-lg rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6">
@@ -1154,7 +1154,7 @@ export default function ProfilePage() {
                           degree: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <input
                   type="text"
@@ -1171,7 +1171,7 @@ export default function ProfilePage() {
                           school: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <input
                   type="text"
@@ -1188,7 +1188,7 @@ export default function ProfilePage() {
                           field: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
@@ -1210,7 +1210,7 @@ export default function ProfilePage() {
                             startDate: e.target.value,
                           })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                   />
                   <input
                     type="text"
@@ -1229,7 +1229,7 @@ export default function ProfilePage() {
                             endDate: e.target.value,
                           })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none"
                   />
                 </div>
                 <textarea
@@ -1250,7 +1250,7 @@ export default function ProfilePage() {
                           description: e.target.value,
                         })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none min-h-[100px]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none min-h-[100px]"
                 />
               </div>
               <button
@@ -1258,7 +1258,7 @@ export default function ProfilePage() {
                   editingEducation ? handleUpdateEducation : handleAddEducation
                 }
                 disabled={saving}
-                className="w-full mt-6 py-4 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50"
+                className="w-full mt-6 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50"
               >
                 {saving ? (
                   <Loader2 className="animate-spin mx-auto" size={20} />
@@ -1280,7 +1280,7 @@ export default function ProfilePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-8 right-8 bg-[#88AB8E] text-[#141C1C] px-6 py-3 rounded-xl font-black uppercase text-xs tracking-widest flex items-center gap-2 shadow-xl"
+            className="fixed bottom-8 right-8 bg-[var(--theme-accent)] text-[var(--theme-background)] px-6 py-3 rounded-xl font-black uppercase text-xs tracking-widest flex items-center gap-2 shadow-xl"
           >
             <Loader2 className="animate-spin" size={16} /> Saving...
           </motion.div>

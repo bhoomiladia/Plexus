@@ -125,13 +125,13 @@ export default function CertificatesPage() {
   if (status === "loading" || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#1E2B2A]">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3rem] p-10 overflow-y-auto no-scrollbar">
+    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3rem] p-10 overflow-y-auto no-scrollbar">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -140,14 +140,14 @@ export default function CertificatesPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-[#88AB8E] rounded-2xl flex items-center justify-center">
-              <Award size={28} className="text-[#1A2323]" />
+            <div className="w-14 h-14 bg-[var(--theme-accent)] rounded-2xl flex items-center justify-center">
+              <Award size={28} className="text-[var(--theme-card)]" />
             </div>
             <div>
               <h1 className="text-3xl font-black text-[#F0F4F2] uppercase tracking-tight">
                 My Certificates
               </h1>
-              <p className="text-sm text-[#88AB8E]/60">
+              <p className="text-sm text-[var(--theme-accent)]/60">
                 Blockchain-verified achievements
               </p>
             </div>
@@ -161,14 +161,14 @@ export default function CertificatesPage() {
             <div className="relative">
               <Search
                 size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--theme-accent)]/40"
               />
               <input
                 type="text"
                 placeholder="Search certificates..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#243131] border border-white/5 pl-10 pr-4 py-3 rounded-xl text-[#F0F4F2] text-sm outline-none focus:ring-2 focus:ring-[#88AB8E] w-64"
+                className="bg-[var(--theme-card-alt)] border border-white/5 pl-10 pr-4 py-3 rounded-xl text-[#F0F4F2] text-sm outline-none focus:ring-2 focus:ring-[var(--theme-accent)] w-64"
               />
             </div>
           </div>
@@ -176,24 +176,24 @@ export default function CertificatesPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-[#243131] rounded-2xl p-6 border border-white/5">
-            <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-widest">
+          <div className="bg-[var(--theme-card-alt)] rounded-2xl p-6 border border-white/5">
+            <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-widest">
               Total Certificates
             </p>
             <p className="text-3xl font-black text-[#F0F4F2] mt-2">
               {certificates.length}
             </p>
           </div>
-          <div className="bg-[#243131] rounded-2xl p-6 border border-white/5">
-            <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-widest">
+          <div className="bg-[var(--theme-card-alt)] rounded-2xl p-6 border border-white/5">
+            <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-widest">
               On-Chain
             </p>
-            <p className="text-3xl font-black text-[#88AB8E] mt-2">
+            <p className="text-3xl font-black text-[var(--theme-accent)] mt-2">
               {certificates.filter((c) => c.status === "minted").length}
             </p>
           </div>
-          <div className="bg-[#243131] rounded-2xl p-6 border border-white/5">
-            <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-widest">
+          <div className="bg-[var(--theme-card-alt)] rounded-2xl p-6 border border-white/5">
+            <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-widest">
               Pending
             </p>
             <p className="text-3xl font-black text-yellow-400 mt-2">
@@ -210,7 +210,7 @@ export default function CertificatesPage() {
                 key={cert._id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-[#243131] rounded-2xl p-5 border border-white/5 hover:border-[#88AB8E]/30 transition-all cursor-pointer group"
+                className="bg-[var(--theme-card-alt)] rounded-2xl p-5 border border-white/5 hover:border-[var(--theme-accent)]/30 transition-all cursor-pointer group"
                 onClick={() => setSelectedCertificate(cert)}
               >
                 {/* Certificate Mini Preview */}
@@ -222,13 +222,13 @@ export default function CertificatesPage() {
                   }}
                 >
                   <div className="p-4 h-full flex flex-col justify-center items-center">
-                    <p className="text-[8px] text-[#3E5C58] uppercase tracking-wider">
+                    <p className="text-[8px] text-[var(--theme-muted)] uppercase tracking-wider">
                       Certificate of Contribution
                     </p>
-                    <p className="text-sm font-black text-[#1A2323] mt-1 text-center line-clamp-1">
+                    <p className="text-sm font-black text-[var(--theme-card)] mt-1 text-center line-clamp-1">
                       {cert.userName}
                     </p>
-                    <p className="text-[8px] text-[#3E5C58] mt-1">
+                    <p className="text-[8px] text-[var(--theme-muted)] mt-1">
                       {cert.projectName}
                     </p>
                   </div>
@@ -255,10 +255,10 @@ export default function CertificatesPage() {
                   <h3 className="text-sm font-bold text-[#F0F4F2] line-clamp-1">
                     {cert.taskTitle}
                   </h3>
-                  <p className="text-xs text-[#88AB8E]/60">{cert.projectName}</p>
+                  <p className="text-xs text-[var(--theme-accent)]/60">{cert.projectName}</p>
 
                   <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                    <p className="text-[10px] text-[#88AB8E]/40">
+                    <p className="text-[10px] text-[var(--theme-accent)]/40">
                       {formatDate(cert.issuedAt)}
                     </p>
                     {cert.blockchain?.explorerUrl && (
@@ -267,7 +267,7 @@ export default function CertificatesPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="text-[#88AB8E] hover:text-[#F0F4F2] transition-colors"
+                        className="text-[var(--theme-accent)] hover:text-[#F0F4F2] transition-colors"
                       >
                         <ExternalLink size={14} />
                       </a>
@@ -276,23 +276,23 @@ export default function CertificatesPage() {
                 </div>
 
                 {/* Hover Effect */}
-                <div className="absolute inset-0 bg-[#88AB8E]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
+                <div className="absolute inset-0 bg-[var(--theme-accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
               </motion.div>
             ))}
           </div>
         ) : (
-          <div className="bg-[#243131] rounded-2xl p-12 border border-white/5 text-center">
-            <Shield className="mx-auto mb-4 text-[#88AB8E]/30" size={48} />
+          <div className="bg-[var(--theme-card-alt)] rounded-2xl p-12 border border-white/5 text-center">
+            <Shield className="mx-auto mb-4 text-[var(--theme-accent)]/30" size={48} />
             <h3 className="text-lg font-bold text-[#F0F4F2] mb-2">
               No Certificates Yet
             </h3>
-            <p className="text-sm text-[#88AB8E]/60 max-w-md mx-auto">
+            <p className="text-sm text-[var(--theme-accent)]/60 max-w-md mx-auto">
               Complete tasks to earn blockchain-verified certificates. Each
               completed task can be minted as an NFT on Solana.
             </p>
             <button
               onClick={() => router.push("/dashboard/tasks")}
-              className="mt-6 px-6 py-3 bg-[#88AB8E] text-[#1A2323] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all"
+              className="mt-6 px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all"
             >
               View Tasks
             </button>

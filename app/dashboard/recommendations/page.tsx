@@ -47,14 +47,14 @@ export default function RecommendationsPage() {
 
   if (loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,7 +63,7 @@ export default function RecommendationsPage() {
         {/* Navigation */}
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-60 hover:opacity-100 transition-all"
+          className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-60 hover:opacity-100 transition-all"
         >
           <ArrowLeft size={14} /> Back to Dashboard
         </Link>
@@ -72,15 +72,15 @@ export default function RecommendationsPage() {
         <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter flex items-center gap-4">
-              <Sparkles className="text-[#88AB8E]" size={40} /> Recommended
+              <Sparkles className="text-[var(--theme-accent)]" size={40} /> Recommended
               Projects
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
               Skill-Matched Opportunities // {recommendations.length} Available
             </p>
           </div>
-          <div className="bg-[#243131] px-8 py-4 rounded-[2rem] border border-white/5 text-center min-w-[140px]">
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+          <div className="bg-[var(--theme-card-alt)] px-8 py-4 rounded-[2rem] border border-white/5 text-center min-w-[140px]">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
               Best Matches
             </p>
             <p className="text-2xl font-black text-[#F0F4F2]">
@@ -91,18 +91,18 @@ export default function RecommendationsPage() {
 
         {/* Recommendations Grid */}
         {recommendations.length === 0 ? (
-          <div className="text-center py-24 bg-[#243131]/30 rounded-[3.5rem] border border-dashed border-white/10">
+          <div className="text-center py-24 bg-[var(--theme-card-alt)]/30 rounded-[3.5rem] border border-dashed border-white/10">
             <Sparkles className="mx-auto mb-6 text-[#F0F4F2]/20" size={64} />
             <h3 className="text-2xl font-black   uppercase text-[#F0F4F2]/40 tracking-widest mb-4">
               No Recommendations Yet
             </h3>
-            <p className="text-[#88AB8E]/30 font-bold uppercase tracking-[0.2em] text-[10px] max-w-md mx-auto mb-8">
+            <p className="text-[var(--theme-accent)]/30 font-bold uppercase tracking-[0.2em] text-[10px] max-w-md mx-auto mb-8">
               Update your skills in settings to get personalized project
               recommendations
             </p>
             <Link
               href="/dashboard/settings"
-              className="inline-block px-8 py-4 bg-[#88AB8E] text-[#141C1C] rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] hover:scale-105 transition-all"
+              className="inline-block px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[2rem] font-black uppercase text-[10px] tracking-[0.3em] hover:scale-105 transition-all"
             >
               Update Skills
             </Link>
@@ -115,25 +115,25 @@ export default function RecommendationsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-[#243131] p-8 rounded-[3.5rem] border border-white/5 hover:border-[#88AB8E]/30 transition-all group flex flex-col justify-between"
+                className="bg-[var(--theme-card-alt)] p-8 rounded-[3.5rem] border border-white/5 hover:border-[var(--theme-accent)]/30 transition-all group flex flex-col justify-between"
               >
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <div className="p-4 bg-[#1A2323] rounded-2xl border border-white/5 group-hover:bg-[#88AB8E] group-hover:text-[#1A2323] transition-colors">
+                    <div className="p-4 bg-[var(--theme-card)] rounded-2xl border border-white/5 group-hover:bg-[var(--theme-accent)] group-hover:text-[var(--theme-card)] transition-colors">
                       <Briefcase size={24} />
                     </div>
                     {project.matchScore > 0 ? (
-                      <div className="bg-[#88AB8E] text-[#141C1C] px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-tighter flex items-center gap-2">
+                      <div className="bg-[var(--theme-accent)] text-[var(--theme-background)] px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-tighter flex items-center gap-2">
                         <TrendingUp size={12} /> {project.matchScore}% Match
                       </div>
                     ) : (
-                      <div className="bg-white/5 text-[#88AB8E] px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-tighter">
+                      <div className="bg-white/5 text-[var(--theme-accent)] px-4 py-2 rounded-full text-[8px] font-black uppercase tracking-tighter">
                         New
                       </div>
                     )}
                   </div>
 
-                  <h3 className="text-2xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-3 group-hover:text-[#88AB8E] transition-colors">
+                  <h3 className="text-2xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-3 group-hover:text-[var(--theme-accent)] transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-[#F0F4F2]/40 text-xs leading-relaxed line-clamp-3 mb-8">
@@ -147,13 +147,13 @@ export default function RecommendationsPage() {
                         .map((role: any, idx: number) => (
                           <span
                             key={idx}
-                            className="px-3 py-1 bg-[#1A2323] text-[#88AB8E]/60 text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5"
+                            className="px-3 py-1 bg-[var(--theme-card)] text-[var(--theme-accent)]/60 text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5"
                           >
                             {role.roleName}
                           </span>
                         ))}
                       {project.roles.length > 3 && (
-                        <span className="px-3 py-1 text-[#88AB8E]/40 text-[8px] font-black">
+                        <span className="px-3 py-1 text-[var(--theme-accent)]/40 text-[8px] font-black">
                           +{project.roles.length - 3}
                         </span>
                       )}
@@ -165,7 +165,7 @@ export default function RecommendationsPage() {
                   onClick={() =>
                     router.push(`/dashboard/projects/${project._id}`)
                   }
-                  className="flex items-center justify-center w-full py-4 bg-[#1A2323] text-[#88AB8E] border border-white/5 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all group-hover:scale-105"
+                  className="flex items-center justify-center w-full py-4 bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all group-hover:scale-105"
                 >
                   View Details <ArrowRight size={14} className="ml-2" />
                 </button>
@@ -176,10 +176,10 @@ export default function RecommendationsPage() {
 
         {/* Info Card */}
         {recommendations.length > 0 && (
-          <div className="bg-[#3E5C58] p-10 rounded-[3.5rem] text-[#F0F4F2]">
+          <div className="bg-[var(--theme-muted)] p-10 rounded-[3.5rem] text-[#F0F4F2]">
             <div className="flex items-start gap-6">
-              <div className="p-4 bg-[#88AB8E] rounded-2xl">
-                <Sparkles size={32} className="text-[#141C1C]" />
+              <div className="p-4 bg-[var(--theme-accent)] rounded-2xl">
+                <Sparkles size={32} className="text-[var(--theme-background)]" />
               </div>
               <div className="flex-1">
                 <h3 className="text-2xl font-black   uppercase tracking-tighter mb-3">

@@ -124,13 +124,13 @@ export default function CommunityPage() {
 
   if (loading && issues.length === 0)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -142,24 +142,24 @@ export default function CommunityPage() {
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
               Community Forum
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
               Collective Intelligence Hub
             </p>
           </div>
           <div className="flex gap-4">
-            <div className="bg-[#243131] px-8 py-4 rounded-[2rem] border border-white/5 text-center min-w-[140px]">
-              <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+            <div className="bg-[var(--theme-card-alt)] px-8 py-4 rounded-[2rem] border border-white/5 text-center min-w-[140px]">
+              <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
                 Open
               </p>
               <p className="text-2xl font-black text-[#F0F4F2]">
                 {issues.filter((i) => i.status === "open").length}
               </p>
             </div>
-            <div className="bg-[#3E5C58] px-8 py-4 rounded-[2rem] text-center min-w-[140px]">
+            <div className="bg-[var(--theme-muted)] px-8 py-4 rounded-[2rem] text-center min-w-[140px]">
               <p className="text-[9px] font-black text-[#F0F4F2] uppercase tracking-widest opacity-60">
                 Solved
               </p>
-              <p className="text-2xl font-black text-[#88AB8E]">
+              <p className="text-2xl font-black text-[var(--theme-accent)]">
                 {issues.filter((i) => i.status === "resolved").length}
               </p>
             </div>
@@ -180,7 +180,7 @@ export default function CommunityPage() {
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center gap-3 pb-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all relative ${
                   activeTab === tab.id
-                    ? "text-[#88AB8E]"
+                    ? "text-[var(--theme-accent)]"
                     : "text-[#F0F4F2]/30 hover:text-[#F0F4F2]"
                 }`}
               >
@@ -189,7 +189,7 @@ export default function CommunityPage() {
                 {activeTab === tab.id && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-[#88AB8E] rounded-t-full"
+                    className="absolute bottom-0 left-0 right-0 h-1 bg-[var(--theme-accent)] rounded-t-full"
                   />
                 )}
               </button>
@@ -198,13 +198,13 @@ export default function CommunityPage() {
 
           <div className="relative w-full md:w-80">
             <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--theme-accent)]/40"
               size={14}
             />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-[#243131] border border-white/5 rounded-2xl text-[10px] font-bold text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E] transition-all placeholder:text-white/10 uppercase tracking-widest"
+              className="w-full pl-12 pr-6 py-4 bg-[var(--theme-card-alt)] border border-white/5 rounded-2xl text-[10px] font-bold text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)] transition-all placeholder:text-white/10 uppercase tracking-widest"
               placeholder="Search Protocol..."
             />
           </div>
@@ -218,7 +218,7 @@ export default function CommunityPage() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-[#243131] p-12 rounded-[3.5rem] border border-white/5 shadow-2xl space-y-8"
+                  className="bg-[var(--theme-card-alt)] p-12 rounded-[3.5rem] border border-white/5 shadow-2xl space-y-8"
                 >
                   <h2 className="text-3xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
                     New Transmission
@@ -229,7 +229,7 @@ export default function CommunityPage() {
                       onChange={(e) =>
                         setNewIssue({ ...newIssue, title: e.target.value })
                       }
-                      className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[#88AB8E] text-[#F0F4F2] font-bold"
+                      className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[var(--theme-accent)] text-[#F0F4F2] font-bold"
                       placeholder="Title of Blocker"
                     />
                     <textarea
@@ -237,12 +237,12 @@ export default function CommunityPage() {
                       onChange={(e) =>
                         setNewIssue({ ...newIssue, content: e.target.value })
                       }
-                      className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[#88AB8E] text-[#F0F4F2] min-h-[250px]"
+                      className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[var(--theme-accent)] text-[#F0F4F2] min-h-[250px]"
                       placeholder="Describe the operational failure..."
                     />
                     <button
                       onClick={handlePostIssue}
-                      className="w-full bg-[#88AB8E] text-[#141C1C] py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] hover:scale-[1.02] transition-all"
+                      className="w-full bg-[var(--theme-accent)] text-[var(--theme-background)] py-5 rounded-[2rem] font-black uppercase tracking-[0.3em] hover:scale-[1.02] transition-all"
                     >
                       Publish Transmission
                     </button>
@@ -251,7 +251,7 @@ export default function CommunityPage() {
               ) : (
                 <div className="space-y-4">
                   {filteredIssues.length === 0 ? (
-                    <div className="text-center py-24 bg-[#243131]/30 rounded-[3.5rem] border border-dashed border-white/10">
+                    <div className="text-center py-24 bg-[var(--theme-card-alt)]/30 rounded-[3.5rem] border border-dashed border-white/10">
                       <AlertCircle
                         className="mx-auto mb-4 text-[#F0F4F2]/20"
                         size={48}
@@ -277,8 +277,8 @@ export default function CommunityPage() {
 
           {/* SIDEBAR */}
           <div className="col-span-12 lg:col-span-4 space-y-8">
-            <div className="bg-[#3E5C58] p-10 rounded-[3.5rem] text-[#F0F4F2] relative overflow-hidden">
-              <TrendingUp className="mb-6 text-[#88AB8E]" size={32} />
+            <div className="bg-[var(--theme-muted)] p-10 rounded-[3.5rem] text-[#F0F4F2] relative overflow-hidden">
+              <TrendingUp className="mb-6 text-[var(--theme-accent)]" size={32} />
               <h3 className="text-2xl font-black   uppercase tracking-tighter mb-4">
                 AI Debugging
               </h3>
@@ -286,11 +286,11 @@ export default function CommunityPage() {
                 Gemini 3 Flash is integrated to analyze code blocks and provide
                 instant solutions for complex logic errors.
               </p>
-              <div className="h-1 w-20 bg-[#88AB8E]" />
+              <div className="h-1 w-20 bg-[var(--theme-accent)]" />
             </div>
 
-            <div className="bg-[#243131] p-10 rounded-[3.5rem] border border-white/5">
-              <h4 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] mb-6 opacity-50">
+            <div className="bg-[var(--theme-card-alt)] p-10 rounded-[3.5rem] border border-white/5">
+              <h4 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] mb-6 opacity-50">
                 Protocol Rules
               </h4>
               <ul className="space-y-4">
@@ -303,7 +303,7 @@ export default function CommunityPage() {
                     key={idx}
                     className="flex gap-4 items-center text-[11px] font-bold text-[#F0F4F2]/60 uppercase tracking-wider"
                   >
-                    <div className="w-1.5 h-1.5 bg-[#88AB8E] rounded-full" />{" "}
+                    <div className="w-1.5 h-1.5 bg-[var(--theme-accent)] rounded-full" />{" "}
                     {rule}
                   </li>
                 ))}
@@ -396,19 +396,19 @@ function IssueCard({ issue, session, onRefresh }: any) {
 
   return (
     <div
-      className={`bg-[#243131] rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-300 ${isOpen ? "ring-2 ring-[#88AB8E]/20" : ""}`}
+      className={`bg-[var(--theme-card-alt)] rounded-[2.5rem] border border-white/5 overflow-hidden transition-all duration-300 ${isOpen ? "ring-2 ring-[var(--theme-accent)]/20" : ""}`}
     >
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="p-8 flex items-center justify-between cursor-pointer group"
       >
         <div className="flex items-center gap-6 flex-1">
-          <div className="w-14 h-14 rounded-[1.2rem] bg-[#1A2323] text-[#88AB8E] flex items-center justify-center font-black text-xl border border-white/5 uppercase">
+          <div className="w-14 h-14 rounded-[1.2rem] bg-[var(--theme-card)] text-[var(--theme-accent)] flex items-center justify-center font-black text-xl border border-white/5 uppercase">
             {issue.userName?.charAt(0)}
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h3 className="text-xl font-black   text-[#F0F4F2] uppercase tracking-tighter group-hover:text-[#88AB8E] transition-all">
+              <h3 className="text-xl font-black   text-[#F0F4F2] uppercase tracking-tighter group-hover:text-[var(--theme-accent)] transition-all">
                 {issue.title}
               </h3>
               {issue.status === "resolved" && (
@@ -418,7 +418,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
               )}
             </div>
             <div className="flex items-center gap-4 mt-2">
-              <span className="text-[9px] font-black text-[#88AB8E] uppercase tracking-[0.2em] opacity-60">
+              <span className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] opacity-60">
                 {issue.userName} /{" "}
                 {new Date(issue.createdAt).toLocaleDateString()}
               </span>
@@ -426,7 +426,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
                 {issue.tags?.slice(0, 2).map((t: string) => (
                   <span
                     key={t}
-                    className="text-[8px] bg-[#1A2323] px-2 py-1 rounded-md text-[#F0F4F2]/40 font-black uppercase tracking-widest"
+                    className="text-[8px] bg-[var(--theme-card)] px-2 py-1 rounded-md text-[#F0F4F2]/40 font-black uppercase tracking-widest"
                   >
                     #{t}
                   </span>
@@ -436,13 +436,13 @@ function IssueCard({ issue, session, onRefresh }: any) {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-[#88AB8E]/60">
+          <div className="flex items-center gap-2 text-[var(--theme-accent)]/60">
             <MessageSquare size={16} />
             <span className="text-xs font-black">
               {issue.responses?.length || 0}
             </span>
           </div>
-          <div className="text-[#88AB8E]/40 group-hover:text-[#88AB8E]">
+          <div className="text-[var(--theme-accent)]/40 group-hover:text-[var(--theme-accent)]">
             {isOpen ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
           </div>
         </div>
@@ -456,9 +456,9 @@ function IssueCard({ issue, session, onRefresh }: any) {
             exit={{ height: 0 }}
             className="border-t border-white/5"
           >
-            <div className="p-10 bg-[#1A2323]/50 space-y-8">
+            <div className="p-10 bg-[var(--theme-card)]/50 space-y-8">
               {/* Issue Content */}
-              <div className="bg-[#1A2323] p-8 rounded-[2rem] border border-white/5">
+              <div className="bg-[var(--theme-card)] p-8 rounded-[2rem] border border-white/5">
                 <p className="text-[#F0F4F2]/80 text-sm leading-relaxed whitespace-pre-wrap">
                   {issue.content}
                 </p>
@@ -474,7 +474,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
                   className={`px-6 py-3 rounded-[2rem] font-black uppercase text-[10px] tracking-widest flex items-center gap-2 transition-all ${
                     userLiked
                       ? "bg-red-500/20 text-red-500"
-                      : "bg-white/5 text-[#88AB8E] hover:bg-[#88AB8E] hover:text-[#141C1C]"
+                      : "bg-white/5 text-[var(--theme-accent)] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)]"
                   }`}
                 >
                   <Heart size={14} fill={userLiked ? "currentColor" : "none"} />
@@ -487,7 +487,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
                     handleAIAudit();
                   }}
                   disabled={aiLoading || hasAIResponse}
-                  className="px-8 py-3 bg-[#88AB8E] text-[#141C1C] rounded-[2rem] font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[2rem] font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {aiLoading ? (
                     <>
@@ -524,7 +524,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
               {/* Responses Section */}
               {issue.responses && issue.responses.length > 0 && (
                 <div className="space-y-4">
-                  <h4 className="text-xs font-black text-[#88AB8E] uppercase tracking-[0.2em]">
+                  <h4 className="text-xs font-black text-[var(--theme-accent)] uppercase tracking-[0.2em]">
                     Responses ({issue.responses.length})
                   </h4>
                   {issue.responses.map((response: any) => (
@@ -532,17 +532,17 @@ function IssueCard({ issue, session, onRefresh }: any) {
                       key={response.id}
                       className={`p-6 rounded-2xl border ${
                         response.isAI
-                          ? "bg-[#88AB8E]/10 border-[#88AB8E]/30"
-                          : "bg-[#1A2323] border-white/5"
+                          ? "bg-[var(--theme-accent)]/10 border-[var(--theme-accent)]/30"
+                          : "bg-[var(--theme-card)] border-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-3">
                         {response.isAI ? (
-                          <div className="w-8 h-8 rounded-lg bg-[#88AB8E] flex items-center justify-center">
-                            <Sparkles size={16} className="text-[#141C1C]" />
+                          <div className="w-8 h-8 rounded-lg bg-[var(--theme-accent)] flex items-center justify-center">
+                            <Sparkles size={16} className="text-[var(--theme-background)]" />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-lg bg-[#243131] text-[#88AB8E] flex items-center justify-center text-xs font-black uppercase">
+                          <div className="w-8 h-8 rounded-lg bg-[var(--theme-card-alt)] text-[var(--theme-accent)] flex items-center justify-center text-xs font-black uppercase">
                             {response.author?.charAt(0)}
                           </div>
                         )}
@@ -550,7 +550,7 @@ function IssueCard({ issue, session, onRefresh }: any) {
                           <p className="text-xs font-black text-[#F0F4F2] uppercase">
                             {response.author}
                           </p>
-                          <p className="text-[9px] text-[#88AB8E]/60 uppercase tracking-wider">
+                          <p className="text-[9px] text-[var(--theme-accent)]/60 uppercase tracking-wider">
                             {new Date(response.createdAt).toLocaleString()}
                           </p>
                         </div>
@@ -565,19 +565,19 @@ function IssueCard({ issue, session, onRefresh }: any) {
 
               {/* Add Response */}
               <div className="space-y-4">
-                <h4 className="text-xs font-black text-[#88AB8E] uppercase tracking-[0.2em]">
+                <h4 className="text-xs font-black text-[var(--theme-accent)] uppercase tracking-[0.2em]">
                   Add Response
                 </h4>
                 <textarea
                   value={responseText}
                   onChange={(e) => setResponseText(e.target.value)}
                   placeholder="Share your solution or insights..."
-                  className="w-full bg-[#1A2323] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[#88AB8E] text-[#F0F4F2] min-h-[120px] text-sm"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-[var(--theme-accent)] text-[#F0F4F2] min-h-[120px] text-sm"
                 />
                 <button
                   onClick={handleAddResponse}
                   disabled={submitting || !responseText.trim()}
-                  className="px-8 py-3 bg-[#88AB8E] text-[#141C1C] rounded-[2rem] font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-[2rem] font-black uppercase text-[10px] tracking-widest flex items-center gap-2 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {submitting ? (
                     <>

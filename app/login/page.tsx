@@ -43,7 +43,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#141C1C] overflow-hidden flex items-center justify-center">
+    <div className="relative min-h-screen bg-[var(--theme-background)] overflow-hidden flex items-center justify-center">
       {/* Background Hero Element */}
       <div className="absolute inset-0 opacity-20 grayscale pointer-events-none">
         <SyntheticHero
@@ -61,17 +61,17 @@ export default function LoginPage() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="bg-[#1A2323] border border-white/5 rounded-[3.5rem] p-12 shadow-2xl"
+          className="bg-[var(--theme-card)] border border-white/5 rounded-[3.5rem] p-12 shadow-2xl"
         >
           {/* Header Section */}
           <div className="text-center mb-10">
-            <div className="inline-flex p-4 bg-[#243131] rounded-2xl text-[#88AB8E] mb-6 border border-white/5">
+            <div className="inline-flex p-4 bg-[var(--theme-card-alt)] rounded-2xl text-[var(--theme-accent)] mb-6 border border-white/5">
               <ShieldCheck size={40} />
             </div>
             <h1 className="text-6xl font-black   uppercase text-[#F0F4F2] tracking-tighter leading-none mb-2">
               Login
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.3em] text-[10px] uppercase opacity-60">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.3em] text-[10px] uppercase opacity-60">
               Access Operational Console
             </p>
           </div>
@@ -84,7 +84,7 @@ export default function LoginPage() {
             )}
 
             <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+              <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                 Identity Email
               </label>
               <input
@@ -92,13 +92,13 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                className="w-full h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                 placeholder="Email Address"
               />
             </div>
 
             <div className="flex flex-col gap-3">
-              <label className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.2em] ml-2 opacity-60">
+              <label className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.2em] ml-2 opacity-60">
                 Encryption Key
               </label>
               <input
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[#88AB8E]/50 outline-none bg-[#141C1C] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
+                className="w-full h-14 px-6 rounded-[1.5rem] border border-white/5 focus:ring-2 focus:ring-[var(--theme-accent)]/50 outline-none bg-[var(--theme-background)] text-[#F0F4F2] font-bold transition-all placeholder:text-white/5"
                 placeholder="••••••••"
               />
             </div>
@@ -114,7 +114,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-16 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-[0.3em] text-xs rounded-[2rem] hover:scale-[1.02] transition-all mt-4 shadow-xl shadow-[#88AB8E]/10 disabled:opacity-50 flex items-center justify-center gap-3"
+              className="w-full h-16 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-[0.3em] text-xs rounded-[2rem] hover:scale-[1.02] transition-all mt-4 shadow-xl shadow-[var(--theme-accent)]/10 disabled:opacity-50 flex items-center justify-center gap-3"
             >
               {isLoading ? (
                 <>
@@ -133,7 +133,7 @@ export default function LoginPage() {
             </p>
             <Link
               href="/signup"
-              className="text-[#88AB8E] hover:text-[#F0F4F2] transition-all text-xs font-black uppercase tracking-[0.2em] underline underline-offset-8 decoration-2"
+              className="text-[var(--theme-accent)] hover:text-[#F0F4F2] transition-all text-xs font-black uppercase tracking-[0.2em] underline underline-offset-8 decoration-2"
             >
               Request Access
             </Link>

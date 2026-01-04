@@ -206,7 +206,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-[#243131] w-full max-w-2xl rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
+          className="bg-[var(--theme-card-alt)] w-full max-w-2xl rounded-[2rem] p-8 border border-white/10 max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
@@ -215,7 +215,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
               <h2 className="text-2xl font-black uppercase text-[#F0F4F2]">
                 Skill Verification
               </h2>
-              <p className="text-[#88AB8E] text-sm mt-1">
+              <p className="text-[var(--theme-accent)] text-sm mt-1">
                 Prove your knowledge in <span className="font-bold">{skill}</span>
               </p>
             </div>
@@ -230,9 +230,9 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
           {/* Loading State */}
           {loading && (
             <div className="py-16 text-center">
-              <Loader2 className="animate-spin mx-auto mb-4 text-[#88AB8E]" size={48} />
+              <Loader2 className="animate-spin mx-auto mb-4 text-[var(--theme-accent)]" size={48} />
               <p className="text-[#F0F4F2]/70">Generating quiz questions...</p>
-              <p className="text-[#88AB8E]/50 text-sm mt-2">
+              <p className="text-[var(--theme-accent)]/50 text-sm mt-2">
                 This may take a few seconds
               </p>
             </div>
@@ -245,7 +245,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
               <p className="text-[#F0F4F2]/70 mb-4">{error}</p>
               <button
                 onClick={handleRetry}
-                className="px-6 py-3 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase text-xs tracking-widest flex items-center gap-2 mx-auto hover:scale-105 transition-all"
+                className="px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase text-xs tracking-widest flex items-center gap-2 mx-auto hover:scale-105 transition-all"
               >
                 <RefreshCw size={14} /> Try Again
               </button>
@@ -257,41 +257,41 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
             <div>
               {/* Progress */}
               <div className="mb-6">
-                <div className="flex justify-between text-xs text-[#88AB8E] mb-2">
+                <div className="flex justify-between text-xs text-[var(--theme-accent)] mb-2">
                   <span>Question {currentIndex + 1} of {questions.length}</span>
                   <div className="flex items-center gap-4">
                     <span>{Math.round(((currentIndex) / questions.length) * 100)}% Complete</span>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-lg ${
-                      timeLeft <= 5 ? "bg-red-500/20 text-red-400" : "bg-[#88AB8E]/20 text-[#88AB8E]"
+                      timeLeft <= 5 ? "bg-red-500/20 text-red-400" : "bg-[var(--theme-accent)]/20 text-[var(--theme-accent)]"
                     }`}>
                       <Clock size={12} />
                       <span className="font-bold tabular-nums">{timeLeft}s</span>
                     </div>
                   </div>
                 </div>
-                <div className="h-2 bg-[#1A2323] rounded-full overflow-hidden">
+                <div className="h-2 bg-[var(--theme-card)] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentIndex) / questions.length) * 100}%` }}
-                    className="h-full bg-gradient-to-r from-[#88AB8E] to-[#3E5C58] rounded-full"
+                    className="h-full bg-gradient-to-r from-[var(--theme-accent)] to-[var(--theme-muted)] rounded-full"
                   />
                 </div>
                 {/* Timer bar */}
-                <div className="h-1 bg-[#1A2323] rounded-full overflow-hidden mt-2">
+                <div className="h-1 bg-[var(--theme-card)] rounded-full overflow-hidden mt-2">
                   <motion.div
                     key={currentIndex}
                     initial={{ width: "100%" }}
                     animate={{ width: "0%" }}
                     transition={{ duration: 15, ease: "linear" }}
                     className={`h-full rounded-full ${
-                      timeLeft <= 5 ? "bg-red-500" : "bg-[#88AB8E]"
+                      timeLeft <= 5 ? "bg-red-500" : "bg-[var(--theme-accent)]"
                     }`}
                   />
                 </div>
               </div>
 
               {/* Question */}
-              <div className="bg-[#1A2323] p-6 rounded-2xl border border-white/5 mb-6">
+              <div className="bg-[var(--theme-card)] p-6 rounded-2xl border border-white/5 mb-6">
                 <p className="text-[#F0F4F2] text-lg font-medium">
                   {questions[currentIndex].question}
                 </p>
@@ -304,9 +304,9 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
                     key={idx}
                     onClick={() => handleAnswer(idx)}
                     disabled={evaluating}
-                    className="w-full text-left bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] hover:border-[#88AB8E]/50 hover:bg-[#88AB8E]/10 transition-all disabled:opacity-50"
+                    className="w-full text-left bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] hover:border-[var(--theme-accent)]/50 hover:bg-[var(--theme-accent)]/10 transition-all disabled:opacity-50"
                   >
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[#88AB8E]/20 text-[#88AB8E] text-xs font-bold mr-3">
+                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] text-xs font-bold mr-3">
                       {String.fromCharCode(65 + idx)}
                     </span>
                     {option}
@@ -316,7 +316,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
 
               {evaluating && (
                 <div className="mt-6 text-center">
-                  <Loader2 className="animate-spin mx-auto text-[#88AB8E]" size={24} />
+                  <Loader2 className="animate-spin mx-auto text-[var(--theme-accent)]" size={24} />
                   <p className="text-[#F0F4F2]/50 text-sm mt-2">Evaluating...</p>
                 </div>
               )}
@@ -329,16 +329,16 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
               {/* Score Card */}
               <div className={`p-8 rounded-2xl text-center mb-6 ${
                 result.passed 
-                  ? "bg-gradient-to-br from-[#88AB8E]/20 to-[#3E5C58]/20 border border-[#88AB8E]/30" 
+                  ? "bg-gradient-to-br from-[var(--theme-accent)]/20 to-[var(--theme-muted)]/20 border border-[var(--theme-accent)]/30" 
                   : "bg-gradient-to-br from-red-500/10 to-red-900/10 border border-red-500/30"
               }`}>
                 {result.passed ? (
                   <>
-                    <Award className="mx-auto mb-4 text-[#88AB8E]" size={64} />
+                    <Award className="mx-auto mb-4 text-[var(--theme-accent)]" size={64} />
                     <h3 className="text-2xl font-black text-[#F0F4F2] mb-2">
                       Congratulations!
                     </h3>
-                    <p className="text-[#88AB8E]">
+                    <p className="text-[var(--theme-accent)]">
                       You scored {result.score}/{result.total} and verified your {skill} skill!
                     </p>
                   </>
@@ -357,7 +357,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
 
               {/* Detailed Results */}
               <div className="space-y-3 mb-6">
-                <h4 className="text-xs font-black text-[#88AB8E] uppercase tracking-widest">
+                <h4 className="text-xs font-black text-[var(--theme-accent)] uppercase tracking-widest">
                   Question Review
                 </h4>
                 {result.results.map((r, idx) => (
@@ -365,13 +365,13 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
                     key={r.questionId}
                     className={`p-4 rounded-xl border ${
                       r.isCorrect 
-                        ? "bg-[#88AB8E]/10 border-[#88AB8E]/30" 
+                        ? "bg-[var(--theme-accent)]/10 border-[var(--theme-accent)]/30" 
                         : "bg-red-500/10 border-red-500/30"
                     }`}
                   >
                     <div className="flex items-start gap-3">
                       {r.isCorrect ? (
-                        <CheckCircle className="text-[#88AB8E] flex-shrink-0 mt-0.5" size={18} />
+                        <CheckCircle className="text-[var(--theme-accent)] flex-shrink-0 mt-0.5" size={18} />
                       ) : (
                         <XCircle className="text-red-400 flex-shrink-0 mt-0.5" size={18} />
                       )}
@@ -395,7 +395,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
                 {!result.passed && (
                   <button
                     onClick={handleRetry}
-                    className="flex-1 py-4 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                    className="flex-1 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                   >
                     <RefreshCw size={16} /> Try Again
                   </button>
@@ -404,7 +404,7 @@ export default function SkillQuizModal({ skill, isOpen, onClose, onSuccess }: Pr
                   onClick={handleClose}
                   className={`py-4 rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all ${
                     result.passed 
-                      ? "flex-1 bg-[#88AB8E] text-[#141C1C]" 
+                      ? "flex-1 bg-[var(--theme-accent)] text-[var(--theme-background)]" 
                       : "flex-1 bg-white/5 text-[#F0F4F2] border border-white/10"
                   }`}
                 >

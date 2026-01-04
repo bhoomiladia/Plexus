@@ -77,13 +77,13 @@ export default function OpenProjectsPage() {
 
   if (loading)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.header
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -94,14 +94,14 @@ export default function OpenProjectsPage() {
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
               Discover Ventures
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60">
               Protocol Analysis // Network Opportunities
             </p>
           </div>
 
           <div className="relative w-full md:w-96">
             <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--theme-accent)]/40"
               size={16}
             />
             <input
@@ -109,7 +109,7 @@ export default function OpenProjectsPage() {
               placeholder="Search ID or Stack..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-[#243131] border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E] transition-all"
+              className="w-full pl-12 pr-6 py-4 bg-[var(--theme-card-alt)] border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)] transition-all"
             />
           </div>
         </div>
@@ -122,19 +122,19 @@ export default function OpenProjectsPage() {
               key={project._id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="bg-[#243131] p-8 rounded-[3.5rem] border border-white/5 hover:border-[#88AB8E]/30 transition-all group flex flex-col justify-between"
+              className="bg-[var(--theme-card-alt)] p-8 rounded-[3.5rem] border border-white/5 hover:border-[var(--theme-accent)]/30 transition-all group flex flex-col justify-between"
             >
               <div>
                 <div className="flex justify-between items-start mb-6">
-                  <div className="p-4 bg-[#1A2323] rounded-2xl border border-white/5 group-hover:bg-[#88AB8E] group-hover:text-[#1A2323] transition-colors">
+                  <div className="p-4 bg-[var(--theme-card)] rounded-2xl border border-white/5 group-hover:bg-[var(--theme-accent)] group-hover:text-[var(--theme-card)] transition-colors">
                     <Briefcase size={24} />
                   </div>
-                  <div className="bg-[#88AB8E] text-[#141C1C] px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter flex items-center gap-1">
+                  <div className="bg-[var(--theme-accent)] text-[var(--theme-background)] px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-tighter flex items-center gap-1">
                     <Sparkles size={10} /> Match
                   </div>
                 </div>
 
-                <h3 className="text-2xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-3 group-hover:text-[#88AB8E] transition-colors">
+                <h3 className="text-2xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-3 group-hover:text-[var(--theme-accent)] transition-colors">
                   {project.title}
                 </h3>
                 <p className="text-[#F0F4F2]/40 text-xs leading-relaxed line-clamp-3 mb-8">
@@ -145,7 +145,7 @@ export default function OpenProjectsPage() {
                   {project.roles.map((role: any) => (
                     <span
                       key={role._id}
-                      className="px-3 py-1 bg-[#1A2323] text-[#88AB8E]/60 text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5"
+                      className="px-3 py-1 bg-[var(--theme-card)] text-[var(--theme-accent)]/60 text-[8px] font-black rounded-lg uppercase tracking-widest border border-white/5"
                     >
                       {role.roleName}
                     </span>
@@ -155,7 +155,7 @@ export default function OpenProjectsPage() {
 
               <Link
                 href={`/dashboard/projects/${project._id}`}
-                className="flex items-center justify-center w-full py-4 bg-[#1A2323] text-[#88AB8E] border border-white/5 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[#88AB8E] hover:text-[#141C1C] transition-all"
+                className="flex items-center justify-center w-full py-4 bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5 rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-[var(--theme-accent)] hover:text-[var(--theme-background)] transition-all"
               >
                 Access Protocol <ArrowRight size={14} className="ml-2" />
               </Link>
@@ -163,14 +163,14 @@ export default function OpenProjectsPage() {
           ))}
         </div>
       ) : (
-        <div className="py-24 text-center bg-[#243131]/30 rounded-[3.5rem] border border-dashed border-white/10">
+        <div className="py-24 text-center bg-[var(--theme-card-alt)]/30 rounded-[3.5rem] border border-dashed border-white/10">
           <div className="max-w-xs mx-auto space-y-6">
             <p className="text-[#F0F4F2]/30 text-xs font-black uppercase tracking-widest">
               No Signals Detected
             </p>
             <Link
               href="/dashboard/settings"
-              className="inline-block text-[#88AB8E] font-black uppercase tracking-[0.2em] text-[10px] hover:underline transition-all"
+              className="inline-block text-[var(--theme-accent)] font-black uppercase tracking-[0.2em] text-[10px] hover:underline transition-all"
             >
               Update Identity Profile →
             </Link>

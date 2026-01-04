@@ -145,6 +145,10 @@ export default function InterviewPage() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
+      // Clear restart timeout
+      if (restartTimeoutRef.current) {
+        clearTimeout(restartTimeoutRef.current);
+      }
       stopCamera();
       stopMicrophone();
       if (typeof window !== "undefined" && window.speechSynthesis) {
@@ -198,6 +202,41 @@ export default function InterviewPage() {
     }
   };
 
+  // Refs for restart management
+  const restartTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isRestartingRef = useRef(false);
+
+  // Safe restart function with debouncing
+  const safeRestartRecognition = useCallback((delay: number = 300) => {
+    // Clear any pending restart
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
+
+    // Don't restart if already restarting or mic is off
+    if (isRestartingRef.current || !isMicOnRef.current) {
+      return;
+    }
+
+    isRestartingRef.current = true;
+
+    restartTimeoutRef.current = setTimeout(() => {
+      isRestartingRef.current = false;
+      
+      if (isMicOnRef.current && recognitionRef.current) {
+        try {
+          recognitionRef.current.start();
+        } catch (e: any) {
+          // If already started or invalid state, ignore
+          if (e.name !== "InvalidStateError") {
+            console.error("Failed to restart recognition:", e);
+          }
+        }
+      }
+    }, delay);
+  }, []);
+
   // Microphone / Speech Recognition functions
   const startMicrophone = () => {
     try {
@@ -219,7 +258,7 @@ export default function InterviewPage() {
           stream.getTracks().forEach(track => track.stop());
           
           const recognition = new SpeechRecognitionAPI();
-          recognition.continuous = false; // Use non-continuous to avoid network issues
+          recognition.continuous = true; // Keep listening continuously
           recognition.interimResults = true;
           recognition.lang = "en-US";
           recognition.maxAlternatives = 1;
@@ -227,6 +266,7 @@ export default function InterviewPage() {
           recognition.onstart = () => {
             setIsListening(true);
             setMediaError("");
+            isRestartingRef.current = false;
           };
 
           recognition.onresult = (event: SpeechRecognitionEvent) => {
@@ -254,48 +294,48 @@ export default function InterviewPage() {
 
           recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
             console.error("Speech recognition error:", event.error);
-            if (event.error === "not-allowed") {
-              setMediaError("Microphone access denied. Please allow microphone permissions.");
-              setIsMicOn(false);
-              setIsListening(false);
-            } else if (event.error === "no-speech") {
-              // Ignore no-speech errors, just restart
-              setIsListening(false);
-            } else if (event.error === "network") {
-              // Network error - restart after a short delay
-              setIsListening(false);
-              console.log("Network error, restarting speech recognition...");
-              setTimeout(() => {
-                if (isMicOnRef.current && recognitionRef.current) {
-                  try {
-                    recognitionRef.current.start();
-                  } catch (e) {
-                    // Ignore
-                  }
+            
+            switch (event.error) {
+              case "not-allowed":
+                setMediaError("Microphone access denied. Please allow microphone permissions.");
+                setIsMicOn(false);
+                setIsListening(false);
+                break;
+              case "no-speech":
+                // No speech detected - this is normal, just continue listening
+                // Don't restart here, let onend handle it
+                break;
+              case "network":
+                // Network error - restart with longer delay
+                setIsListening(false);
+                console.log("Network error, will restart speech recognition...");
+                safeRestartRecognition(1000);
+                break;
+              case "aborted":
+                // Aborted - only restart if mic should still be on
+                setIsListening(false);
+                if (isMicOnRef.current) {
+                  safeRestartRecognition(500);
                 }
-              }, 500);
-            } else if (event.error === "aborted") {
-              // Aborted - just restart
-              setIsListening(false);
-            } else {
-              setMediaError(`Speech error: ${event.error}. Try again.`);
-              setIsListening(false);
+                break;
+              case "audio-capture":
+                setMediaError("No microphone detected. Please check your audio input.");
+                setIsMicOn(false);
+                setIsListening(false);
+                break;
+              default:
+                // For other errors, show message but try to recover
+                setMediaError(`Speech error: ${event.error}. Retrying...`);
+                setIsListening(false);
+                safeRestartRecognition(1000);
             }
           };
 
           recognition.onend = () => {
             setIsListening(false);
-            // Restart if still supposed to be on
-            if (isMicOnRef.current && recognitionRef.current) {
-              setTimeout(() => {
-                if (isMicOnRef.current && recognitionRef.current) {
-                  try {
-                    recognitionRef.current.start();
-                  } catch (e) {
-                    // Ignore if already started
-                  }
-                }
-              }, 100);
+            // Only restart if mic should still be on and not already restarting
+            if (isMicOnRef.current && !isRestartingRef.current) {
+              safeRestartRecognition(300);
             }
           };
 
@@ -316,6 +356,13 @@ export default function InterviewPage() {
   };
 
   const stopMicrophone = () => {
+    // Clear any pending restart timeout
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
+    isRestartingRef.current = false;
+    
     if (recognitionRef.current) {
       try {
         recognitionRef.current.stop();
@@ -562,22 +609,22 @@ export default function InterviewPage() {
 
   if (loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center border border-white/5">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center border border-white/5">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   if (error || !interview) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex flex-col items-center justify-center border border-white/5">
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex flex-col items-center justify-center border border-white/5">
         <AlertCircle className="h-16 w-16 text-red-400 mb-4" />
         <h2 className="text-2xl font-black text-[#F0F4F2] uppercase tracking-widest mb-4">
           {error || "Interview Not Found"}
         </h2>
         <Link
           href="/dashboard/notifications"
-          className="px-6 py-3 bg-[#88AB8E] text-[#1A2323] rounded-2xl font-black uppercase text-sm"
+          className="px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-2xl font-black uppercase text-sm"
         >
           Back to Notifications
         </Link>
@@ -586,13 +633,13 @@ export default function InterviewPage() {
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex flex-col overflow-hidden border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex flex-col overflow-hidden border border-white/5">
       {/* Header */}
-      <div className="p-6 border-b border-white/5 flex items-center justify-between bg-[#243131]">
+      <div className="p-6 border-b border-white/5 flex items-center justify-between bg-[var(--theme-card-alt)]">
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard/notifications"
-            className="p-3 bg-[#1A2323] hover:bg-[#3E5C58] rounded-xl text-[#88AB8E] transition-colors"
+            className="p-3 bg-[var(--theme-card)] hover:bg-[var(--theme-muted)] rounded-xl text-[var(--theme-accent)] transition-colors"
           >
             <ArrowLeft size={20} />
           </Link>
@@ -600,7 +647,7 @@ export default function InterviewPage() {
             <h1 className="text-2xl font-black uppercase text-[#F0F4F2] tracking-tighter">
               AI Interview
             </h1>
-            <p className="text-[#88AB8E] text-xs font-bold">
+            <p className="text-[var(--theme-accent)] text-xs font-bold">
               {interview.roleName} • {interview.projectTitle}
             </p>
           </div>
@@ -619,7 +666,7 @@ export default function InterviewPage() {
             </div>
           )}
           {interviewEnded && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#88AB8E]/20 text-[#88AB8E] rounded-xl text-xs font-bold">
+            <div className="flex items-center gap-2 px-4 py-2 bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] rounded-xl text-xs font-bold">
               <CheckCircle size={14} />
               Completed
             </div>
@@ -630,9 +677,9 @@ export default function InterviewPage() {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Video Panel */}
-        <div className="w-80 bg-[#243131] border-r border-white/5 flex flex-col">
+        <div className="w-80 bg-[var(--theme-card-alt)] border-r border-white/5 flex flex-col">
           {/* Camera View */}
-          <div className="relative aspect-video bg-[#1A2323] m-4 rounded-2xl overflow-hidden border border-white/5">
+          <div className="relative aspect-video bg-[var(--theme-card)] m-4 rounded-2xl overflow-hidden border border-white/5">
             <video
               ref={videoRef}
               autoPlay
@@ -642,11 +689,11 @@ export default function InterviewPage() {
             />
             {!isCameraOn && (
               <div className="w-full h-full flex items-center justify-center">
-                <User size={48} className="text-[#88AB8E]/30" />
+                <User size={48} className="text-[var(--theme-accent)]/30" />
               </div>
             )}
             {isSpeaking && (
-              <div className="absolute bottom-2 left-2 px-3 py-1 bg-[#88AB8E] text-[#1A2323] rounded-full text-[10px] font-bold animate-pulse">
+              <div className="absolute bottom-2 left-2 px-3 py-1 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-full text-[10px] font-bold animate-pulse">
                 AI Speaking...
               </div>
             )}
@@ -671,8 +718,8 @@ export default function InterviewPage() {
               title={isCameraOn ? "Turn off camera" : "Turn on camera"}
               className={`p-4 rounded-2xl transition-all ${
                 isCameraOn
-                  ? "bg-[#88AB8E] text-[#1A2323]"
-                  : "bg-[#1A2323] text-[#88AB8E] border border-white/5 hover:bg-[#3E5C58]"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-card)]"
+                  : "bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5 hover:bg-[var(--theme-muted)]"
               }`}
             >
               {isCameraOn ? <Video size={20} /> : <VideoOff size={20} />}
@@ -682,8 +729,8 @@ export default function InterviewPage() {
               title={isMicOn ? "Turn off microphone" : "Turn on microphone"}
               className={`p-4 rounded-2xl transition-all ${
                 isMicOn
-                  ? "bg-[#88AB8E] text-[#1A2323]"
-                  : "bg-[#1A2323] text-[#88AB8E] border border-white/5 hover:bg-[#3E5C58]"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-card)]"
+                  : "bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5 hover:bg-[var(--theme-muted)]"
               }`}
             >
               {isMicOn ? <Mic size={20} /> : <MicOff size={20} />}
@@ -698,8 +745,8 @@ export default function InterviewPage() {
               title={isAudioOn ? "Mute AI voice" : "Unmute AI voice"}
               className={`p-4 rounded-2xl transition-all ${
                 isAudioOn
-                  ? "bg-[#88AB8E] text-[#1A2323]"
-                  : "bg-[#1A2323] text-[#88AB8E] border border-white/5"
+                  ? "bg-[var(--theme-accent)] text-[var(--theme-card)]"
+                  : "bg-[var(--theme-card)] text-[var(--theme-accent)] border border-white/5"
               }`}
             >
               {isAudioOn ? <Volume2 size={20} /> : <VolumeX size={20} />}
@@ -709,8 +756,8 @@ export default function InterviewPage() {
           {/* Listening indicator */}
           {isListening && (
             <div className="px-4 pb-4">
-              <div className="p-3 bg-[#1A2323] rounded-xl border border-[#88AB8E]/30">
-                <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest mb-2">
+              <div className="p-3 bg-[var(--theme-card)] rounded-xl border border-[var(--theme-accent)]/30">
+                <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-2">
                   Listening...
                 </p>
                 <p className="text-[#F0F4F2]/60 text-xs">
@@ -722,17 +769,17 @@ export default function InterviewPage() {
 
           {/* Interview Info */}
           <div className="flex-1 p-4 overflow-y-auto">
-            <div className="bg-[#1A2323] p-4 rounded-2xl border border-white/5">
-              <h3 className="text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+            <div className="bg-[var(--theme-card)] p-4 rounded-2xl border border-white/5">
+              <h3 className="text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                 Interview Details
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="text-[9px] text-[#88AB8E]/50 uppercase">Position</p>
+                  <p className="text-[9px] text-[var(--theme-accent)]/50 uppercase">Position</p>
                   <p className="text-sm font-bold text-[#F0F4F2]">{interview.roleName}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] text-[#88AB8E]/50 uppercase">Project</p>
+                  <p className="text-[9px] text-[var(--theme-accent)]/50 uppercase">Project</p>
                   <p className="text-sm font-bold text-[#F0F4F2]">{interview.projectTitle}</p>
                 </div>
               </div>
@@ -745,19 +792,19 @@ export default function InterviewPage() {
           {!interviewStarted ? (
             /* Pre-interview Screen */
             <div className="flex-1 flex flex-col items-center justify-center p-10">
-              <div className="w-32 h-32 rounded-full bg-[#243131] border border-white/10 flex items-center justify-center mb-8">
-                <Video size={64} className="text-[#88AB8E]" />
+              <div className="w-32 h-32 rounded-full bg-[var(--theme-card-alt)] border border-white/10 flex items-center justify-center mb-8">
+                <Video size={64} className="text-[var(--theme-accent)]" />
               </div>
               <h2 className="text-3xl font-black uppercase text-[#F0F4F2] tracking-tighter mb-4 text-center">
                 Ready for Your Interview?
               </h2>
-              <p className="text-[#88AB8E]/60 text-sm text-center max-w-md mb-8">
-                You'll be interviewed by an AI for the <span className="text-[#88AB8E]">{interview.roleName}</span> position.
+              <p className="text-[var(--theme-accent)]/60 text-sm text-center max-w-md mb-8">
+                You'll be interviewed by an AI for the <span className="text-[var(--theme-accent)]">{interview.roleName}</span> position.
                 Make sure your camera and microphone are working.
               </p>
 
-              <div className="bg-[#243131] p-6 rounded-2xl border border-white/5 mb-8 max-w-lg">
-                <h4 className="text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+              <div className="bg-[var(--theme-card-alt)] p-6 rounded-2xl border border-white/5 mb-8 max-w-lg">
+                <h4 className="text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Tips for Success
                 </h4>
                 <ul className="space-y-2 text-sm text-[#F0F4F2]/60">
@@ -770,7 +817,7 @@ export default function InterviewPage() {
 
               <button
                 onClick={startInterview}
-                className="px-10 py-5 bg-[#88AB8E] text-[#1A2323] rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center gap-3"
+                className="px-10 py-5 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center gap-3"
               >
                 <Phone size={20} />
                 Start Interview
@@ -790,12 +837,12 @@ export default function InterviewPage() {
                     <div
                       className={`max-w-[80%] p-5 rounded-2xl ${
                         message.role === "user"
-                          ? "bg-[#88AB8E] text-[#1A2323] rounded-tr-none"
-                          : "bg-[#243131] text-[#F0F4F2] rounded-tl-none border border-white/5"
+                          ? "bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-tr-none"
+                          : "bg-[var(--theme-card-alt)] text-[#F0F4F2] rounded-tl-none border border-white/5"
                       }`}
                     >
                       {message.role === "assistant" && (
-                        <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest mb-2 opacity-60">
+                        <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest mb-2 opacity-60">
                           AI Interviewer
                         </p>
                       )}
@@ -808,8 +855,8 @@ export default function InterviewPage() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-[#243131] p-5 rounded-2xl rounded-tl-none border border-white/5">
-                      <Loader2 className="animate-spin text-[#88AB8E]" size={20} />
+                    <div className="bg-[var(--theme-card-alt)] p-5 rounded-2xl rounded-tl-none border border-white/5">
+                      <Loader2 className="animate-spin text-[var(--theme-accent)]" size={20} />
                     </div>
                   </div>
                 )}
@@ -819,18 +866,18 @@ export default function InterviewPage() {
 
               {/* Interview Completed */}
               {interviewEnded && (
-                <div className="p-6 border-t border-white/5 bg-[#243131]">
+                <div className="p-6 border-t border-white/5 bg-[var(--theme-card-alt)]">
                   <div className="text-center">
-                    <CheckCircle className="mx-auto mb-4 text-[#88AB8E]" size={48} />
+                    <CheckCircle className="mx-auto mb-4 text-[var(--theme-accent)]" size={48} />
                     <h3 className="text-xl font-black uppercase text-[#F0F4F2] tracking-tighter mb-2">
                       Interview Complete!
                     </h3>
-                    <p className="text-[#88AB8E]/60 text-sm mb-4">
+                    <p className="text-[var(--theme-accent)]/60 text-sm mb-4">
                       Thank you for completing the interview. The project owner will review your responses.
                     </p>
                     <Link
                       href="/dashboard/notifications"
-                      className="inline-block px-8 py-4 bg-[#88AB8E] text-[#1A2323] rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all"
+                      className="inline-block px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all"
                     >
                       Back to Dashboard
                     </Link>
@@ -840,7 +887,7 @@ export default function InterviewPage() {
 
               {/* Input */}
               {!interviewEnded && (
-                <div className="p-6 border-t border-white/5 bg-[#243131]/50">
+                <div className="p-6 border-t border-white/5 bg-[var(--theme-card-alt)]/50">
                   <div className="flex items-center gap-4">
                     <input
                       ref={inputRef}
@@ -850,12 +897,12 @@ export default function InterviewPage() {
                       onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                       placeholder="Type or speak your response..."
                       disabled={isLoading}
-                      className="flex-1 bg-[#1A2323] border border-white/5 rounded-2xl px-6 py-4 text-[#F0F4F2] outline-none focus:border-[#88AB8E]/50 transition-colors disabled:opacity-50"
+                      className="flex-1 bg-[var(--theme-card)] border border-white/5 rounded-2xl px-6 py-4 text-[#F0F4F2] outline-none focus:border-[var(--theme-accent)]/50 transition-colors disabled:opacity-50"
                     />
                     <button
                       onClick={sendMessage}
                       disabled={isLoading || !input.trim()}
-                      className="p-4 bg-[#88AB8E] text-[#1A2323] rounded-2xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-2xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isLoading ? (
                         <Loader2 className="animate-spin" size={24} />
@@ -864,7 +911,7 @@ export default function InterviewPage() {
                       )}
                     </button>
                   </div>
-                  <p className="text-[9px] font-black text-[#88AB8E]/40 uppercase tracking-widest mt-3 text-center">
+                  <p className="text-[9px] font-black text-[var(--theme-accent)]/40 uppercase tracking-widest mt-3 text-center">
                     {isMicOn ? "Voice input active • " : ""}Press Enter to send
                   </p>
                 </div>

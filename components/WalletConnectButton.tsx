@@ -24,7 +24,6 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
   const [copied, setCopied] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Fetch balance when connected
   useEffect(() => {
     const fetchBalance = async () => {
       if (publicKey && connection) {
@@ -41,7 +40,6 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
     };
 
     fetchBalance();
-    // Set up interval to refresh balance
     const interval = setInterval(fetchBalance, 30000);
     return () => clearInterval(interval);
   }, [publicKey, connection]);
@@ -71,7 +69,7 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
     return (
       <button
         disabled
-        className={`flex items-center gap-2 px-4 py-2.5 bg-[#243131] text-[#88AB8E] rounded-xl font-medium ${className}`}
+        className={`flex items-center gap-2 px-4 py-2.5 bg-[var(--theme-card-alt)] text-[var(--theme-accent)] rounded-xl font-medium ${className}`}
       >
         <Loader2 size={16} className="animate-spin" />
         Connecting...
@@ -83,7 +81,7 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
     return (
       <button
         onClick={handleConnect}
-        className={`flex items-center gap-2 px-4 py-2.5 bg-[#88AB8E] text-[#1A2323] rounded-xl font-bold hover:scale-[1.02] transition-all ${className}`}
+        className={`flex items-center gap-2 px-4 py-2.5 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl font-bold hover:scale-[1.02] transition-all ${className}`}
       >
         <Wallet size={16} />
         {compact ? "Connect" : "Connect Wallet"}
@@ -95,12 +93,12 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
     <div className="relative">
       <button
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-        className={`flex items-center gap-2 px-4 py-2.5 bg-[#243131] text-[#F0F4F2] rounded-xl font-medium border border-white/10 hover:bg-white/5 transition-all ${className}`}
+        className={`flex items-center gap-2 px-4 py-2.5 bg-[var(--theme-card-alt)] text-[#F0F4F2] rounded-xl font-medium border border-white/10 hover:bg-white/5 transition-all ${className}`}
       >
         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
         <span className="font-mono text-sm">{truncateAddress(publicKey.toBase58())}</span>
         {showBalance && balance !== null && (
-          <span className="text-[#88AB8E] text-sm ml-1">
+          <span className="text-[var(--theme-accent)] text-sm ml-1">
             {balance.toFixed(2)} SOL
           </span>
         )}
@@ -112,9 +110,9 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
             className="fixed inset-0 z-40"
             onClick={() => setIsDropdownOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 w-64 bg-[#1A2323] rounded-xl border border-white/10 shadow-xl z-50 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-64 bg-[var(--theme-card)] rounded-xl border border-white/10 shadow-xl z-50 overflow-hidden">
             <div className="p-4 border-b border-white/10">
-              <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+              <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider mb-1">
                 Connected Wallet
               </p>
               <div className="flex items-center gap-2">
@@ -128,7 +126,7 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
                   {copied ? (
                     <Check size={14} className="text-green-400" />
                   ) : (
-                    <Copy size={14} className="text-[#88AB8E]" />
+                    <Copy size={14} className="text-[var(--theme-accent)]" />
                   )}
                 </button>
               </div>
@@ -146,7 +144,7 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[#F0F4F2] hover:bg-white/5 rounded-lg transition-all"
               >
-                <ExternalLink size={14} className="text-[#88AB8E]" />
+                <ExternalLink size={14} className="text-[var(--theme-accent)]" />
                 View on Explorer
               </a>
               <button

@@ -118,13 +118,13 @@ export default function CertificatePreview({
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-[#1A2323] rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            className="bg-[var(--theme-card)] rounded-[2rem] w-full max-w-4xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-white/10">
               <div className="flex items-center gap-3">
-                <Award className="text-[#88AB8E]" size={24} />
+                <Award className="text-[var(--theme-accent)]" size={24} />
                 <h2 className="text-xl font-black text-[#F0F4F2] uppercase tracking-wider">
                   Certificate Preview
                 </h2>
@@ -150,47 +150,47 @@ export default function CertificatePreview({
                 >
                   <div className="p-8 min-h-[400px] flex flex-col">
                     {/* Logo */}
-                    <p className="text-[#1A2323] font-black text-lg">Unirico</p>
+                    <p className="text-[var(--theme-card)] font-black text-lg">Unirico</p>
                     
                     {/* Title */}
-                    <h3 className="text-2xl font-black text-[#1A2323] mt-6 text-center uppercase tracking-wider">
+                    <h3 className="text-2xl font-black text-[var(--theme-card)] mt-6 text-center uppercase tracking-wider">
                       Certificate of Contribution
                     </h3>
                     
-                    <p className="text-center text-[#3E5C58] mt-4 text-sm">
+                    <p className="text-center text-[var(--theme-muted)] mt-4 text-sm">
                       This certificate is proudly awarded to:
                     </p>
                     
                     {/* Name */}
-                    <h4 className="text-3xl font-black text-[#1A2323] text-center mt-2 uppercase">
+                    <h4 className="text-3xl font-black text-[var(--theme-card)] text-center mt-2 uppercase">
                       {certificate.userName}
                     </h4>
                     
-                    <p className="text-center text-[#3E5C58] mt-4 text-sm px-4">
+                    <p className="text-center text-[var(--theme-muted)] mt-4 text-sm px-4">
                       In recognition of their significant contributions to the{" "}
                       <span className="font-bold">{certificate.projectName}</span> ecosystem.
                     </p>
 
                     <div className="mt-auto pt-6 grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-[#3E5C58] text-xs">Awarded on:</p>
-                        <p className="text-[#1A2323] font-bold">
+                        <p className="text-[var(--theme-muted)] text-xs">Awarded on:</p>
+                        <p className="text-[var(--theme-card)] font-bold">
                           {formatDate(certificate.issuedAt)}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[#3E5C58] text-xs">Total Tasks Completed:</p>
-                        <p className="text-[#1A2323] font-bold">
+                        <p className="text-[var(--theme-muted)] text-xs">Total Tasks Completed:</p>
+                        <p className="text-[var(--theme-card)] font-bold">
                           {certificate.totalTasksCompleted}
                         </p>
                       </div>
                       <div>
-                        <p className="text-[#3E5C58] text-xs">Role:</p>
-                        <p className="text-[#1A2323] font-bold">{certificate.role}</p>
+                        <p className="text-[var(--theme-muted)] text-xs">Role:</p>
+                        <p className="text-[var(--theme-card)] font-bold">{certificate.role}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[#3E5C58] text-xs">Certificate ID:</p>
-                        <p className="text-[#1A2323] font-bold text-xs">
+                        <p className="text-[var(--theme-muted)] text-xs">Certificate ID:</p>
+                        <p className="text-[var(--theme-card)] font-bold text-xs">
                           {certificate.certificateId}
                         </p>
                       </div>
@@ -229,9 +229,9 @@ export default function CertificatePreview({
               {/* Certificate Details */}
               <div className="space-y-4">
                 {/* Wallet Connection Section */}
-                <div className="bg-[#243131] rounded-2xl p-5 border border-white/5">
+                <div className="bg-[var(--theme-card-alt)] rounded-2xl p-5 border border-white/5">
                   <div className="flex items-center gap-2 mb-4">
-                    <Wallet className="text-[#88AB8E]" size={18} />
+                    <Wallet className="text-[var(--theme-accent)]" size={18} />
                     <h4 className="text-sm font-bold text-[#F0F4F2] uppercase tracking-wider">
                       Wallet Connection
                     </h4>
@@ -244,21 +244,21 @@ export default function CertificatePreview({
                         <span className="text-sm text-green-400 font-medium">Connected</span>
                       </div>
                       <div>
-                        <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+                        <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider mb-1">
                           Wallet Address
                         </p>
                         <div className="flex items-center gap-2">
-                          <p className="text-xs text-[#F0F4F2] font-mono bg-[#1A2323] px-3 py-2 rounded-lg flex-1 truncate">
+                          <p className="text-xs text-[#F0F4F2] font-mono bg-[var(--theme-card)] px-3 py-2 rounded-lg flex-1 truncate">
                             {publicKey.toBase58()}
                           </p>
                           <button
                             onClick={() => copyToClipboard(publicKey.toBase58())}
-                            className="p-2 bg-[#1A2323] rounded-lg hover:bg-white/10 transition-all"
+                            className="p-2 bg-[var(--theme-card)] rounded-lg hover:bg-white/10 transition-all"
                           >
                             {copied ? (
                               <Check size={14} className="text-green-400" />
                             ) : (
-                              <Copy size={14} className="text-[#88AB8E]" />
+                              <Copy size={14} className="text-[var(--theme-accent)]" />
                             )}
                           </button>
                         </div>
@@ -271,7 +271,7 @@ export default function CertificatePreview({
                       </p>
                       <button
                         onClick={handleConnectWallet}
-                        className="w-full py-3 bg-[#88AB8E] text-[#1A2323] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                       >
                         <Wallet size={16} />
                         Connect Wallet
@@ -281,9 +281,9 @@ export default function CertificatePreview({
                 </div>
 
                 {/* Blockchain Info */}
-                <div className="bg-[#243131] rounded-2xl p-5 border border-white/5">
+                <div className="bg-[var(--theme-card-alt)] rounded-2xl p-5 border border-white/5">
                   <div className="flex items-center gap-2 mb-4">
-                    <Shield className="text-[#88AB8E]" size={18} />
+                    <Shield className="text-[var(--theme-accent)]" size={18} />
                     <h4 className="text-sm font-bold text-[#F0F4F2] uppercase tracking-wider">
                       Blockchain Verification
                     </h4>
@@ -291,7 +291,7 @@ export default function CertificatePreview({
 
                   <div className="space-y-3">
                     <div>
-                      <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider mb-1">
                         Network
                       </p>
                       <p className="text-sm text-[#F0F4F2] font-medium">
@@ -300,11 +300,11 @@ export default function CertificatePreview({
                     </div>
 
                     <div>
-                      <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider mb-1">
                         Certificate Hash
                       </p>
                       <div className="flex items-center gap-2">
-                        <p className="text-xs text-[#F0F4F2] font-mono bg-[#1A2323] px-3 py-2 rounded-lg flex-1 truncate">
+                        <p className="text-xs text-[#F0F4F2] font-mono bg-[var(--theme-card)] px-3 py-2 rounded-lg flex-1 truncate">
                           {certificate.certificateHash}
                         </p>
                       </div>
@@ -312,20 +312,20 @@ export default function CertificatePreview({
 
                     {certificate.blockchain?.transactionSignature && (
                       <div>
-                        <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider mb-1">
+                        <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider mb-1">
                           Transaction Signature
                         </p>
                         <div className="flex items-center gap-2">
-                          <p className="text-xs text-[#F0F4F2] font-mono bg-[#1A2323] px-3 py-2 rounded-lg flex-1 truncate">
+                          <p className="text-xs text-[#F0F4F2] font-mono bg-[var(--theme-card)] px-3 py-2 rounded-lg flex-1 truncate">
                             {certificate.blockchain.transactionSignature}
                           </p>
                           <a
                             href={certificate.blockchain.explorerUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 bg-[#1A2323] rounded-lg hover:bg-white/10 transition-all"
+                            className="p-2 bg-[var(--theme-card)] rounded-lg hover:bg-white/10 transition-all"
                           >
-                            <ExternalLink size={14} className="text-[#88AB8E]" />
+                            <ExternalLink size={14} className="text-[var(--theme-accent)]" />
                           </a>
                         </div>
                       </div>
@@ -334,19 +334,19 @@ export default function CertificatePreview({
                 </div>
 
                 {/* Task Info */}
-                <div className="bg-[#243131] rounded-2xl p-5 border border-white/5">
+                <div className="bg-[var(--theme-card-alt)] rounded-2xl p-5 border border-white/5">
                   <h4 className="text-sm font-bold text-[#F0F4F2] uppercase tracking-wider mb-3">
                     Task Details
                   </h4>
                   <div className="space-y-2">
                     <div>
-                      <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider">
                         Task
                       </p>
                       <p className="text-sm text-[#F0F4F2]">{certificate.taskTitle}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] text-[#88AB8E]/60 uppercase tracking-wider">
+                      <p className="text-[10px] text-[var(--theme-accent)]/60 uppercase tracking-wider">
                         Project
                       </p>
                       <p className="text-sm text-[#F0F4F2]">{certificate.projectName}</p>
@@ -369,8 +369,8 @@ export default function CertificatePreview({
                       disabled={isMinting || !connected}
                       className={`flex-1 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all flex items-center justify-center gap-2 ${
                         connected
-                          ? "bg-[#88AB8E] text-[#1A2323] hover:scale-[1.02]"
-                          : "bg-[#3E5C58] text-[#F0F4F2]/50 cursor-not-allowed"
+                          ? "bg-[var(--theme-accent)] text-[var(--theme-card)] hover:scale-[1.02]"
+                          : "bg-[var(--theme-muted)] text-[#F0F4F2]/50 cursor-not-allowed"
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       {isMinting ? (
@@ -397,7 +397,7 @@ export default function CertificatePreview({
                       href={certificate.blockchain.explorerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-4 bg-[#3E5C58] text-[#F0F4F2] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                      className="flex-1 py-4 bg-[var(--theme-muted)] text-[#F0F4F2] rounded-xl font-bold uppercase tracking-wider text-sm hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
                     >
                       <ExternalLink size={16} />
                       View on Explorer
@@ -415,8 +415,8 @@ export default function CertificatePreview({
                     disabled={!canViewCertificate}
                     className={`px-6 py-4 rounded-xl font-bold uppercase tracking-wider text-sm transition-all border border-white/5 ${
                       canViewCertificate
-                        ? "bg-[#243131] text-[#88AB8E] hover:bg-white/10"
-                        : "bg-[#243131]/50 text-[#88AB8E]/30 cursor-not-allowed"
+                        ? "bg-[var(--theme-card-alt)] text-[var(--theme-accent)] hover:bg-white/10"
+                        : "bg-[var(--theme-card-alt)]/50 text-[var(--theme-accent)]/30 cursor-not-allowed"
                     }`}
                   >
                     <Download size={16} />

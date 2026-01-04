@@ -262,15 +262,15 @@ export default function ProjectManagePage() {
 
   if (loading)
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <div className="text-[#88AB8E] font-black uppercase tracking-widest animate-pulse">
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <div className="text-[var(--theme-accent)] font-black uppercase tracking-widest animate-pulse">
           Initializing Console...
         </div>
       </div>
     );
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -281,14 +281,14 @@ export default function ProjectManagePage() {
           <div className="space-y-4">
             <Link
               href="/dashboard/projects/manage"
-              className="text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-60 flex items-center gap-2 hover:opacity-100 transition-all"
+              className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-60 flex items-center gap-2 hover:opacity-100 transition-all"
             >
               <ArrowLeft size={14} /> Back to Ventures
             </Link>
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter leading-none">
               {project.title}
             </h1>
-            <div className="flex items-center gap-3 text-[#88AB8E]">
+            <div className="flex items-center gap-3 text-[var(--theme-accent)]">
               {isOwner ? <ShieldCheck size={18} /> : <Users size={18} />}
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">
                 {isOwner
@@ -302,27 +302,27 @@ export default function ProjectManagePage() {
             {isOwner && (
               <Link
                 href={`/dashboard/projects/manage/${id}/edit`}
-                className="p-4 bg-[#243131] text-[#88AB8E] rounded-2xl border border-white/5 hover:bg-[#3E5C58] transition-all"
+                className="p-4 bg-[var(--theme-card-alt)] text-[var(--theme-accent)] rounded-2xl border border-white/5 hover:bg-[var(--theme-muted)] transition-all"
               >
                 <Edit3 size={20} />
               </Link>
             )}
-            <div className="flex p-1.5 bg-[#243131] rounded-[2rem] border border-white/5">
+            <div className="flex p-1.5 bg-[var(--theme-card-alt)] rounded-[2rem] border border-white/5">
               <button
                 onClick={() => setActiveTab("details")}
-                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "details" ? "bg-[#88AB8E] text-[#141C1C]" : "text-[#F0F4F2]/40"}`}
+                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "details" ? "bg-[var(--theme-accent)] text-[var(--theme-background)]" : "text-[#F0F4F2]/40"}`}
               >
                 Overview
               </button>
               <button
                 onClick={() => setActiveTab("tasks")}
-                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === "tasks" ? "bg-[#88AB8E] text-[#141C1C]" : "text-[#F0F4F2]/40"}`}
+                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === "tasks" ? "bg-[var(--theme-accent)] text-[var(--theme-background)]" : "text-[#F0F4F2]/40"}`}
               >
                 <LayoutGrid size={14} /> Tasks
               </button>
               <button
                 onClick={() => setActiveTab("members")}
-                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "members" ? "bg-[#88AB8E] text-[#141C1C]" : "text-[#F0F4F2]/40"}`}
+                className={`px-8 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === "members" ? "bg-[var(--theme-accent)] text-[var(--theme-background)]" : "text-[#F0F4F2]/40"}`}
               >
                 Personnel
               </button>
@@ -338,8 +338,8 @@ export default function ProjectManagePage() {
               animate={{ opacity: 1, y: 0 }}
               className="grid grid-cols-12 gap-8"
             >
-              <div className="col-span-8 bg-[#243131] p-12 rounded-[3.5rem] border border-white/5">
-                <h3 className="text-[10px] font-black text-[#88AB8E] uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+              <div className="col-span-8 bg-[var(--theme-card-alt)] p-12 rounded-[3.5rem] border border-white/5">
+                <h3 className="text-[10px] font-black text-[var(--theme-accent)] uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
                   <Info size={16} /> Briefing
                 </h3>
                 <p className="text-[#F0F4F2] text-xl font-medium leading-relaxed   opacity-80">
@@ -347,14 +347,14 @@ export default function ProjectManagePage() {
                 </p>
               </div>
 
-              <div className="col-span-4 bg-[#3E5C58] p-12 rounded-[3.5rem] flex flex-col justify-center text-[#F0F4F2]">
+              <div className="col-span-4 bg-[var(--theme-muted)] p-12 rounded-[3.5rem] flex flex-col justify-center text-[#F0F4F2]">
                 <span className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-2">
                   Team Size
                 </span>
                 <h2 className="text-6xl font-black  ">
                   {acceptedMembers.length + 1}
                 </h2>
-                <p className="text-[10px] font-black uppercase tracking-widest text-[#88AB8E] mt-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[var(--theme-accent)] mt-4">
                   Active Contributors
                 </p>
               </div>
@@ -367,12 +367,12 @@ export default function ProjectManagePage() {
               className="space-y-6"
             >
               {/* Task View Toggle */}
-              <div className="flex items-center gap-2 p-1.5 bg-[#243131] rounded-2xl border border-white/5 w-fit">
+              <div className="flex items-center gap-2 p-1.5 bg-[var(--theme-card-alt)] rounded-2xl border border-white/5 w-fit">
                 <button
                   onClick={() => setActiveTaskView("kanban")}
                   className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                     activeTaskView === "kanban"
-                      ? "bg-[#88AB8E] text-[#141C1C]"
+                      ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
                       : "text-[#F0F4F2]/40 hover:text-[#F0F4F2]"
                   }`}
                 >
@@ -382,7 +382,7 @@ export default function ProjectManagePage() {
                   onClick={() => setActiveTaskView("milestones")}
                   className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${
                     activeTaskView === "milestones"
-                      ? "bg-[#88AB8E] text-[#141C1C]"
+                      ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
                       : "text-[#F0F4F2]/40 hover:text-[#F0F4F2]"
                   }`}
                 >
@@ -458,7 +458,7 @@ export default function ProjectManagePage() {
                   {isOwner && (
                     <button
                       onClick={() => setShowAddMemberModal(true)}
-                      className="p-3 bg-[#88AB8E] text-[#141C1C] rounded-xl hover:scale-110 transition-all"
+                      className="p-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl hover:scale-110 transition-all"
                     >
                       <Plus size={20} />
                     </button>
@@ -468,17 +468,17 @@ export default function ProjectManagePage() {
                   {acceptedMembers.map((app: any) => (
                     <div
                       key={app._id}
-                      className="p-8 bg-[#243131] rounded-[2.5rem] border border-[#88AB8E]/20 relative group"
+                      className="p-8 bg-[var(--theme-card-alt)] rounded-[2.5rem] border border-[var(--theme-accent)]/20 relative group"
                     >
                       <div className="flex items-center gap-5">
-                        <div className="p-3 bg-[#1A2323] rounded-2xl text-[#88AB8E]">
+                        <div className="p-3 bg-[var(--theme-card)] rounded-2xl text-[var(--theme-accent)]">
                           <UserCircle size={24} />
                         </div>
                         <div>
                           <p className="font-black   text-[#F0F4F2] uppercase tracking-tight">
                             {app.userName}
                           </p>
-                          <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
+                          <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest">
                             {project.roles.find(
                               (r: any) => r._id.toString() === app.roleId
                             )?.roleName || "Specialist"}
@@ -499,18 +499,18 @@ export default function ProjectManagePage() {
                   {isOwner && (
                     <button
                       onClick={() => setShowAddAuthorizedModal(true)}
-                      className="p-3 bg-[#88AB8E] text-[#141C1C] rounded-xl hover:scale-110 transition-all"
+                      className="p-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl hover:scale-110 transition-all"
                     >
                       <Plus size={20} />
                     </button>
                   )}
                 </div>
-                <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest px-4">
+                <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest px-4">
                   Users with direct access to view project and chat
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {(project.authorizedPersonnel || []).length === 0 ? (
-                    <div className="col-span-3 p-8 bg-[#243131] rounded-[2.5rem] border border-white/5 text-center">
+                    <div className="col-span-3 p-8 bg-[var(--theme-card-alt)] rounded-[2.5rem] border border-white/5 text-center">
                       <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">
                         No authorized personnel added
                       </p>
@@ -520,17 +520,17 @@ export default function ProjectManagePage() {
                       (person: any, index: number) => (
                         <div
                           key={person.userEmail || index}
-                          className="p-8 bg-[#243131] rounded-[2.5rem] border border-[#3E5C58]/30 relative group"
+                          className="p-8 bg-[var(--theme-card-alt)] rounded-[2.5rem] border border-[var(--theme-muted)]/30 relative group"
                         >
                           <div className="flex items-center gap-5">
-                            <div className="p-3 bg-[#1A2323] rounded-2xl text-[#3E5C58]">
+                            <div className="p-3 bg-[var(--theme-card)] rounded-2xl text-[var(--theme-muted)]">
                               <ShieldCheck size={24} />
                             </div>
                             <div className="flex-1">
                               <p className="font-black   text-[#F0F4F2] uppercase tracking-tight">
                                 {person.userName}
                               </p>
-                              <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest">
+                              <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest">
                                 {person.userEmail}
                               </p>
                             </div>
@@ -588,26 +588,26 @@ export default function ProjectManagePage() {
                     {project.roles.map((role: any) => (
                       <div
                         key={role._id}
-                        className="bg-[#1A2323] p-10 rounded-[3.5rem] border border-white/5"
+                        className="bg-[var(--theme-card)] p-10 rounded-[3.5rem] border border-white/5"
                       >
                         <div className="flex justify-between items-center mb-10 px-4">
                           <div>
                             <h4 className="text-3xl font-black   text-[#F0F4F2] uppercase tracking-tighter">
                               {role.roleName}
                             </h4>
-                            <span className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-60">
+                            <span className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-60">
                               Fulfillment Status
                             </span>
                           </div>
                           <div className="flex items-center gap-6">
                             <button
                               onClick={() => fetchMatchedProfiles(role)}
-                              className="flex items-center gap-2 px-6 py-3 bg-[#3E5C58] text-[#F0F4F2] rounded-2xl hover:bg-[#88AB8E] hover:text-[#1A2323] transition-all text-[10px] font-black uppercase tracking-widest"
+                              className="flex items-center gap-2 px-6 py-3 bg-[var(--theme-muted)] text-[#F0F4F2] rounded-2xl hover:bg-[var(--theme-accent)] hover:text-[var(--theme-card)] transition-all text-[10px] font-black uppercase tracking-widest"
                             >
                               <Sparkles size={14} /> Find Matches
                             </button>
                             <div className="text-right">
-                              <span className="text-4xl font-black   text-[#88AB8E]">
+                              <span className="text-4xl font-black   text-[var(--theme-accent)]">
                                 {role.filled} / {role.needed}
                               </span>
                               <p className="text-[9px] font-black text-[#F0F4F2]/30 uppercase tracking-widest">
@@ -648,11 +648,11 @@ export default function ProjectManagePage() {
 
       {/* Add Member Modal - UNIRIVO Dark Styled */}
       {showAddMemberModal && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3.5rem] p-12 max-w-md w-full border border-white/10 shadow-2xl"
+            className="bg-[var(--theme-card-alt)] rounded-[3.5rem] p-12 max-w-md w-full border border-white/10 shadow-2xl"
           >
             <h2 className="text-3xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-8">
               Deploy Specialist
@@ -698,7 +698,7 @@ export default function ProjectManagePage() {
               className="space-y-6"
             >
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Select Role
                 </label>
                 <select
@@ -710,7 +710,7 @@ export default function ProjectManagePage() {
                       roleId: e.target.value,
                     }))
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                 >
                   <option value="">Choose a role...</option>
                   {project.roles
@@ -723,7 +723,7 @@ export default function ProjectManagePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   Identity Email
                 </label>
                 <input
@@ -736,7 +736,7 @@ export default function ProjectManagePage() {
                       email: e.target.value,
                     }))
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold placeholder:text-white/10"
                   placeholder="user@UNIRIVO.io"
                 />
               </div>
@@ -744,7 +744,7 @@ export default function ProjectManagePage() {
                 <button
                   type="submit"
                   disabled={addingMember}
-                  className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 py-5 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {addingMember ? "Adding..." : "Authorize"}
                 </button>
@@ -766,16 +766,16 @@ export default function ProjectManagePage() {
 
       {/* Add Authorized Personnel Modal */}
       {showAddAuthorizedModal && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3.5rem] p-12 max-w-md w-full border border-white/10 shadow-2xl"
+            className="bg-[var(--theme-card-alt)] rounded-[3.5rem] p-12 max-w-md w-full border border-white/10 shadow-2xl"
           >
             <h2 className="text-3xl font-black   text-[#F0F4F2] uppercase tracking-tighter mb-4">
               Add Authorized Personnel
             </h2>
-            <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mb-8">
+            <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mb-8">
               Grant direct access to view project and chat
             </p>
             <form
@@ -816,7 +816,7 @@ export default function ProjectManagePage() {
               className="space-y-6"
             >
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-3 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-3 opacity-60">
                   User Email
                 </label>
                 <input
@@ -824,7 +824,7 @@ export default function ProjectManagePage() {
                   type="email"
                   value={addAuthorizedEmail}
                   onChange={(e) => setAddAuthorizedEmail(e.target.value)}
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-2xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold placeholder:text-white/10"
                   placeholder="user@example.com"
                 />
               </div>
@@ -832,7 +832,7 @@ export default function ProjectManagePage() {
                 <button
                   type="submit"
                   disabled={addingAuthorized}
-                  className="flex-1 py-5 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 py-5 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {addingAuthorized ? "Adding..." : "Authorize"}
                 </button>
@@ -866,28 +866,28 @@ export default function ProjectManagePage() {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-[#1A2323] rounded-[3rem] border border-white/10 w-full max-w-4xl max-h-[85vh] overflow-hidden"
+              className="bg-[var(--theme-card)] rounded-[3rem] border border-white/10 w-full max-w-4xl max-h-[85vh] overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Header */}
               <div className="p-8 border-b border-white/5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="p-4 bg-[#88AB8E] rounded-2xl">
-                      <Sparkles size={28} className="text-[#1A2323]" />
+                    <div className="p-4 bg-[var(--theme-accent)] rounded-2xl">
+                      <Sparkles size={28} className="text-[var(--theme-card)]" />
                     </div>
                     <div>
                       <h2 className="text-3xl font-black uppercase text-[#F0F4F2] tracking-tighter">
                         Matched Profiles
                       </h2>
-                      <p className="text-[#88AB8E] text-sm font-bold mt-1">
+                      <p className="text-[var(--theme-accent)] text-sm font-bold mt-1">
                         For {selectedRoleForMatch?.roleName || "Role"}
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={() => setShowMatchedProfiles(false)}
-                    className="p-3 bg-[#243131] hover:bg-[#3E5C58] rounded-xl text-[#88AB8E] transition-colors"
+                    className="p-3 bg-[var(--theme-card-alt)] hover:bg-[var(--theme-muted)] rounded-xl text-[var(--theme-accent)] transition-colors"
                   >
                     <X size={20} />
                   </button>
@@ -898,8 +898,8 @@ export default function ProjectManagePage() {
               <div className="p-8 overflow-y-auto max-h-[calc(85vh-180px)]">
                 {loadingProfiles ? (
                   <div className="flex flex-col items-center justify-center py-16">
-                    <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E] mb-4" />
-                    <p className="text-[#88AB8E] font-bold">Finding matching profiles...</p>
+                    <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)] mb-4" />
+                    <p className="text-[var(--theme-accent)] font-bold">Finding matching profiles...</p>
                   </div>
                 ) : matchedProfiles.length === 0 ? (
                   <div className="text-center py-16">
@@ -907,15 +907,15 @@ export default function ProjectManagePage() {
                     <h3 className="text-xl font-black uppercase text-[#F0F4F2]/40 tracking-widest mb-2">
                       No Matches Found
                     </h3>
-                    <p className="text-[#88AB8E]/50 text-sm">
+                    <p className="text-[var(--theme-accent)]/50 text-sm">
                       No profiles match the required skills for this role
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 mb-6">
-                      <Users size={18} className="text-[#88AB8E]" />
-                      <span className="text-[#88AB8E] font-bold text-sm">
+                      <Users size={18} className="text-[var(--theme-accent)]" />
+                      <span className="text-[var(--theme-accent)] font-bold text-sm">
                         {matchedProfiles.length} matching profile{matchedProfiles.length !== 1 ? 's' : ''} found
                       </span>
                     </div>
@@ -927,10 +927,10 @@ export default function ProjectManagePage() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
-                          className="bg-[#243131] p-6 rounded-[2rem] border border-white/5 hover:border-[#88AB8E]/30 transition-all"
+                          className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5 hover:border-[var(--theme-accent)]/30 transition-all"
                         >
                           <div className="flex items-start gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-[#3E5C58] flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="w-14 h-14 rounded-2xl bg-[var(--theme-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
                               {profile.avatar ? (
                                 <img
                                   src={profile.avatar}
@@ -938,7 +938,7 @@ export default function ProjectManagePage() {
                                   className="w-full h-full object-cover"
                                 />
                               ) : (
-                                <User size={24} className="text-[#88AB8E]" />
+                                <User size={24} className="text-[var(--theme-accent)]" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
@@ -946,33 +946,33 @@ export default function ProjectManagePage() {
                                 <h4 className="text-lg font-black text-[#F0F4F2] truncate">
                                   {profile.name}
                                 </h4>
-                                <div className="flex items-center gap-1 bg-[#88AB8E] text-[#1A2323] px-3 py-1 rounded-full flex-shrink-0">
+                                <div className="flex items-center gap-1 bg-[var(--theme-accent)] text-[var(--theme-card)] px-3 py-1 rounded-full flex-shrink-0">
                                   <Star size={12} />
                                   <span className="text-xs font-black">
                                     {profile.matchScore}%
                                   </span>
                                 </div>
                               </div>
-                              <p className="text-[#88AB8E]/60 text-xs mb-3 truncate">
+                              <p className="text-[var(--theme-accent)]/60 text-xs mb-3 truncate">
                                 {profile.email}
                               </p>
 
                               {profile.matchedSkills.length > 0 && (
                                 <div className="mb-3">
-                                  <span className="text-[8px] font-black uppercase text-[#88AB8E] tracking-widest opacity-50 block mb-2">
+                                  <span className="text-[8px] font-black uppercase text-[var(--theme-accent)] tracking-widest opacity-50 block mb-2">
                                     Matched Skills
                                   </span>
                                   <div className="flex flex-wrap gap-1">
                                     {profile.matchedSkills.slice(0, 4).map((skill, idx) => (
                                       <span
                                         key={idx}
-                                        className="px-2 py-1 bg-[#88AB8E]/20 text-[#88AB8E] text-[9px] font-bold rounded-lg"
+                                        className="px-2 py-1 bg-[var(--theme-accent)]/20 text-[var(--theme-accent)] text-[9px] font-bold rounded-lg"
                                       >
                                         {skill}
                                       </span>
                                     ))}
                                     {profile.matchedSkills.length > 4 && (
-                                      <span className="px-2 py-1 text-[#88AB8E]/40 text-[9px] font-bold">
+                                      <span className="px-2 py-1 text-[var(--theme-accent)]/40 text-[9px] font-bold">
                                         +{profile.matchedSkills.length - 4}
                                       </span>
                                     )}
@@ -1007,14 +1007,14 @@ export default function ProjectManagePage() {
                               <div className="flex gap-2">
                                 <Link
                                   href={`/dashboard/profile/${profile._id}`}
-                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#1A2323] text-[#88AB8E] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[#3E5C58] transition-all border border-white/5"
+                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--theme-card)] text-[var(--theme-accent)] text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-[var(--theme-muted)] transition-all border border-white/5"
                                 >
                                   <UserCircle size={14} /> View Profile
                                 </Link>
                                 <button
                                   onClick={() => handleShortlistUser(profile)}
                                   disabled={shortlistingUser === profile._id}
-                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#88AB8E] text-[#1A2323] text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--theme-accent)] text-[var(--theme-card)] text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                   {shortlistingUser === profile._id ? (
                                     <Loader2 size={14} className="animate-spin" />
@@ -1037,7 +1037,7 @@ export default function ProjectManagePage() {
               <div className="p-6 border-t border-white/5">
                 <button
                   onClick={() => setShowMatchedProfiles(false)}
-                  className="w-full py-4 bg-[#243131] text-[#88AB8E] font-black uppercase tracking-widest rounded-2xl hover:bg-[#3E5C58] transition-colors text-sm"
+                  className="w-full py-4 bg-[var(--theme-card-alt)] text-[var(--theme-accent)] font-black uppercase tracking-widest rounded-2xl hover:bg-[var(--theme-muted)] transition-colors text-sm"
                 >
                   Close
                 </button>
@@ -1056,10 +1056,10 @@ function StatusCol({ title, icon, status, apps, role, onUpdate, onInterview }: a
   );
   return (
     <div className="space-y-6">
-      <h5 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[#88AB8E] opacity-50 px-4">
+      <h5 className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-[var(--theme-accent)] opacity-50 px-4">
         {icon} {title}
       </h5>
-      <div className="space-y-4 p-6 bg-[#243131] rounded-[2.5rem] border border-white/5 min-h-[160px]">
+      <div className="space-y-4 p-6 bg-[var(--theme-card-alt)] rounded-[2.5rem] border border-white/5 min-h-[160px]">
         {filtered.length === 0 ? (
           <div className="flex items-center justify-center h-24 text-[9px] font-black uppercase tracking-widest text-white/5">
             Queue Empty
@@ -1068,12 +1068,12 @@ function StatusCol({ title, icon, status, apps, role, onUpdate, onInterview }: a
           filtered.map((app: any) => (
             <div
               key={app._id}
-              className="bg-[#1A2323] p-6 rounded-[2rem] border border-white/5 group hover:border-[#88AB8E]/30 transition-all"
+              className="bg-[var(--theme-card)] p-6 rounded-[2rem] border border-white/5 group hover:border-[var(--theme-accent)]/30 transition-all"
             >
               <p className="font-black text-[#F0F4F2] uppercase tracking-tight mb-1">
                 {app.userName}
               </p>
-              <p className="text-[#88AB8E]/50 text-[9px] mb-4 truncate">
+              <p className="text-[var(--theme-accent)]/50 text-[9px] mb-4 truncate">
                 {app.userEmail}
               </p>
               <div className="flex gap-2">
@@ -1081,14 +1081,14 @@ function StatusCol({ title, icon, status, apps, role, onUpdate, onInterview }: a
                   <>
                     <button
                       onClick={() => onInterview(app, role)}
-                      className="flex-1 py-2 bg-[#3E5C58] text-[#F0F4F2] text-[9px] font-black uppercase rounded-lg hover:bg-[#4a6b67] transition-all flex items-center justify-center gap-1"
+                      className="flex-1 py-2 bg-[var(--theme-muted)] text-[#F0F4F2] text-[9px] font-black uppercase rounded-lg hover:bg-[#4a6b67] transition-all flex items-center justify-center gap-1"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
                       Interview
                     </button>
                     <button
                       onClick={() => onUpdate(app._id, role._id, "ACCEPTED", app)}
-                      className="flex-1 py-2 bg-[#88AB8E] text-[#141C1C] text-[9px] font-black uppercase rounded-lg hover:scale-105 transition-all"
+                      className="flex-1 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] text-[9px] font-black uppercase rounded-lg hover:scale-105 transition-all"
                     >
                       Accept
                     </button>
@@ -1098,14 +1098,14 @@ function StatusCol({ title, icon, status, apps, role, onUpdate, onInterview }: a
                   <>
                     <button
                       onClick={() => onInterview(app, role)}
-                      className="flex-1 py-2 bg-[#3E5C58] text-[#F0F4F2] text-[9px] font-black uppercase rounded-lg hover:bg-[#4a6b67] transition-all flex items-center justify-center gap-1"
+                      className="flex-1 py-2 bg-[var(--theme-muted)] text-[#F0F4F2] text-[9px] font-black uppercase rounded-lg hover:bg-[#4a6b67] transition-all flex items-center justify-center gap-1"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2" ry="2"/></svg>
                       Interview
                     </button>
                     <button
                       onClick={() => onUpdate(app._id, role._id, "ACCEPTED", app)}
-                      className="flex-1 py-2 bg-[#88AB8E] text-[#141C1C] text-[9px] font-black uppercase rounded-lg"
+                      className="flex-1 py-2 bg-[var(--theme-accent)] text-[var(--theme-background)] text-[9px] font-black uppercase rounded-lg"
                     >
                       Accept
                     </button>

@@ -235,14 +235,14 @@ export default function TasksPage() {
 
   if (status === "loading" || loading) {
     return (
-      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] flex items-center justify-center">
-        <Loader2 className="animate-spin h-12 w-12 text-[#88AB8E]" />
+      <div className="ml-80 mr-8 mt-2 mb-8 h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] flex items-center justify-center">
+        <Loader2 className="animate-spin h-12 w-12 text-[var(--theme-accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[#1A2323] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
+    <div className="ml-80 mr-8 mt-2 mb-8 min-h-[calc(100vh-120px)] bg-[var(--theme-card)] rounded-[3.5rem] p-10 overflow-y-auto no-scrollbar border border-white/5">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -254,13 +254,13 @@ export default function TasksPage() {
             <h1 className="text-5xl font-black   uppercase text-[#F0F4F2] tracking-tighter">
               My Tasks
             </h1>
-            <p className="text-[#88AB8E] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
+            <p className="text-[var(--theme-accent)] font-bold tracking-[0.2em] text-[10px] uppercase opacity-60 mt-2">
               Stay organized and productive
             </p>
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="px-8 py-4 bg-[#88AB8E] text-[#1A2323] rounded-[2rem] font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
+            className="px-8 py-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-[2rem] font-black uppercase text-xs tracking-widest flex items-center gap-2 hover:scale-105 transition-all"
           >
             <Plus size={16} /> New Task
           </button>
@@ -268,32 +268,32 @@ export default function TasksPage() {
 
         {/* Stats */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="bg-[#243131] p-6 rounded-[2rem] border border-white/5">
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
               Total
             </p>
             <p className="text-3xl font-black text-[#F0F4F2] mt-1">
               {tasks.length}
             </p>
           </div>
-          <div className="bg-[#243131] p-6 rounded-[2rem] border border-white/5">
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
               Pending
             </p>
             <p className="text-3xl font-black text-yellow-400 mt-1">
               {pendingCount}
             </p>
           </div>
-          <div className="bg-[#243131] p-6 rounded-[2rem] border border-white/5">
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
               Completed
             </p>
             <p className="text-3xl font-black text-green-400 mt-1">
               {completedCount}
             </p>
           </div>
-          <div className="bg-[#243131] p-6 rounded-[2rem] border border-white/5">
-            <p className="text-[9px] font-black text-[#88AB8E] uppercase tracking-widest opacity-50">
+          <div className="bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5">
+            <p className="text-[9px] font-black text-[var(--theme-accent)] uppercase tracking-widest opacity-50">
               Overdue
             </p>
             <p className="text-3xl font-black text-red-400 mt-1">
@@ -311,8 +311,8 @@ export default function TasksPage() {
                 onClick={() => setFilter(f)}
                 className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                   filter === f
-                    ? "bg-[#88AB8E] text-[#1A2323]"
-                    : "bg-[#243131] text-[#88AB8E] hover:bg-[#88AB8E]/20"
+                    ? "bg-[var(--theme-accent)] text-[var(--theme-card)]"
+                    : "bg-[var(--theme-card-alt)] text-[var(--theme-accent)] hover:bg-[var(--theme-accent)]/20"
                 }`}
               >
                 {f}
@@ -321,13 +321,13 @@ export default function TasksPage() {
           </div>
           <div className="relative w-full md:w-80">
             <Search
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#88AB8E]/40"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--theme-accent)]/40"
               size={14}
             />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 bg-[#243131] border border-white/5 rounded-xl text-[10px] font-bold text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E] transition-all placeholder:text-white/20 uppercase tracking-widest"
+              className="w-full pl-12 pr-6 py-4 bg-[var(--theme-card-alt)] border border-white/5 rounded-xl text-[10px] font-bold text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)] transition-all placeholder:text-white/20 uppercase tracking-widest"
               placeholder="Search tasks..."
             />
           </div>
@@ -336,7 +336,7 @@ export default function TasksPage() {
         {/* Task List */}
         <div className="space-y-4">
           {filteredTasks.length === 0 ? (
-            <div className="text-center py-16 bg-[#243131]/30 rounded-[2rem] border border-dashed border-white/10">
+            <div className="text-center py-16 bg-[var(--theme-card-alt)]/30 rounded-[2rem] border border-dashed border-white/10">
               <AlertCircle
                 className="mx-auto mb-4 text-[#F0F4F2]/20"
                 size={48}
@@ -352,7 +352,7 @@ export default function TasksPage() {
                 layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`bg-[#243131] p-6 rounded-[2rem] border border-white/5 flex items-center gap-4 group hover:border-[#88AB8E]/20 transition-all ${
+                className={`bg-[var(--theme-card-alt)] p-6 rounded-[2rem] border border-white/5 flex items-center gap-4 group hover:border-[var(--theme-accent)]/20 transition-all ${
                   task.status === "completed" ? "opacity-60" : ""
                 }`}
               >
@@ -360,12 +360,12 @@ export default function TasksPage() {
                   onClick={() => handleToggleStatus(task._id, task.status)}
                   className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-all ${
                     task.status === "completed"
-                      ? "bg-[#88AB8E] border-[#88AB8E]"
-                      : "border-[#88AB8E]/40 hover:border-[#88AB8E]"
+                      ? "bg-[var(--theme-accent)] border-[var(--theme-accent)]"
+                      : "border-[var(--theme-accent)]/40 hover:border-[var(--theme-accent)]"
                   }`}
                 >
                   {task.status === "completed" && (
-                    <CheckCircle size={14} className="text-[#1A2323]" />
+                    <CheckCircle size={14} className="text-[var(--theme-card)]" />
                   )}
                 </button>
 
@@ -378,7 +378,7 @@ export default function TasksPage() {
                     {task.title}
                   </p>
                   {task.description && (
-                    <p className="text-xs text-[#88AB8E]/60 mt-1 line-clamp-1">
+                    <p className="text-xs text-[var(--theme-accent)]/60 mt-1 line-clamp-1">
                       {task.description}
                     </p>
                   )}
@@ -389,7 +389,7 @@ export default function TasksPage() {
                           new Date(task.dueDate) < new Date() &&
                           task.status !== "completed"
                             ? "text-red-400"
-                            : "text-[#88AB8E]/60"
+                            : "text-[var(--theme-accent)]/60"
                         }`}
                       >
                         <Calendar size={10} />
@@ -397,7 +397,7 @@ export default function TasksPage() {
                       </span>
                     )}
                     {task.projectTitle && (
-                      <span className="text-[10px] text-[#88AB8E]/60">
+                      <span className="text-[10px] text-[var(--theme-accent)]/60">
                         📁 {task.projectTitle}
                       </span>
                     )}
@@ -421,7 +421,7 @@ export default function TasksPage() {
                     onClick={() => setEditingTask(task)}
                     className="p-2 bg-white/5 rounded-lg hover:bg-white/10 transition-all"
                   >
-                    <ChevronDown size={14} className="text-[#88AB8E]" />
+                    <ChevronDown size={14} className="text-[var(--theme-accent)]" />
                   </button>
                   <button
                     onClick={() => handleDeleteTask(task._id)}
@@ -450,7 +450,7 @@ export default function TasksPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] p-8 rounded-[2rem] w-full max-w-lg border border-white/10"
+              className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] w-full max-w-lg border border-white/10"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6">
@@ -472,7 +472,7 @@ export default function TasksPage() {
                   onChange={(e) =>
                     setNewTask({ ...newTask, title: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                 />
                 <textarea
                   placeholder="Description (optional)..."
@@ -480,7 +480,7 @@ export default function TasksPage() {
                   onChange={(e) =>
                     setNewTask({ ...newTask, description: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E] min-h-[100px]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)] min-h-[100px]"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
@@ -489,14 +489,14 @@ export default function TasksPage() {
                     onChange={(e) =>
                       setNewTask({ ...newTask, dueDate: e.target.value })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                   />
                   <select
                     value={newTask.priority}
                     onChange={(e) =>
                       setNewTask({ ...newTask, priority: e.target.value })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                   >
                     <option value="low">Low Priority</option>
                     <option value="medium">Medium Priority</option>
@@ -506,7 +506,7 @@ export default function TasksPage() {
                 <button
                   onClick={handleCreateTask}
                   disabled={!newTask.title.trim()}
-                  className="w-full py-4 bg-[#88AB8E] text-[#1A2323] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Create Task
                 </button>
@@ -530,7 +530,7 @@ export default function TasksPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] p-8 rounded-[2rem] w-full max-w-lg border border-white/10"
+              className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] w-full max-w-lg border border-white/10"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-6">
@@ -552,7 +552,7 @@ export default function TasksPage() {
                   onChange={(e) =>
                     setEditingTask({ ...editingTask, title: e.target.value })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                 />
                 <textarea
                   placeholder="Description (optional)..."
@@ -563,7 +563,7 @@ export default function TasksPage() {
                       description: e.target.value,
                     })
                   }
-                  className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E] min-h-[100px]"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)] min-h-[100px]"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
@@ -575,7 +575,7 @@ export default function TasksPage() {
                         dueDate: e.target.value,
                       })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                   />
                   <select
                     value={editingTask.priority}
@@ -585,7 +585,7 @@ export default function TasksPage() {
                         priority: e.target.value,
                       })
                     }
-                    className="w-full bg-[#1A2323] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[#88AB8E]"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 p-4 rounded-xl text-[#F0F4F2] outline-none focus:ring-2 focus:ring-[var(--theme-accent)]"
                   >
                     <option value="low">Low Priority</option>
                     <option value="medium">Medium Priority</option>
@@ -594,7 +594,7 @@ export default function TasksPage() {
                 </div>
                 <button
                   onClick={handleUpdateTask}
-                  className="w-full py-4 bg-[#88AB8E] text-[#1A2323] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all"
+                  className="w-full py-4 bg-[var(--theme-accent)] text-[var(--theme-card)] rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-all"
                 >
                   Save Changes
                 </button>
@@ -617,16 +617,16 @@ export default function TasksPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-[#243131] p-8 rounded-[2rem] border border-white/10 text-center"
+              className="bg-[var(--theme-card-alt)] p-8 rounded-[2rem] border border-white/10 text-center"
             >
-              <Award className="mx-auto mb-4 text-[#88AB8E] animate-pulse" size={48} />
+              <Award className="mx-auto mb-4 text-[var(--theme-accent)] animate-pulse" size={48} />
               <h3 className="text-xl font-black text-[#F0F4F2] uppercase mb-2">
                 Generating Certificate
               </h3>
-              <p className="text-sm text-[#88AB8E]/60">
+              <p className="text-sm text-[var(--theme-accent)]/60">
                 Creating your blockchain-verified certificate...
               </p>
-              <Loader2 className="mx-auto mt-4 animate-spin text-[#88AB8E]" size={24} />
+              <Loader2 className="mx-auto mt-4 animate-spin text-[var(--theme-accent)]" size={24} />
             </motion.div>
           </motion.div>
         )}

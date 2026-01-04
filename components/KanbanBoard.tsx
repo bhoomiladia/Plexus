@@ -50,7 +50,7 @@ interface KanbanBoardProps {
 }
 
 const columns = [
-  { id: "pending", title: "To Do", icon: Clock, color: "#88AB8E" },
+  { id: "pending", title: "To Do", icon: Clock, color: "var(--theme-accent)" },
   { id: "in-progress", title: "In Progress", icon: AlertCircle, color: "#F59E0B" },
   { id: "completed", title: "Completed", icon: CheckCircle2, color: "#10B981" },
   { id: "verified", title: "Verified", icon: BadgeCheck, color: "#8B5CF6" },
@@ -294,15 +294,15 @@ export default function KanbanBoard({
           <h3 className="text-2xl font-black uppercase text-[#F0F4F2] tracking-tighter">
             Task Board
           </h3>
-          <p className="text-[10px] font-black text-[#88AB8E]/60 uppercase tracking-widest mt-1">
+          <p className="text-[10px] font-black text-[var(--theme-accent)]/60 uppercase tracking-widest mt-1">
             {isOwner ? "Admin View - Full Access" : isAuthorized ? "Authorized - Can update assigned tasks" : "Team Member - Can update assigned tasks"}
           </p>
         </div>
         
         <div className="flex items-center gap-3">
           {/* Filter by user */}
-          <div className="flex items-center gap-2 bg-[#243131] rounded-xl p-1 border border-white/5">
-            <Filter size={14} className="text-[#88AB8E] ml-3" />
+          <div className="flex items-center gap-2 bg-[var(--theme-card-alt)] rounded-xl p-1 border border-white/5">
+            <Filter size={14} className="text-[var(--theme-accent)] ml-3" />
             <select
               value={filterByUser}
               onChange={(e) => setFilterByUser(e.target.value)}
@@ -324,7 +324,7 @@ export default function KanbanBoard({
                 resetForm();
                 setShowAddModal(true);
               }}
-              className="flex items-center gap-2 px-6 py-3 bg-[#88AB8E] text-[#141C1C] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
+              className="flex items-center gap-2 px-6 py-3 bg-[var(--theme-accent)] text-[var(--theme-background)] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"
             >
               <Plus size={16} /> Add Task
             </button>
@@ -341,7 +341,7 @@ export default function KanbanBoard({
           return (
             <div
               key={column.id}
-              className="bg-[#1A2323] rounded-[2rem] border border-white/5 overflow-hidden"
+              className="bg-[var(--theme-card)] rounded-[2rem] border border-white/5 overflow-hidden"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, column.id)}
             >
@@ -382,11 +382,11 @@ export default function KanbanBoard({
                         exit={{ opacity: 0, scale: 0.9 }}
                         draggable={canDrag}
                         onDragStart={() => canDrag && handleDragStart(task)}
-                        className={`bg-[#243131] p-4 rounded-xl border transition-all group ${
+                        className={`bg-[var(--theme-card-alt)] p-4 rounded-xl border transition-all group ${
                           isMyTask 
-                            ? "border-[#88AB8E]/30 ring-1 ring-[#88AB8E]/20" 
+                            ? "border-[var(--theme-accent)]/30 ring-1 ring-[var(--theme-accent)]/20" 
                             : "border-white/5"
-                        } ${canDrag ? "cursor-grab active:cursor-grabbing hover:border-[#88AB8E]/30" : "cursor-default"} ${
+                        } ${canDrag ? "cursor-grab active:cursor-grabbing hover:border-[var(--theme-accent)]/30" : "cursor-default"} ${
                           draggedTask?._id === task._id ? "opacity-50" : ""
                         }`}
                       >
@@ -400,7 +400,7 @@ export default function KanbanBoard({
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <h4
-                                className={`font-bold text-[#F0F4F2] text-sm ${canDrag ? "cursor-pointer hover:text-[#88AB8E]" : ""} transition-colors`}
+                                className={`font-bold text-[#F0F4F2] text-sm ${canDrag ? "cursor-pointer hover:text-[var(--theme-accent)]" : ""} transition-colors`}
                                 onClick={() => canDrag && openEditModal(task)}
                               >
                                 {task.title}
@@ -450,9 +450,9 @@ export default function KanbanBoard({
 
                             {/* Assignee */}
                             {task.assignedToName && (
-                              <div className={`flex items-center gap-1.5 mt-2 px-2 py-1 rounded-lg ${isMyTask ? "bg-[#88AB8E]/10" : "bg-white/5"}`}>
-                                <User size={10} className={isMyTask ? "text-[#88AB8E]" : "text-white/40"} />
-                                <span className={`text-[9px] font-bold ${isMyTask ? "text-[#88AB8E]" : "text-white/40"}`}>
+                              <div className={`flex items-center gap-1.5 mt-2 px-2 py-1 rounded-lg ${isMyTask ? "bg-[var(--theme-accent)]/10" : "bg-white/5"}`}>
+                                <User size={10} className={isMyTask ? "text-[var(--theme-accent)]" : "text-white/40"} />
+                                <span className={`text-[9px] font-bold ${isMyTask ? "text-[var(--theme-accent)]" : "text-white/40"}`}>
                                   {isMyTask ? "You" : task.assignedToName}
                                 </span>
                               </div>
@@ -487,11 +487,11 @@ export default function KanbanBoard({
 
       {/* Add/Edit Task Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-[#141C1C]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
+        <div className="fixed inset-0 bg-[var(--theme-background)]/90 backdrop-blur-md flex items-center justify-center z-[100] p-4">
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-[#243131] rounded-[3rem] p-10 max-w-lg w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
+            className="bg-[var(--theme-card-alt)] rounded-[3rem] p-10 max-w-lg w-full border border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
           >
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-black text-[#F0F4F2] uppercase tracking-tighter">
@@ -510,7 +510,7 @@ export default function KanbanBoard({
 
             <div className="space-y-5">
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                   Title
                 </label>
                 <input
@@ -520,13 +520,13 @@ export default function KanbanBoard({
                     setFormData((prev) => ({ ...prev, title: e.target.value }))
                   }
                   disabled={editingTask && !isOwner}
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold placeholder:text-white/10 disabled:opacity-50"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold placeholder:text-white/10 disabled:opacity-50"
                   placeholder="Task title..."
                 />
               </div>
 
               <div>
-                <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                   Description
                 </label>
                 <textarea
@@ -535,14 +535,14 @@ export default function KanbanBoard({
                     setFormData((prev) => ({ ...prev, description: e.target.value }))
                   }
                   rows={3}
-                  className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-medium placeholder:text-white/10 resize-none"
+                  className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-medium placeholder:text-white/10 resize-none"
                   placeholder="Task description or progress update..."
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Priority
                   </label>
                   <select
@@ -554,7 +554,7 @@ export default function KanbanBoard({
                       }))
                     }
                     disabled={editingTask && !isOwner}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold disabled:opacity-50"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold disabled:opacity-50"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -563,7 +563,7 @@ export default function KanbanBoard({
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Due Date
                   </label>
                   <input
@@ -573,7 +573,7 @@ export default function KanbanBoard({
                       setFormData((prev) => ({ ...prev, dueDate: e.target.value }))
                     }
                     disabled={editingTask && !isOwner}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold disabled:opacity-50"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold disabled:opacity-50"
                   />
                 </div>
               </div>
@@ -581,7 +581,7 @@ export default function KanbanBoard({
               {/* Only owner can assign tasks */}
               {isOwner && (
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Assign To
                   </label>
                   <select
@@ -596,7 +596,7 @@ export default function KanbanBoard({
                         assignedToName: selected?.userName || "",
                       }));
                     }}
-                    className="w-full bg-[#1A2323] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[#88AB8E] outline-none transition-all font-bold"
+                    className="w-full bg-[var(--theme-card)] border border-white/5 rounded-xl p-4 text-[#F0F4F2] focus:ring-2 focus:ring-[var(--theme-accent)] outline-none transition-all font-bold"
                   >
                     <option value="">Unassigned</option>
                     {members.map((member) => (
@@ -610,8 +610,8 @@ export default function KanbanBoard({
 
               {/* Show current assignee for non-owners */}
               {!isOwner && editingTask?.assignedToName && (
-                <div className="p-4 bg-[#1A2323] rounded-xl border border-white/5">
-                  <span className="text-[10px] font-black uppercase text-[#88AB8E] tracking-widest opacity-60">
+                <div className="p-4 bg-[var(--theme-card)] rounded-xl border border-white/5">
+                  <span className="text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest opacity-60">
                     Assigned To
                   </span>
                   <p className="text-[#F0F4F2] font-bold mt-1">{editingTask.assignedToName}</p>
@@ -621,7 +621,7 @@ export default function KanbanBoard({
               {/* Status change for assigned users */}
               {editingTask && canModifyTask(editingTask) && !isOwner && (
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-[#88AB8E] tracking-widest mb-2 opacity-60">
+                  <label className="block text-[10px] font-black uppercase text-[var(--theme-accent)] tracking-widest mb-2 opacity-60">
                     Update Status
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -636,8 +636,8 @@ export default function KanbanBoard({
                         }}
                         className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                           editingTask.status === status
-                            ? "bg-[#88AB8E] text-[#141C1C]"
-                            : "bg-[#1A2323] text-white/40 hover:text-white border border-white/5"
+                            ? "bg-[var(--theme-accent)] text-[var(--theme-background)]"
+                            : "bg-[var(--theme-card)] text-white/40 hover:text-white border border-white/5"
                         }`}
                       >
                         {status.replace("-", " ")}
@@ -651,7 +651,7 @@ export default function KanbanBoard({
                 <button
                   onClick={editingTask ? handleUpdateTask : handleCreateTask}
                   disabled={loading || !formData.title.trim()}
-                  className="flex-1 py-4 bg-[#88AB8E] text-[#141C1C] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 py-4 bg-[var(--theme-accent)] text-[var(--theme-background)] font-black uppercase tracking-widest rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? "Saving..." : editingTask ? "Update" : "Create"}
                 </button>
