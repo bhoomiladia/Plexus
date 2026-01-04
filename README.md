@@ -29,7 +29,8 @@ The result is a platform where collaboration is not only efficient, but also ver
 ## Key Features
 
 ### Project & Task Management
-![Task Board](/images/task-board.png)
+<img width="1902" height="867" alt="image" src="https://github.com/user-attachments/assets/38fda8b8-b45a-44ae-973e-937f80b98d83" />
+
 
 - Kanban-style task board with drag-and-drop workflow  
 - Clear task states: **To Do**, **In Progress**, **Completed**, and **Verified**  
@@ -55,7 +56,8 @@ The result is a platform where collaboration is not only efficient, but also ver
 ---
 
 ### Blockchain-Based Credentials
-![Certificate Preview](/images/certificate.png)
+<img width="1918" height="872" alt="image" src="https://github.com/user-attachments/assets/575e3781-de64-4eac-8452-1d763da98292" />
+
 
 - Mint **on-chain certificates on Solana** for verified contributions  
 - Certificates remain locked until officially minted  
