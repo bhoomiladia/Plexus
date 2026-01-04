@@ -7,7 +7,7 @@
 ## Platform Preview
 
 ### Landing Experience
-![Unirivo Landing](./images/landing.png)
+![Unirivo Landing](/images/landing.png)
 
 A minimal, dark-themed landing interface designed to communicate focus, collaboration, and convergence of ideas.
 
@@ -28,7 +28,7 @@ The result is a platform where collaboration is not only efficient, but also ver
 ## Key Features
 
 ### Project & Task Management
-![Task Board](./images/task-board.png)
+![Task Board](/images/task-board.png)
 
 - Kanban-style task board with drag-and-drop workflow  
 - Clear task states: **To Do**, **In Progress**, **Completed**, and **Verified**  
@@ -54,7 +54,7 @@ The result is a platform where collaboration is not only efficient, but also ver
 ---
 
 ### Blockchain-Based Credentials
-![Certificate Preview](./images/certificate.png)
+![Certificate Preview](/images/certificate.png)
 
 - Mint **on-chain certificates on Solana** for verified contributions  
 - Certificates remain locked until officially minted  
