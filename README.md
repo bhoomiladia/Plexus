@@ -7,7 +7,8 @@
 ## Platform Preview
 
 ### Landing Experience
-![Unirivo Landing](/images/landing.png)
+<img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/8e37baea-9ef7-415e-a8cd-12f88a90f0b4" />
+
 
 A minimal, dark-themed landing interface designed to communicate focus, collaboration, and convergence of ideas.
 
